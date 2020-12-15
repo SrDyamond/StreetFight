@@ -12,20 +12,26 @@ paths:
     get:
       summary: Devuelve una lista de banderas cercanas en base a tu localización.
       parameters:
-        - name: lat
+        - name: latitude
           in: query
+          required: true
           schema:
             type: double
+            example: 43.36848
           description: Latitud de la ubicación del usuario
-        - name: long
+        - name: longitude
           in: query
+          required: true
           schema:
             type: double
+            example: -8.40531
           description: Longitud de la ubicación del usuario
-        - name: radio
+        - name: radius
           in: query
+          required: true
           schema:
             type: int
+            example: 1
           description: En base a la ubicación del usuario, cuantas banderas mostrar.
       responses:
         '200':
