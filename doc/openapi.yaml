@@ -13,6 +13,7 @@ paths:
     post:
       summary: Inicia sesión un usuario registrado y se devuelve una cookie de sesión.
       requestBody:
+        description: "Formato JSON para enviar un POST de login."
         content:
           application/json:
             schema:
@@ -24,9 +25,9 @@ paths:
                   password_sha:
                     type: string
                     example: "86f7e437faa5a7fce15d1ddcb9eaeaea377667b8"
-            required:
-              - username
-              - password_sha
+        required:
+          - username
+          - password_sha
   /register:
     post:
       summary: Se registra un usuario nuevo y se devuelve una cookie de sesión.
