@@ -148,44 +148,44 @@ paths:
                   clan_color:
                       type: string
                       example: "#FFFF55"
-      '404':
-        description: Cuando no mandas los query params correctamente.
-        content:
-          application/json:
-            schema:
-                type: object
-                properties:
-                  http_response:
-                    type: object
-                    properties:
-                      code:
-                        type: int
-                        example: 404
-                      description:
-                        type: string
-                        example: "Not found"
-                      extra:
-                        type: string
-                        example: ""
-      '500':
-        description: Error interno del servidor.
-        content:
-          application/json:
-            schema:
-                type: object
-                properties:
-                  http_response:
-                    type: object
-                    properties:
-                      code:
-                        type: int
-                        example: 500
-                      description:
-                        type: string
-                        example: "Internal Server Error"
-                      extra:
-                        type: string
-                        example: ""
+        '404':
+          description: Cuando el id consultado no existe.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: int
+                          example: 404
+                        description:
+                          type: string
+                          example: "Not found"
+                        extra:
+                          type: string
+                          example: ""
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: int
+                          example: 500
+                        description:
+                          type: string
+                          example: "Internal Server Error"
+                        extra:
+                          type: string
+                          example: ""
   /user/{id_user}:
     get:
       summary: Devuelve toda la info de un usuario y su clan.
@@ -216,7 +216,7 @@ paths:
                     example: 11
                   clan_id:
                     type: int
-                    example: 256
+                    example: 132
                   clan_name:
                     type: string
                     example: "Kakariko Select Club"
@@ -230,7 +230,7 @@ paths:
                       type: string
                       example: "#FFFF55"
         '404':
-          description: Cuando no mandas los query params correctamente.
+          description: Cuando el id consultado no existe.
           content:
             application/json:
               schema:
