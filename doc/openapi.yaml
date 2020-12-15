@@ -1,0 +1,257 @@
+openapi: 3.0.0
+info:
+  title: Street Fight
+  description: Street Fight es un MMORPG no lineal en el que escribes tu propia historia sin limitarte a seguir un camino prefijado, explora un amplio mundo abierto, todo cuanto hagas tendra su repercusíon en el mundo.
+  version: 1.0
+
+servers:
+  - url: http://localhost:8080/
+
+paths:
+  /flags:
+    get:
+      summary: Devuelve una lista de banderas cercanas en base a tu localización.
+      parameters:
+        - name: lat
+          in: query
+          schema:
+            type: double
+          description: Latitud de la ubicación del usuario
+        - name: long
+          in: query
+          schema:
+            type: double
+          description: Longitud de la ubicación del usuario
+        - name: radio
+          in: query
+          schema:
+            type: int
+          description: En base a la ubicación del usuario, cuantas banderas mostrar.
+      responses:
+        '200':
+          description: Un array JSON de banderas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: int
+                      example: 1
+                    latitude:
+                      type: double
+                      example: 43.36848
+                    longitude:
+                      type: double
+                      example: -8.40531
+                    url_icon:
+                      type: string
+                      example: "https://i.imgur.com/Lbu3ErD.png"
+                    acronym:
+                      type: string
+                      example: "LPA"
+                    color:
+                      type: string
+                      example: "#FFFFFF"
+        '400':
+          description: Cuando no mandas los query params correctos.
+  /flags/{id_flag}:
+    get:
+      summary: Devuelve toda la info de una bandera.
+      parameters:
+        - name: id_flag
+          in: path
+          required: true
+          description: El id de la bandera de la que queremos obtener información
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Toda la info de la bandera y un poco del clan al que pertenece.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: int
+                    example: 1
+                  name:
+                    type: string
+                    example: "Estatua de María Pita"
+                  latitude:
+                    type: double
+                    example: 43.36848
+                  longitude:
+                    type: double
+                    example: -8.40531
+                  clan_name:
+                    type: string
+                    example: "Los Mejores"
+                  clan_url_icon:
+                    type: string
+                    example: "https://i.imgur.com/Lbu3ErD.png"
+                  clan_acronym:
+                    type: string
+                    example: "LM"
+                  clan_color:
+                      type: string
+                      example: "#FFFFFF"
+
+
+
+
+
+
+
+  /product/{reference}:
+    get:
+      summary: Returns a list of trucks
+      parameters:
+        - name: reference
+          in: path
+          required: true
+          description: The reference of the product to return
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A JSON object with the full info of the truck
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: PatataTruck
+                  reference:
+                    type: string
+                    example: R-002
+                  imageUrl:
+                    type: string
+                  productInfo:
+                    type: object
+                    properties:
+                      description:
+                        type: string
+                        example: Una gran compra, totalmente aconsejable
+                      price:
+                        type: integer
+                        example: 2699999
+                      availableAmount:
+                        type: integer
+                        example: 20
+        '404':
+          description: A truck with the specified reference was not found
+  /{username}/reserve:
+    get:
+      summary: Returns the list of reserves for a given user
+      parameters:
+        - name: username
+          in: path
+          schema:
+            type: string
+          description: The username as it is stored in the database
+        - name: passwordSha
+          in: query
+          schema:
+            type: string
+          description: The SHA-1 hash of the password provided by the user
+      responses:
+        '200':
+          description: A JSON array of reserves
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    reserveDate:
+                      type: integer
+                      format: int64
+                      example: 1605398405
+                      description: Number of seconds since Unix Epoch (1970)
+                    product:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          example: PatataTruck
+                        reference:
+                          type: string
+                          example: R-002
+                        imageUrl:
+                          type: string
+                        productInfo:
+                          type: object
+                          properties:
+                            description:
+                              type: string
+                              example: Una gran compra, totalmente aconsejable
+                            price:
+                              type: integer
+                              example: 2699999
+                            availableAmount:
+                              type: integer
+                              example: 20
+        '404':
+          description: The username has not been found
+        '401':
+          description: The passwordSha is not valid for the given user
+  /{username}/reserve/{reference}:
+    post:
+      summary: Creates a reserve for a user, at the current server time, for the product specified
+      parameters:
+        - name: username
+          in: path
+          schema:
+            type: string
+          description: The username as it is stored in the database
+        - name: reference
+          in: path
+          schema:
+            type: string
+          description: The product reference
+        - name: passwordSha
+          in: query
+          schema:
+            type: string
+          description: The SHA-1 hash of the password provided by the user
+      responses:
+        '201':
+          description: Success response if the reserve was created
+        '401':
+          description: The passwordSha is not valid for the given user
+        '404':
+          description: Either the username or the reference specified could not be found
+        '409':
+          description: The reserve for the given combination of username and product already exists
+    delete:
+      summary: Removes a reserve for the product specified for the given user
+      parameters:
+        - name: username
+          in: path
+          schema:
+            type: string
+          description: The username as it is stored in the database
+        - name: reference
+          in: path
+          schema:
+            type: string
+          description: The product reference
+        - name: passwordSha
+          in: query
+          schema:
+            type: string
+          description: The SHA-1 hash of the password provided by the user
+      responses:
+        '200':
+          description: Success response if the reserve was correctly removed
+        '401':
+          description: The passwordSha is not valid for the given user
+        '404':
+          description: Either the username or the reference specified could not be found
