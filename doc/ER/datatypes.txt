@@ -1,0 +1,11 @@
+SESION
+    id INT PRIMARY KEY
+    id_usuario INT NOT NULL
+    timestamp_caducidad BIGINT NOT NULL
+    valor_cookie VARCHAR(40) NOT NULL
+USARIO
+    id INT PRIMARY KEY
+    
+CLAN
+BANDERA
+INTENTO_CAPTURA

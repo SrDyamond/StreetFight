@@ -10,7 +10,7 @@ servers:
 paths:
   /flags:
     get:
-      summary: Devuelve una lista de banderas cercanas en base a tu localización.
+      summary: Devuelve una lista de banderas cercanas en base a tu localización y un rádio.
       parameters:
         - name: latitude
           in: query
@@ -32,10 +32,10 @@ paths:
           schema:
             type: int
             example: 1
-          description: En base a la ubicación del usuario, cuantas banderas mostrar.
+          description: Tamaño del rádio que se obtiene al trazar una circunferencia con centro en dichas coordenadas.
       responses:
         '200':
-          description: Un array JSON de banderas
+          description: Un array JSON con las banderas dentro del radio especicado.
           content:
             application/json:
               schema:
@@ -62,7 +62,7 @@ paths:
                       type: string
                       example: "#FFFFFF"
         '400':
-          description: Cuando no mandas los query params correctos.
+          description: Cuando no mandas los query params correctamente.
   /flags/{id_flag}:
     get:
       summary: Devuelve toda la info de una bandera.
@@ -87,24 +87,30 @@ paths:
                   name:
                     type: string
                     example: "Estatua de María Pita"
+                  description:
+                    type: string
+                    example: "María Mayor Fernández de Cámara y Pita (Sigrás, Cambre, 1565-1643), conocida como María Pita, fue una heroína de la defensa de La Coruña en 1589 contra la Invencible Inglesa."
                   latitude:
                     type: double
                     example: 43.36848
                   longitude:
                     type: double
                     example: -8.40531
+                  clan_id:
+                    type: int
+                    example: 2
                   clan_name:
                     type: string
-                    example: "Los Mejores"
+                    example: "El Mejor Clan"
                   clan_url_icon:
                     type: string
                     example: "https://i.imgur.com/Lbu3ErD.png"
                   clan_acronym:
                     type: string
-                    example: "LM"
+                    example: "EMC"
                   clan_color:
                       type: string
-                      example: "#FFFFFF"
+                      example: "#FFFF55"
 
 
 
