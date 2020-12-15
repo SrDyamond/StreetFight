@@ -63,6 +63,42 @@ paths:
                       example: "#FFFFFF"
         '400':
           description: Cuando no mandas los query params correctamente.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: int
+                          example: 404
+                        description:
+                          type: string
+                          example: "Not found"
+                        extra:
+                          type: string
+                          example: ""
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: int
+                          example: 500
+                        description:
+                          type: string
+                          example: "Internal Server Error"
+                        extra:
+                          type: string
+                          example: ""
   /flags/{id_flag}:
     get:
       summary: Devuelve toda la info de una bandera.
@@ -111,6 +147,7 @@ paths:
                   clan_color:
                       type: string
                       example: "#FFFF55"
+              
 
 
 
@@ -118,152 +155,152 @@ paths:
 
 
 
-  /product/{reference}:
-    get:
-      summary: Returns a list of trucks
-      parameters:
-        - name: reference
-          in: path
-          required: true
-          description: The reference of the product to return
-          schema:
-            type: string
-      responses:
-        '200':
-          description: A JSON object with the full info of the truck
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  name:
-                    type: string
-                    example: PatataTruck
-                  reference:
-                    type: string
-                    example: R-002
-                  imageUrl:
-                    type: string
-                  productInfo:
-                    type: object
-                    properties:
-                      description:
-                        type: string
-                        example: Una gran compra, totalmente aconsejable
-                      price:
-                        type: integer
-                        example: 2699999
-                      availableAmount:
-                        type: integer
-                        example: 20
-        '404':
-          description: A truck with the specified reference was not found
-  /{username}/reserve:
-    get:
-      summary: Returns the list of reserves for a given user
-      parameters:
-        - name: username
-          in: path
-          schema:
-            type: string
-          description: The username as it is stored in the database
-        - name: passwordSha
-          in: query
-          schema:
-            type: string
-          description: The SHA-1 hash of the password provided by the user
-      responses:
-        '200':
-          description: A JSON array of reserves
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    reserveDate:
-                      type: integer
-                      format: int64
-                      example: 1605398405
-                      description: Number of seconds since Unix Epoch (1970)
-                    product:
-                      type: object
-                      properties:
-                        name:
-                          type: string
-                          example: PatataTruck
-                        reference:
-                          type: string
-                          example: R-002
-                        imageUrl:
-                          type: string
-                        productInfo:
-                          type: object
-                          properties:
-                            description:
-                              type: string
-                              example: Una gran compra, totalmente aconsejable
-                            price:
-                              type: integer
-                              example: 2699999
-                            availableAmount:
-                              type: integer
-                              example: 20
-        '404':
-          description: The username has not been found
-        '401':
-          description: The passwordSha is not valid for the given user
-  /{username}/reserve/{reference}:
-    post:
-      summary: Creates a reserve for a user, at the current server time, for the product specified
-      parameters:
-        - name: username
-          in: path
-          schema:
-            type: string
-          description: The username as it is stored in the database
-        - name: reference
-          in: path
-          schema:
-            type: string
-          description: The product reference
-        - name: passwordSha
-          in: query
-          schema:
-            type: string
-          description: The SHA-1 hash of the password provided by the user
-      responses:
-        '201':
-          description: Success response if the reserve was created
-        '401':
-          description: The passwordSha is not valid for the given user
-        '404':
-          description: Either the username or the reference specified could not be found
-        '409':
-          description: The reserve for the given combination of username and product already exists
-    delete:
-      summary: Removes a reserve for the product specified for the given user
-      parameters:
-        - name: username
-          in: path
-          schema:
-            type: string
-          description: The username as it is stored in the database
-        - name: reference
-          in: path
-          schema:
-            type: string
-          description: The product reference
-        - name: passwordSha
-          in: query
-          schema:
-            type: string
-          description: The SHA-1 hash of the password provided by the user
-      responses:
-        '200':
-          description: Success response if the reserve was correctly removed
-        '401':
-          description: The passwordSha is not valid for the given user
-        '404':
-          description: Either the username or the reference specified could not be found
+  # /product/{reference}:
+  #   get:
+  #     summary: Returns a list of trucks
+  #     parameters:
+  #       - name: reference
+  #         in: path
+  #         required: true
+  #         description: The reference of the product to return
+  #         schema:
+  #           type: string
+  #     responses:
+  #       '200':
+  #         description: A JSON object with the full info of the truck
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: object
+  #               properties:
+  #                 name:
+  #                   type: string
+  #                   example: PatataTruck
+  #                 reference:
+  #                   type: string
+  #                   example: R-002
+  #                 imageUrl:
+  #                   type: string
+  #                 productInfo:
+  #                   type: object
+  #                   properties:
+  #                     description:
+  #                       type: string
+  #                       example: Una gran compra, totalmente aconsejable
+  #                     price:
+  #                       type: integer
+  #                       example: 2699999
+  #                     availableAmount:
+  #                       type: integer
+  #                       example: 20
+  #       '404':
+  #         description: A truck with the specified reference was not found
+  # /{username}/reserve:
+  #   get:
+  #     summary: Returns the list of reserves for a given user
+  #     parameters:
+  #       - name: username
+  #         in: path
+  #         schema:
+  #           type: string
+  #         description: The username as it is stored in the database
+  #       - name: passwordSha
+  #         in: query
+  #         schema:
+  #           type: string
+  #         description: The SHA-1 hash of the password provided by the user
+  #     responses:
+  #       '200':
+  #         description: A JSON array of reserves
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: array
+  #               items:
+  #                 type: object
+  #                 properties:
+  #                   reserveDate:
+  #                     type: integer
+  #                     format: int64
+  #                     example: 1605398405
+  #                     description: Number of seconds since Unix Epoch (1970)
+  #                   product:
+  #                     type: object
+  #                     properties:
+  #                       name:
+  #                         type: string
+  #                         example: PatataTruck
+  #                       reference:
+  #                         type: string
+  #                         example: R-002
+  #                       imageUrl:
+  #                         type: string
+  #                       productInfo:
+  #                         type: object
+  #                         properties:
+  #                           description:
+  #                             type: string
+  #                             example: Una gran compra, totalmente aconsejable
+  #                           price:
+  #                             type: integer
+  #                             example: 2699999
+  #                           availableAmount:
+  #                             type: integer
+  #                             example: 20
+  #       '404':
+  #         description: The username has not been found
+  #       '401':
+  #         description: The passwordSha is not valid for the given user
+  # /{username}/reserve/{reference}:
+  #   post:
+  #     summary: Creates a reserve for a user, at the current server time, for the product specified
+  #     parameters:
+  #       - name: username
+  #         in: path
+  #         schema:
+  #           type: string
+  #         description: The username as it is stored in the database
+  #       - name: reference
+  #         in: path
+  #         schema:
+  #           type: string
+  #         description: The product reference
+  #       - name: passwordSha
+  #         in: query
+  #         schema:
+  #           type: string
+  #         description: The SHA-1 hash of the password provided by the user
+  #     responses:
+  #       '201':
+  #         description: Success response if the reserve was created
+  #       '401':
+  #         description: The passwordSha is not valid for the given user
+  #       '404':
+  #         description: Either the username or the reference specified could not be found
+  #       '409':
+  #         description: The reserve for the given combination of username and product already exists
+  #   delete:
+  #     summary: Removes a reserve for the product specified for the given user
+  #     parameters:
+  #       - name: username
+  #         in: path
+  #         schema:
+  #           type: string
+  #         description: The username as it is stored in the database
+  #       - name: reference
+  #         in: path
+  #         schema:
+  #           type: string
+  #         description: The product reference
+  #       - name: passwordSha
+  #         in: query
+  #         schema:
+  #           type: string
+  #         description: The SHA-1 hash of the password provided by the user
+  #     responses:
+  #       '200':
+  #         description: Success response if the reserve was correctly removed
+  #       '401':
+  #         description: The passwordSha is not valid for the given user
+  #       '404':
+  #         description: Either the username or the reference specified could not be found
