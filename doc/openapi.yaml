@@ -2,9 +2,10 @@ openapi: 3.0.0
 info:
   title: Street Fight
   description: Street Fight es un MMORPG no lineal en el que escribes tu propia historia sin limitarte a seguir un camino prefijado, explora un amplio mundo abierto, todo cuanto hagas tendra su repercusíon en el mundo.
-  version: 1.0
+  version: 0.1
 
 servers:
+  - url: http://streetfight.rat.la:8080/
   - url: http://localhost:8080/
 
 paths:
@@ -35,7 +36,7 @@ paths:
           description: Tamaño del rádio que se obtiene al trazar una circunferencia con centro en dichas coordenadas.
       responses:
         '200':
-          description: Un array JSON con las banderas dentro del radio especicado.
+          description: Un array JSON con las banderas dentro del radio especificado.
           content:
             application/json:
               schema:
@@ -267,7 +268,21 @@ paths:
                         extra:
                           type: string
                           example: ""
-
+  /user/top/{length}:
+    get:
+      summary: Devuelve la lista de usuarios que mas banderas han capturado en funcion del tamaño indicado.
+  /clan/top/{length}:
+    get:
+      summary: Devuelve la lista de clanes que mas banderas han capturado en funcion del tamaño indicado.
+  /clan:
+    get:
+      summary: Devuelve la lista de clanes que coincidan en nombre con el parámetro "q".
+  /clan/{id_clan}:
+    get:
+      summary: Devuelve toda la info de un clan.
+  /{id_user}/clan:
+    post:
+      summary: Permite que un usuario cambie de clan.
 
 
 
