@@ -45,16 +45,16 @@ paths:
                   properties:
                     id:
                       type: int
-                      example: 1
+                      example: 6578
                     latitude:
                       type: double
-                      example: 43.36848
+                      example: 43.36644
                     longitude:
                       type: double
-                      example: -8.40531
+                      example: -8.40881
                     url_icon:
                       type: string
-                      example: "https://i.imgur.com/Lbu3ErD.png"
+                      example: "https://i.imgur.com/Lbu3ErF.png"
                     acronym:
                       type: string
                       example: "LPA"
@@ -62,6 +62,92 @@ paths:
                       type: string
                       example: "#FFFFFF"
         '400':
+          description: Cuando no mandas los query params correctamente.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: int
+                          example: 400
+                        description:
+                          type: string
+                          example: "Bad Request"
+                        extra:
+                          type: string
+                          example: ""
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: int
+                          example: 500
+                        description:
+                          type: string
+                          example: "Internal Server Error"
+                        extra:
+                          type: string
+                          example: ""
+  /flag/{id_flag}:
+    get:
+      summary: Devuelve toda la info de una bandera y su clan.
+      parameters:
+        - name: id_flag
+          in: path
+          required: true
+          description: El id de la bandera de la que queremos obtener información.
+          schema:
+            type: int
+      responses:
+        '200':
+          description: Toda la info de la bandera y un poco sobre el clan al que pertenece.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: int
+                    example: 17895
+                  name:
+                    type: string
+                    example: "Estatua de María Pita"
+                  description:
+                    type: string
+                    example: "María Mayor Fernández de Cámara y Pita (Sigrás, Cambre, 1565-1643), conocida como María Pita, fue una heroína de la defensa de La Coruña en 1589 contra la Invencible Inglesa."
+                  latitude:
+                    type: double
+                    example: 43.77848
+                  longitude:
+                    type: double
+                    example: -8.45531
+                  clan_id:
+                    type: int
+                    example: 256
+                  clan_name:
+                    type: string
+                    example: "El Mejor Clan"
+                  clan_url_icon:
+                    type: string
+                    example: "https://i.imgur.com/Lbu3ErD.png"
+                  clan_acronym:
+                    type: string
+                    example: "EMC"
+                  clan_color:
+                      type: string
+                      example: "#FFFF55"
+      '404':
           description: Cuando no mandas los query params correctamente.
           content:
             application/json:
@@ -99,19 +185,19 @@ paths:
                         extra:
                           type: string
                           example: ""
-  /flags/{id_flag}:
+  /user/{id_user}:
     get:
-      summary: Devuelve toda la info de una bandera.
+      summary: Devuelve toda la info de un usuario y su clan.
       parameters:
-        - name: id_flag
+        - name: id_user
           in: path
           required: true
-          description: El id de la bandera de la que queremos obtener información
+          description: El id del usuario de el que queremos obtener información.
           schema:
-            type: string
+            type: int
       responses:
         '200':
-          description: Toda la info de la bandera y un poco del clan al que pertenece.
+          description: Toda la info del usuario y un poco sobre el clan al que pertenece.
           content:
             application/json:
               schema:
@@ -119,36 +205,66 @@ paths:
                 properties:
                   id:
                     type: int
-                    example: 1
+                    example: 1568
                   name:
                     type: string
-                    example: "Estatua de María Pita"
-                  description:
-                    type: string
-                    example: "María Mayor Fernández de Cámara y Pita (Sigrás, Cambre, 1565-1643), conocida como María Pita, fue una heroína de la defensa de La Coruña en 1589 contra la Invencible Inglesa."
-                  latitude:
-                    type: double
-                    example: 43.36848
-                  longitude:
-                    type: double
-                    example: -8.40531
+                    example: "Pikachu67"
+                  captured_flags:
+                    type: int
+                    example: 11
                   clan_id:
                     type: int
-                    example: 2
+                    example: 256
                   clan_name:
                     type: string
-                    example: "El Mejor Clan"
+                    example: "Kakariko Select Club"
                   clan_url_icon:
                     type: string
-                    example: "https://i.imgur.com/Lbu3ErD.png"
+                    example: "https://i.imgur.com/Kbu3ErD.png"
                   clan_acronym:
                     type: string
-                    example: "EMC"
+                    example: "KSC"
                   clan_color:
                       type: string
                       example: "#FFFF55"
-              
-
+        '404':
+            description: Cuando no mandas los query params correctamente.
+            content:
+              application/json:
+                schema:
+                    type: object
+                    properties:
+                      http_response:
+                        type: object
+                        properties:
+                          code:
+                            type: int
+                            example: 404
+                          description:
+                            type: string
+                            example: "Not found"
+                          extra:
+                            type: string
+                            example: ""
+          '500':
+            description: Error interno del servidor.
+            content:
+              application/json:
+                schema:
+                    type: object
+                    properties:
+                      http_response:
+                        type: object
+                        properties:
+                          code:
+                            type: int
+                            example: 500
+                          description:
+                            type: string
+                            example: "Internal Server Error"
+                          extra:
+                            type: string
+                            example: ""
 
 
 
