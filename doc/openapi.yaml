@@ -148,43 +148,43 @@ paths:
                       type: string
                       example: "#FFFF55"
       '404':
-          description: Cuando no mandas los query params correctamente.
-          content:
-            application/json:
-              schema:
-                  type: object
-                  properties:
-                    http_response:
-                      type: object
-                      properties:
-                        code:
-                          type: int
-                          example: 404
-                        description:
-                          type: string
-                          example: "Not found"
-                        extra:
-                          type: string
-                          example: ""
-        '500':
-          description: Error interno del servidor.
-          content:
-            application/json:
-              schema:
-                  type: object
-                  properties:
-                    http_response:
-                      type: object
-                      properties:
-                        code:
-                          type: int
-                          example: 500
-                        description:
-                          type: string
-                          example: "Internal Server Error"
-                        extra:
-                          type: string
-                          example: ""
+        description: Cuando no mandas los query params correctamente.
+        content:
+          application/json:
+            schema:
+                type: object
+                properties:
+                  http_response:
+                    type: object
+                    properties:
+                      code:
+                        type: int
+                        example: 404
+                      description:
+                        type: string
+                        example: "Not found"
+                      extra:
+                        type: string
+                        example: ""
+      '500':
+        description: Error interno del servidor.
+        content:
+          application/json:
+            schema:
+                type: object
+                properties:
+                  http_response:
+                    type: object
+                    properties:
+                      code:
+                        type: int
+                        example: 500
+                      description:
+                        type: string
+                        example: "Internal Server Error"
+                      extra:
+                        type: string
+                        example: ""
   /user/{id_user}:
     get:
       summary: Devuelve toda la info de un usuario y su clan.
@@ -228,43 +228,43 @@ paths:
                       type: string
                       example: "#FFFF55"
         '404':
-            description: Cuando no mandas los query params correctamente.
-            content:
-              application/json:
-                schema:
-                    type: object
-                    properties:
-                      http_response:
-                        type: object
-                        properties:
-                          code:
-                            type: int
-                            example: 404
-                          description:
-                            type: string
-                            example: "Not found"
-                          extra:
-                            type: string
-                            example: ""
-          '500':
-            description: Error interno del servidor.
-            content:
-              application/json:
-                schema:
-                    type: object
-                    properties:
-                      http_response:
-                        type: object
-                        properties:
-                          code:
-                            type: int
-                            example: 500
-                          description:
-                            type: string
-                            example: "Internal Server Error"
-                          extra:
-                            type: string
-                            example: ""
+          description: Cuando no mandas los query params correctamente.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: int
+                          example: 404
+                        description:
+                          type: string
+                          example: "Not found"
+                        extra:
+                          type: string
+                          example: ""
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: int
+                          example: 500
+                        description:
+                          type: string
+                          example: "Internal Server Error"
+                        extra:
+                          type: string
+                          example: ""
 
 
 
