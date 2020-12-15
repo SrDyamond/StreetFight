@@ -9,6 +9,27 @@ servers:
   - url: http://localhost:8080/
 
 paths:
+  /login:
+    post:
+      summary: Inicia sesión un usuario registrado y se devuelve una cookie de sesión.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+                properties:
+                  username:
+                    type: string
+                    example: "PepitoUJU"
+                  password_sha:
+                    type: string
+                    example: "86f7e437faa5a7fce15d1ddcb9eaeaea377667b8"
+            required:
+              - username
+              - password_sha
+  /register:
+    post:
+      summary: Se registra un usuario nuevo y se devuelve una cookie de sesión.
   /flags:
     get:
       summary: Devuelve una lista de banderas cercanas en base a tu localización y un rádio.
@@ -271,18 +292,34 @@ paths:
   /user/top/{length}:
     get:
       summary: Devuelve la lista de usuarios que mas banderas han capturado en funcion del tamaño indicado.
-  /clan/top/{length}:
-    get:
-      summary: Devuelve la lista de clanes que mas banderas han capturado en funcion del tamaño indicado.
+      parameters:
+        - name: length
   /clan:
     get:
       summary: Devuelve la lista de clanes que coincidan en nombre con el parámetro "q".
+      parameters:
+        - name: q
   /clan/{id_clan}:
     get:
       summary: Devuelve toda la info de un clan.
+      parameters:
+        - name: id_clan
+  /clan/top/{length}:
+    get:
+      summary: Devuelve la lista de clanes que mas banderas han capturado en funcion del tamaño indicado.
+      parameters:
+        - name: length
   /{id_user}/clan:
     post:
       summary: Permite que un usuario cambie de clan.
+      parameters:
+        - name: id_user
+  /{id_user}/catch/{id_flag}:
+    post:
+      summary: Un usuario captura una bandera.
+      parameters:
+        - name: id_user
+        - name: id_flag
 
 
 
