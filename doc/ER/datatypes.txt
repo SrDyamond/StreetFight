@@ -9,7 +9,7 @@ USARIO
     nombre VARCHAR(25) NOT NULL
     banderas_capturadas INT NOT NULL
     salt VARCHAR(40) NOT NULL
-    calvae_sha_concatenada VARCHAR(40) NOT NULL
+    clave_sha_concatenada VARCHAR(40) NOT NULL
     id_clan INT NOT NULL FOREIGN KEY
 
 CLAN

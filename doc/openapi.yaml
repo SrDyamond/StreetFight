@@ -13,7 +13,7 @@ paths:
     post:
       summary: Inicia sesión un usuario registrado y se devuelve una cookie de sesión.
       requestBody:
-        description: "Formato JSON para enviar un POST de login."
+        description: "Formato para enviar un POST de login."
         content:
           application/json:
             schema:
@@ -31,6 +31,26 @@ paths:
   /register:
     post:
       summary: Se registra un usuario nuevo y se devuelve una cookie de sesión.
+      requestBody:
+        description: "Formato para enviar un POST de registro."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: "Nuevito2"
+                password_sha:
+                  type: string
+                  example: "e9d71f5ee7c92d6dc9e92ffdad17b8bd49418f98"
+                id_clan:
+                  type: int
+                  example: 1056
+        required:
+          - username
+          - password_sha
+          - id_clan
   /flags:
     get:
       summary: Devuelve una lista de banderas cercanas en base a tu localización y un rádio.
@@ -300,6 +320,8 @@ paths:
       summary: Devuelve la lista de clanes que coincidan en nombre con el parámetro "q".
       parameters:
         - name: q
+    post:
+      summary: Permite registrar un nuevo clan.
   /clan/{id_clan}:
     get:
       summary: Devuelve toda la info de un clan.
