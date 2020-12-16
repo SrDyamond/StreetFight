@@ -1,6 +1,6 @@
 # Street Fight
 
-Street Fight es un MMORPG no lineal en el que escribes tu propia historia sin limitarte a seguir un camino prefijado, explora un amplio mundo abierto, todo cuanto hagas tendra su repercusíon en el mundo.
+Street Fight es un MMORPG no lineal en el que escribes tu propia historia sin limitarte a seguir un camino prefijado, explora un amplio mundo abierto, todo cuanto hagas tendrá su repercusión en el mundo.
 
 ## Diagrama ER
 
@@ -55,19 +55,19 @@ Street Fight es un MMORPG no lineal en el que escribes tu propia historia sin li
 
 #### DIFUSION AUTOMATICA
 
-Mensaje de difusion cuando un clan captura una bandera (si esa bandera esta en blanco).
+Mensaje de difusión cuando un clan captura una bandera (si esa bandera esta en blanco).
 
 ```
 El clan Los Pepes ha capturado la bandera de Afundación.
 ```
 
-Mensaje de difusion cuando un clan captura una bandera y otro clan la pierde.
+Mensaje de difusión cuando un clan captura una bandera y otro clan la pierde.
 
 ```
 El clan Los Pepes ha robado la bandera de Afundación al clan Los Juanjos.
 ```
 
-Mensaje de difusion para la puntuación del los top clanes (10).
+Mensaje de difusión para la puntuación del los top clanes (10).
 
 ```
 El nuevo top 10 de clanes es:
@@ -77,7 +77,7 @@ El nuevo top 10 de clanes es:
 - etc
 ```
 
-Mensaje de difusion para la puntuación del los top usuarios (10).
+Mensaje de difusión para la puntuación del los top usuarios (10).
 
 ```
 El nuevo top 10 de usuarios es:
@@ -87,7 +87,7 @@ El nuevo top 10 de usuarios es:
 - etc
 ```
 
-Mensaje de difusion clan sin banderas.
+Mensaje de difusión clan sin banderas.
 
 ```
 El clan Los Juanjos se han quedado sin territorio, a ver si se ponen las pilas.
@@ -95,15 +95,15 @@ El clan Los Juanjos se han quedado sin territorio, a ver si se ponen las pilas.
 
 #### SOLICITADAS
 
-Top de clanes (XX).
+Top de clanes (número variable).
 
-solicitud:
+- Solicitudes
 
 ```
 Top clanes 30
 ```
 
-respuesta:
+- Respuestas
 
 ```
 El top 30 de clanes es:
@@ -113,15 +113,15 @@ El top 30 de clanes es:
 - etc
 ```
 
-Top de usuarios (XX).
+Top de usuarios (número variable).
 
-solicitud:
+- Solicitudes
 
 ```
 Top usuarios 15
 ```
 
-respuesta:
+- Respuestas
 
 ```
 El top 15 de usuarios es:
@@ -131,42 +131,63 @@ El top 15 de usuarios es:
 - etc
 ```
 
-Consulta clan
+Consulta clan (nombre exacto)
 
-solicitud:
+- Solicitudes
 
 ```
 Info del clan Los Pepes
 ```
 
-respuesta:
+```
+Información del clan Los Pepes
+```
+
+- Respuestas
 
 ```
 El clan Los Pepes (LP) tiene una puntuación de 675, ha capturado 40 banderas y tiene 30 miembros.
 ```
 
-Consulta usuario.
+- Errores
 
-solicitud:
+```
+No existe ningún clan con el nombre 'Los Pepes'.
+```
+
+Consulta usuario  (nombre exacto)
+
+- Solicitudes
 
 ```
 Info del usuario Pikachu78
 ```
 
-respuesta:
+```
+Información del usuario Pikachu78
+```
+
+- Respuestas
+
 ```
 El usuario Pikachu78 tiene una puntuación de 50, ha capturado 10 banderas y pertenece al clan Pokimons En Acción (PEA).
+```
+
+- Errores
+
+```
+No existe ningún usuario con el nombre 'Pikachu78'.
 ```
 
 Comando no reconocido.
 
 ```
-Oh, algo a salido mal. Puto, escribe ayuda para saber como usar esto.
+Oh, algo ha salido mal. Escribe 'ayuda' para saber como usar esto.
 ```
 
 Comando ayuda.
 
-solicitud: 
+- Solicitudes
 
 ```
 Ayuda
@@ -180,10 +201,14 @@ Help
 Ayúdame
 ```
 
-respuesta:
+- Respuestas
 
 ```
-todos los comandos
+- Ayuda
+- Top clanes <número>
+- Top usuarios <número>
+- Info del clan <nombre_exacto>
+- Info del usuario <nombre_exacto>
 ```
 
 ## Definición OpenAPI
