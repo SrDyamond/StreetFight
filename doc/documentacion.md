@@ -53,6 +53,139 @@ Street Fight es un MMORPG no lineal en el que escribes tu propia historia sin li
 
 ### Twitter Bot
 
+#### DIFUSION AUTOMATICA
+
+Mensaje de difusion cuando un clan captura una bandera (si esa bandera esta en blanco).
+
+```
+El clan Los Pepes ha capturado la bandera de Afundación.
+```
+
+Mensaje de difusion cuando un clan captura una bandera y otro clan la pierde.
+
+```
+El clan Los Pepes ha robado la bandera de Afundación al clan Los Juanjos.
+```
+
+Mensaje de difusion para la puntuación del los top clanes (10).
+
+```
+El nuevo top 10 de clanes es:
+- clan 1 (score)
+- clan 2 (score)
+- clan 3 (score)
+- etc
+```
+
+Mensaje de difusion para la puntuación del los top usuarios (10).
+
+```
+El nuevo top 10 de usuarios es:
+- user 1 (score)
+- user 2 (score)
+- user 3 (score)
+- etc
+```
+
+Mensaje de difusion clan sin banderas.
+
+```
+El clan Los Juanjos se han quedado sin territorio, a ver si se ponen las pilas.
+```
+
+#### SOLICITADAS
+
+Top de clanes (XX).
+
+solicitud:
+
+```
+Top clanes 30
+```
+
+respuesta:
+
+```
+El top 30 de clanes es:
+- clan 1 (score)
+- clan 2 (score)
+- clan 3 (score)
+- etc
+```
+
+Top de usuarios (XX).
+
+solicitud:
+
+```
+Top usuarios 15
+```
+
+respuesta:
+
+```
+El top 15 de usuarios es:
+- user 1 (score)
+- user 2 (score)
+- user 3 (score)
+- etc
+```
+
+Consulta clan
+
+solicitud:
+
+```
+Info del clan Los Pepes
+```
+
+respuesta:
+
+```
+El clan Los Pepes (LP) tiene una puntuación de 675, ha capturado 40 banderas y tiene 30 miembros.
+```
+
+Consulta usuario.
+
+solicitud:
+
+```
+Info del usuario Pikachu78
+```
+
+respuesta:
+```
+El usuario Pikachu78 tiene una puntuación de 50, ha capturado 10 banderas y pertenece al clan Pokimons En Acción (PEA).
+```
+
+Comando no reconocido.
+
+```
+Oh, algo a salido mal. Puto, escribe ayuda para saber como usar esto.
+```
+
+Comando ayuda.
+
+solicitud: 
+
+```
+Ayuda
+```
+
+```
+Help
+```
+
+```
+Ayúdame
+```
+
+respuesta:
+
+```
+todos los comandos
+```
+
 ## Definición OpenAPI
 
 [Archivo de definición del OpenAPI](openapi.yaml)
