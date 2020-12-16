@@ -49,9 +49,27 @@ Street Fight es un MMORPG no lineal en el que escribes tu propia historia sin li
 
 ### Android APP
 
+El juego en sí.
+
+#### Pantalla principal sin sesión iniciada
+
+![](mockups-ui/mockup-android-img/pantalla1.png)
+
+#### Pantalla de login
+
+#### Pantalla de registro
+
+#### Pantalla de unirse a un clan
+
+#### Pantalla de creación de clan
+
 ### Webpage
 
+Destinada a consultar estadísticas, ver el mapa global y edtitar tu perfil y tu clan.
+
 ### Twitter Bot
+
+Se encarga anunciar publicamene cambios grandes en el desarrollo del juego y permite consultar estadísticas resumidas.
 
 #### DIFUSION AUTOMATICA
 
