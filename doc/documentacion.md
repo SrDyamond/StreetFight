@@ -57,11 +57,41 @@ El juego en sí.
 
 #### Pantalla de login
 
+![](mockups-ui/mockup-android-img/pantalla2.png)
+
 #### Pantalla de registro
+
+![](mockups-ui/mockup-android-img/pantalla3.png)
 
 #### Pantalla de unirse a un clan
 
+![](mockups-ui/mockup-android-img/pantalla4.png)
+
 #### Pantalla de creación de clan
+
+![](mockups-ui/mockup-android-img/pantalla5.png)
+
+#### Pantalla principal con sesión iniciada
+
+![](mockups-ui/mockup-android-img/pantalla6.png)
+
+#### Pantalla detalle de usuario
+
+![](mockups-ui/mockup-android-img/pantalla7.png)
+
+#### Pantalla proceso de captura
+
+![](mockups-ui/mockup-android-img/pantalla8.png)
+
+> Los números 4/6 indican cuantos usuarios están intentando capturar la bandera, 4 de tu grupo y 6 de otros.
+
+#### Pantalla proceso de captura OK
+
+![](mockups-ui/mockup-android-img/pantalla9.png)
+
+#### Pantalla proceso de captura KO
+
+![](mockups-ui/mockup-android-img/pantalla10.png)
 
 ### Webpage
 
