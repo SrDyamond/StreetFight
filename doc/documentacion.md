@@ -81,9 +81,9 @@ El juego en sí.
 
 #### Pantalla proceso de captura
 
-![](mockups-ui/mockup-android-img/pantalla8.png)
+- Los números 4/6 indican cuantos usuarios están intentando capturar la bandera, 4 de tu grupo y 6 de otros.
 
-> Los números 4/6 indican cuantos usuarios están intentando capturar la bandera, 4 de tu grupo y 6 de otros.
+![](mockups-ui/mockup-android-img/pantalla8.png)
 
 #### Pantalla proceso de captura OK
 
@@ -95,13 +95,42 @@ El juego en sí.
 
 ### Webpage
 
-Destinada a consultar estadísticas, ver el mapa global y edtitar tu perfil y tu clan.
+Destinada a consultar estadísticas, ver el mapa global y editar tu perfil y tu clan.
+
+#### Pantalla principal sin sesión iniciada
+
+![](mockups-ui/mockup-web-img/pantalla1.png)
+
+#### Pantalla de login
+
+![](mockups-ui/mockup-web-img/pantalla2.png)
+
+#### Pantalla de inicio con sesión iniciada
+
+![](mockups-ui/mockup-web-img/pantalla5.png)
+
+#### Pantalla de detalle de usuario
+
+![](mockups-ui/mockup-web-img/pantalla3.png)
+
+#### Pantalla modo edición del usuario
+
+- Si el usuario es el fundador de su clan, también puede editar sus atributos.
+
+![](mockups-ui/mockup-web-img/pantalla4.png)
+
+#### Pantalla de búsqueda de clan o usuario
+
+- Para buscar no es necesario iniciar sesión.
+- En caso de haber iniciado sesión, al lado de cada clan (resultado de búsqueda) aparecerá un botón (Join) que te permitirá unirte al clan.
+
+![](mockups-ui/mockup-web-img/pantalla6.png)
 
 ### Twitter Bot
 
 Se encarga anunciar publicamene cambios grandes en el desarrollo del juego y permite consultar estadísticas resumidas.
 
-#### DIFUSION AUTOMATICA
+#### Difusión automatizada
 
 Mensaje de difusión cuando un clan captura una bandera (si esa bandera esta en blanco).
 
@@ -141,7 +170,7 @@ Mensaje de difusión clan sin banderas.
 El clan Los Juanjos se han quedado sin territorio, a ver si se ponen las pilas.
 ```
 
-#### SOLICITADAS
+#### Respuestas a solicitudes (comandos)
 
 Top de clanes (número variable).
 
