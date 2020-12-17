@@ -28,10 +28,12 @@ Web
 
 Bot de Twitter
 
-- Follow por follow automatico.
-- Rt y fav,con palabras que se ajusten a nuestro criterio.
 - Mostrar un top clanes cuando cambie el top.
 - Mostrar un top usuarios cuando cambie el top.
+- Responder a ciertos comandos.
+- Follow por follow automatico.
+- RT y FAV con palabras que se ajusten a nuestro criterio.
+
 
 > El equipo de Street Fight no se hace responsable de los posibles conflictos ocasionados por la competitividad de los usuarios.
 
@@ -269,6 +271,11 @@ Ayúdame
 - Info del clan <nombre_exacto>
 - Info del usuario <nombre_exacto>
 ```
+
+#### Funcionabilidades extra
+
+- Follow por follow automatico.
+- RT y FAV con palabras que se ajusten a nuestro criterio.
 
 ## Diagrama ER
 
