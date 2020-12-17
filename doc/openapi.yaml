@@ -9,7 +9,7 @@ servers:
   - url: http://localhost:8271/
 
 paths:
-  /login:
+  /session:
     post:
       summary: Inicia sesión un usuario registrado y se devuelve una cookie de sesión.
       requestBody:
@@ -100,7 +100,6 @@ paths:
                         extra:
                           type: string
                           example: ""
-  /logout:
     delete:
       summary: Cierra la sesión en un dispositivo destruyendo la cookie indicada.
       requestBody:
@@ -172,81 +171,6 @@ paths:
                         extra:
                           type: string
                           example: ""
-        '500':
-          description: Error interno del servidor.
-          content:
-            application/json:
-              schema:
-                  type: object
-                  properties:
-                    http_response:
-                      type: object
-                      properties:
-                        code:
-                          type: integer
-                          example: 500
-                        description:
-                          type: string
-                          example: "Internal Server Error"
-                        extra:
-                          type: string
-                          example: ""
-  /register:
-    post:
-      summary: Se registra un usuario nuevo y se devuelve una cookie de sesión.
-      requestBody:
-        description: "Formato para enviar un POST de registro."
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                username:
-                  type: string
-                  example: "Nuevito2"
-                password_sha:
-                  type: string
-                  example: "e9d71f5ee7c92d6dc9e92ffdad17b8bd49418f98"
-                id_clan:
-                  type: integer
-                  example: 1056
-      responses:
-        '200':
-          description: Devolvemos la cookie de sesión generada.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  user_id:
-                    type: integer
-                    example: 561
-                  cookie_id:
-                    type: integer
-                    example: 12372
-                  cookie:
-                    type: string
-                    example: "a6f8faa64204770ba3281fa515eca12f95d9a354"
-        '409':
-          description: El nombre de usuario ya existe.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  http_response:
-                    type: object
-                    properties:
-                      code:
-                        type: integer
-                        example: 409
-                      description:
-                        type: string
-                        example: "Conflict"
-                      extra:
-                        type: string
-                        example: "El nombre de usuario ya existe."
         '500':
           description: Error interno del servidor.
           content:
@@ -457,6 +381,80 @@ paths:
       responses:
         '200':
           description: JSON array de usuarios que coinciden con el nombre o fragmento introducido.
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 500
+                        description:
+                          type: string
+                          example: "Internal Server Error"
+                        extra:
+                          type: string
+                          example: ""
+    post:
+      summary: Se registra un usuario nuevo y se devuelve una cookie de sesión.
+      requestBody:
+        description: "Formato para enviar un POST de registro."
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: "Nuevito2"
+                password_sha:
+                  type: string
+                  example: "e9d71f5ee7c92d6dc9e92ffdad17b8bd49418f98"
+                id_clan:
+                  type: integer
+                  example: 1056
+      responses:
+        '200':
+          description: Devolvemos la cookie de sesión generada.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    type: integer
+                    example: 561
+                  cookie_id:
+                    type: integer
+                    example: 12372
+                  cookie:
+                    type: string
+                    example: "a6f8faa64204770ba3281fa515eca12f95d9a354"
+        '409':
+          description: El nombre de usuario ya existe.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  http_response:
+                    type: object
+                    properties:
+                      code:
+                        type: integer
+                        example: 409
+                      description:
+                        type: string
+                        example: "Conflict"
+                      extra:
+                        type: string
+                        example: "El nombre de usuario ya existe."
         '500':
           description: Error interno del servidor.
           content:
