@@ -50,10 +50,6 @@ El juego en sí.
 
 ![](mockups-ui/mockup-android-img/pantalla9.png)
 
-#### Pantalla proceso de captura KO
-
-![](mockups-ui/mockup-android-img/pantalla10.png)
-
 ### Webpage
 
 Destinada a consultar estadísticas, ver el mapa global y editar tu perfil y tu clan.
