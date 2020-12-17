@@ -349,6 +349,19 @@ paths:
                         extra:
                           type: string
                           example: ""
+  /user:
+    get:
+      summary: Devuelve la lista de usuarios que coincidan en nombre con el parámetro "q".
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema:
+            type: string
+            example: "Paki"
+      responses:
+        '200':
+          description: JSON array de usuarios que coinciden con el nombre o fragmento introducido.
   /user/{id_user}:
     get:
       summary: Devuelve toda la info de un usuario y su clan.
@@ -456,7 +469,7 @@ paths:
             example: "Clan Pat"
       responses:
         '200':
-          description: JSON array de clanes que coinciden con el nombre po fragmento introducido.
+          description: JSON array de clanes que coinciden con el nombre o fragmento introducido.
     post:
       summary: Permite registrar un nuevo clan.
       responses:
