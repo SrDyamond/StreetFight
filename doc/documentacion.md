@@ -28,6 +28,8 @@ El juego en sí.
 
 ![](mockups-ui/mockup-android-img/pantalla4.png)
 
+- Una opción de simplificación es eliminar el selector de clanes que hay al crearse una cuenta nueva, simplemente se podría substituir por un textbox donde introducir el nombre exacto del clan en la pantalla de registro.
+
 #### Pantalla de creación de clan
 
 ![](mockups-ui/mockup-android-img/pantalla5.png)
