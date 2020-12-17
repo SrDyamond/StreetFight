@@ -61,7 +61,7 @@ paths:
                           example: "Unauthorized"
                         extra:
                           type: string
-                          example: "La contraseña es incorrecta."
+                          example: ""
         '404':
           description: El nombre de usuario no existe.
           content:
@@ -80,7 +80,26 @@ paths:
                           example: "Not found"
                         extra:
                           type: string
-                          example: "El nombre de usuario no existe."
+                          example: ""
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 500
+                        description:
+                          type: string
+                          example: "Internal Server Error"
+                        extra:
+                          type: string
+                          example: ""
   /logout:
     delete:
       summary: Cierra la sesión en un dispositivo destruyendo la cookie indicada.
@@ -114,7 +133,64 @@ paths:
                         example: "OK"
                       extra:
                         type: string
-                        example: "Sesión cerrada."
+                        example: "logout"
+        '401':
+          description: Cookie de sesión inválida.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 401
+                        description:
+                          type: string
+                          example: "Unauthorized"
+                        extra:
+                          type: string
+                          example: ""
+        '404':
+          description: El id de cookie no existe.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 404
+                        description:
+                          type: string
+                          example: "Not found"
+                        extra:
+                          type: string
+                          example: ""
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 500
+                        description:
+                          type: string
+                          example: "Internal Server Error"
+                        extra:
+                          type: string
+                          example: ""
   /register:
     post:
       summary: Se registra un usuario nuevo y se devuelve una cookie de sesión.
@@ -171,6 +247,25 @@ paths:
                       extra:
                         type: string
                         example: "El nombre de usuario ya existe."
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 500
+                        description:
+                          type: string
+                          example: "Internal Server Error"
+                        extra:
+                          type: string
+                          example: ""
   /flags:
     get:
       summary: Devuelve una lista de banderas cercanas en base a tu localización y un rádio.
