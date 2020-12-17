@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -26,9 +27,12 @@ import java.util.Arrays;
 
 //  Todas la pruevas son realizadas en la zona de La Coruña.
 
-public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
+public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback, LocationListener {
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
     private MapView map = null;
+    private Location loc;
+    private IMapController mapController;
+    private LocationManager locManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,24 +54,23 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         setContentView(R.layout.activity_main);
 
         //  Localización
-        LocationManager locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 
         }
-        Location loc = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
+        loc = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, this);
         map = findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK);
         map.setMultiTouchControls(true);
-        IMapController mapController = map.getController();
+        mapController = map.getController();
         mapController.setZoom(20.0);
         MyLocationNewOverlay mLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(this), map);
         mLocationOverlay.enableMyLocation();
         map.getOverlays().add(mLocationOverlay);
         GeoPoint locPoint = new GeoPoint(loc.getLatitude(), loc.getLongitude());
         mapController.setCenter(locPoint);
-
 
         /*
         //  Prueva de icono en mapa
@@ -85,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         geoPoints.add(new GeoPoint(43.35984, -8.39767));
         geoPoints.add(new GeoPoint(43.36316, -8.39668));
         geoPoints.add(new GeoPoint(43.36393, -8.39876));
-//add your points here
+        //add your points here
         Polygon polygon = new Polygon();    //see note below
         polygon.getFillPaint().setColor(Color.RED); //set fill color
         geoPoints.add(geoPoints.get(0));    //forces the loop to close(connect last point to first point)
@@ -101,6 +104,32 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                 // WRITE_EXTERNAL_STORAGE is required in order to show the map
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
         });
+    }
+
+    //  Cosas que hacer cuando cambia la ubicacion
+    public void onLocationChanged(Location location) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        loc = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        GeoPoint locPoint = new GeoPoint(loc.getLatitude(), loc.getLongitude());
+        mapController.animateTo(locPoint);
+    }
+
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+    }
+
+    public void onProviderEnabled(String provider) {
+    }
+
+    public void onProviderDisabled(String provider) {
     }
 
     @Override
