@@ -25,8 +25,6 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-//  Todas la pruevas son realizadas en la zona de La Coruña.
-
 public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback, LocationListener {
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
     private MapView map = null;
@@ -37,6 +35,11 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //  Use icon on another class
+        if (coordinates.resources == null) {
+            coordinates.resources = getResources();
+        }
 
         //handle permissions first, before map is created. not depicted here
 
@@ -53,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         //inflate and create the map
         setContentView(R.layout.activity_main);
 
-        //  Localización
+        //  Localization
         locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
@@ -61,6 +64,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         }
         loc = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, this);
+
+        //  Creacion de mapa ,controlador y overlay
         map = findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK);
         map.setMultiTouchControls(true);
@@ -71,6 +76,9 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         map.getOverlays().add(mLocationOverlay);
         GeoPoint locPoint = new GeoPoint(loc.getLatitude(), loc.getLongitude());
         mapController.setCenter(locPoint);
+
+        //  Se añaden las coordenadas
+        coordinates.coors(map);
 
         /*
         //  Prueva de icono en mapa
@@ -106,16 +114,10 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         });
     }
 
-    //  Cosas que hacer cuando cambia la ubicacion
+    //  Runs wen the ubi changes
     public void onLocationChanged(Location location) {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             return;
         }
         loc = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -123,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         mapController.animateTo(locPoint);
     }
 
+    //  Must stay to work
     public void onStatusChanged(String provider, int status, Bundle extras) {
     }
 
