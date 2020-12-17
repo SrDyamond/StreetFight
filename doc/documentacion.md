@@ -1,10 +1,39 @@
 # Street Fight
 
-Street Fight es un MMORPG no lineal en el que escribes tu propia historia sin limitarte a seguir un camino prefijado, explora un amplio mundo abierto, todo cuanto hagas tendrá su repercusión en el mundo.
+Street Fight es un MMORPG no lineal en el que escribes tu propia historia sin limitarte a seguir un camino prefijado, explora un amplio mundo abierto. Todo cuanto hagas tendrá su repercusión en la realidad.
 
-## Idea general
+## Descripcíon general
 
-...
+El programa es un juego, en el cual tu principal objetivo es la conquista de banderas, ganando puntos para tu clan (de momento los puntos no sirven para nada), lo cual a su vez genera un factor competitivo.
+
+### Resumen de funcionabilidades
+
+Android y Web
+
+- Visualizar las banderas en el mapa.
+- Iniciar sesion en la cuenta de usuario.
+- Posibilidad de crear, unirse y gestionar un clan.
+
+Android APP
+
+- Localizacion del usuario en un mapa.
+- Captura de banderas.
+- Crear una cuenta de usuario.
+
+Web
+
+- Ver el top 10 de clanes.
+- Ver el top 10 de jugadores.
+- Buscar clanes y/o jugadores.
+
+Bot de Twitter
+
+- Follow por follow automatico.
+- Rt y fav,con palabras que se ajusten a nuestro criterio.
+- Mostrar un top clanes cuando cambie el top.
+- Mostrar un top usuarios cuando cambie el top.
+
+> El equipo de Street Fight no se hace responsable de los posibles conflictos ocasionados por la competitividad de los usuarios.
 
 ## Mockups UI
 
@@ -85,7 +114,7 @@ Destinada a consultar estadísticas, ver el mapa global y editar tu perfil y tu 
 
 ![](mockups-ui/mockup-web-img/pantalla6.png)
 
-### Twitter Bot
+### Bot de Twitter
 
 Se encarga anunciar publicamene cambios grandes en el desarrollo del juego y permite consultar estadísticas resumidas.
 
