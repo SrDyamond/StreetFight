@@ -5,8 +5,8 @@ info:
   version: "0.1"
 
 servers:
-  - url: http://streetfight.rat.la:8080/
-  - url: http://localhost:8080/
+  - url: http://streetfight.rat.la:8271/
+  - url: http://localhost:8271/
 
 paths:
   /login:
@@ -310,13 +310,13 @@ paths:
                     longitude:
                       type: number
                       example: -8.40881
-                    url_icon:
+                    clan_url_icon:
                       type: string
                       example: "https://i.imgur.com/Lbu3ErF.png"
-                    acronym:
+                    clan_acronym:
                       type: string
                       example: "LPA"
-                    color:
+                    clan_color:
                       type: string
                       example: "#FFFFFF"
         '400':
@@ -457,6 +457,25 @@ paths:
       responses:
         '200':
           description: JSON array de usuarios que coinciden con el nombre o fragmento introducido.
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 500
+                        description:
+                          type: string
+                          example: "Internal Server Error"
+                        extra:
+                          type: string
+                          example: ""
   /user/{id_user}:
     get:
       summary: Devuelve toda la info de un usuario y su clan.
@@ -552,6 +571,25 @@ paths:
       responses:
         '200':
           description: JSON array con el top indicado.
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 500
+                        description:
+                          type: string
+                          example: "Internal Server Error"
+                        extra:
+                          type: string
+                          example: ""
   /clan:
     get:
       summary: Devuelve la lista de clanes que coincidan en nombre con el parámetro "q".
@@ -565,6 +603,25 @@ paths:
       responses:
         '200':
           description: JSON array de clanes que coinciden con el nombre o fragmento introducido.
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 500
+                        description:
+                          type: string
+                          example: "Internal Server Error"
+                        extra:
+                          type: string
+                          example: ""
     post:
       summary: Permite registrar un nuevo clan.
       responses:
@@ -572,6 +629,25 @@ paths:
           description: Clan creado.
         '401':
           description: Cookie de sesión inválida.
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 500
+                        description:
+                          type: string
+                          example: "Internal Server Error"
+                        extra:
+                          type: string
+                          example: ""
   /clan/{id_clan}:
     get:
       summary: Devuelve toda la info de un clan.
@@ -585,6 +661,44 @@ paths:
       responses:
         '200':
           description: JSON object con la info del clan indicado.
+        '404':
+          description: Cuando el id consultado no existe.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 404
+                        description:
+                          type: string
+                          example: "Not found"
+                        extra:
+                          type: string
+                          example: ""
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 500
+                        description:
+                          type: string
+                          example: "Internal Server Error"
+                        extra:
+                          type: string
+                          example: ""
   /clan/top:
     get:
       summary: Devuelve la lista de clanes que mas banderas han capturado en funcion del tamaño indicado, por defecto devuelve 10.
@@ -598,6 +712,25 @@ paths:
       responses:
         '200':
           description: JSON array con el top indicado.
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 500
+                        description:
+                          type: string
+                          example: "Internal Server Error"
+                        extra:
+                          type: string
+                          example: ""
   /{id_user}/clan:
     post:
       summary: Permite que un usuario cambie de clan.
@@ -613,6 +746,25 @@ paths:
           description: Clan cambiado.
         '401':
           description: Cookie de sesión inválida.
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 500
+                        description:
+                          type: string
+                          example: "Internal Server Error"
+                        extra:
+                          type: string
+                          example: ""
   /{id_user}/catch/{id_flag}:
     post:
       summary: Un usuario captura una bandera.
@@ -634,6 +786,25 @@ paths:
           description: Intentando capturar la bandera.
         '401':
           description: Cookie de sesión inválida.
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 500
+                        description:
+                          type: string
+                          example: "Internal Server Error"
+                        extra:
+                          type: string
+                          example: ""
     get:
       summary: Un usuario que ha iniciado una captura comprueba el estado de la captura.
       parameters:
@@ -654,3 +825,22 @@ paths:
           description: Intentando capturar la bandera.
         '401':
           description: Cookie de sesión inválida.
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 500
+                        description:
+                          type: string
+                          example: "Internal Server Error"
+                        extra:
+                          type: string
+                          example: ""
