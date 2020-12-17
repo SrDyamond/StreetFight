@@ -125,12 +125,6 @@ El nuevo top 10 de usuarios es:
 - etc
 ```
 
-Mensaje de difusión clan sin banderas.
-
-```
-El clan Los Juanjos se han quedado sin territorio, a ver si se ponen las pilas.
-```
-
 #### Respuestas a solicitudes (comandos)
 
 Top de clanes (número variable).
