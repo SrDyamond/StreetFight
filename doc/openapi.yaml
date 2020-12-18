@@ -810,6 +810,28 @@ paths:
       responses:
         '201':
           description: Clan creado.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 132
+                    name:
+                      type: string
+                      example: "Kakariko Select Club"
+                    url_icon:
+                      type: string
+                      example: "https://i.imgur.com/Kbu3ErD.png"
+                    acronym:
+                      type: string
+                      example: "KSC"
+                    color:
+                        type: string
+                        example: "#FFFF55"
         '401':
           description: Cookie de sesión inválida.
           content:
@@ -861,6 +883,103 @@ paths:
       responses:
         '200':
           description: JSON object con la info del clan indicado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 132
+                  name:
+                    type: string
+                    example: "Kakariko Select Club"
+                  url_icon:
+                    type: string
+                    example: "https://i.imgur.com/Kbu3ErD.png"
+                  acronym:
+                    type: string
+                    example: "KSC"
+                  color:
+                      type: string
+                      example: "#FFFF55"
+                  members:
+                    type: integer
+                    example: 70
+                  flags:
+                    type: integer
+                    example: 200
+        '404':
+          description: Cuando el id consultado no existe.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 404
+                        description:
+                          type: string
+                          example: "Not found"
+                        extra:
+                          type: string
+                          example: ""
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 500
+                        description:
+                          type: string
+                          example: "Internal Server Error"
+                        extra:
+                          type: string
+                          example: ""
+  /clan/{clan_name}:
+    get:
+      summary: Devuelve la info del clan en base a su nombre exacto. Esto es muy util para comprobar si un clan existe ya en la BD.
+      parameters:
+        - name: clan_name
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "Kakariko Select Club"
+      responses:
+        '200':
+          description: JSON object con la info del clan indicado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 132
+                  name:
+                    type: string
+                    example: "Kakariko Select Club"
+                  url_icon:
+                    type: string
+                    example: "https://i.imgur.com/Kbu3ErD.png"
+                  acronym:
+                    type: string
+                    example: "KSC"
+                  color:
+                      type: string
+                      example: "#FFFF55"
         '404':
           description: Cuando el id consultado no existe.
           content:
@@ -912,6 +1031,28 @@ paths:
       responses:
         '200':
           description: JSON array con el top indicado.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 132
+                    name:
+                      type: string
+                      example: "Kakariko Select Club"
+                    url_icon:
+                      type: string
+                      example: "https://i.imgur.com/Kbu3ErD.png"
+                    acronym:
+                      type: string
+                      example: "KSC"
+                    color:
+                        type: string
+                        example: "#FFFF55"
         '400':
           description: Cuando no mandas los query params correctamente.
           content:
@@ -950,7 +1091,7 @@ paths:
                         extra:
                           type: string
                           example: ""
-  /{id_user}/clan:
+  /{id_user}/clan/{id_clan}:
     post:
       summary: Permite que un usuario cambie de clan.
       parameters:
@@ -960,9 +1101,32 @@ paths:
           schema:
             type: integer
             example: 654
+        - name: id_clan
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 765
       responses:
         '200':
           description: Clan cambiado.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 200
+                        description:
+                          type: string
+                          example: "OK"
+                        extra:
+                          type: string
+                          example: ""
         '401':
           description: Cookie de sesión inválida.
           content:
@@ -1003,7 +1167,7 @@ paths:
                           example: ""
   /{id_user}/catch/{id_flag}:
     post:
-      summary: Un usuario captura una bandera.
+      summary: Un usuario inicia la captura de una bandera.
       parameters:
         - name: id_user
           in: path
@@ -1019,7 +1183,44 @@ paths:
             example: 110
       responses:
         '200':
+          description: Bandera capturada.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 200
+                        description:
+                          type: string
+                          example: "OK"
+                        extra:
+                          type: string
+                          example: ""
+        '202':
           description: Intentando capturar la bandera.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 202
+                        description:
+                          type: string
+                          example: "Accepted"
+                        extra:
+                          type: string
+                          example: "4/3"
+                          description: Los usuarios que están intentando capturar la bandera, los de tu clan/los de potros clanes.
         '401':
           description: Cookie de sesión inválida.
           content:
@@ -1036,6 +1237,25 @@ paths:
                         description:
                           type: string
                           example: "Unauthorized"
+                        extra:
+                          type: string
+                          example: ""
+        '404':
+          description: Cuando el id consultado no existe.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 404
+                        description:
+                          type: string
+                          example: "Not found"
                         extra:
                           type: string
                           example: ""
@@ -1075,7 +1295,44 @@ paths:
             example: 321
       responses:
         '200':
+          description: Bandera capturada.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 200
+                        description:
+                          type: string
+                          example: "OK"
+                        extra:
+                          type: string
+                          example: ""
+        '202':
           description: Intentando capturar la bandera.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 202
+                        description:
+                          type: string
+                          example: "Accepted"
+                        extra:
+                          type: string
+                          example: "4/9"
+                          description: Los usuarios que están intentando capturar la bandera, los de tu clan/los de potros clanes.
         '401':
           description: Cookie de sesión inválida.
           content:
@@ -1092,6 +1349,25 @@ paths:
                         description:
                           type: string
                           example: "Unauthorized"
+                        extra:
+                          type: string
+                          example: ""
+        '404':
+          description: Cuando el id consultado no existe.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 404
+                        description:
+                          type: string
+                          example: "Not found"
                         extra:
                           type: string
                           example: ""
