@@ -22,7 +22,7 @@ public class coordinates {
 
             startMarker.get(i).setPosition(coors_num(i));
             startMarker.get(i).setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-            startMarker.get(i).setIcon(icons(i));
+            startMarker.get(i).setIcon(coors_icons(i));
             startMarker.get(i).setTitle("\t" + coors_name(i) + "\t" + "\n" + coors_desc(i));
             map.getOverlays().add(startMarker.get(i));
         }
@@ -31,8 +31,7 @@ public class coordinates {
     public static GeoPoint coors_num(int i) {
         List<GeoPoint> coors_num = new ArrayList<>();
         //  Add coordinate number
-        coors_num.add(new GeoPoint(43.36209, -8.41248));    // Casa de la ciencias
-        coors_num.add(new GeoPoint(43.36367, -8.404));
+        coors_num.add(new GeoPoint(43.36209, -8.41248));    // Casa de las ciencias
 
         return coors_num.get(i);
     }
@@ -40,7 +39,7 @@ public class coordinates {
     public static String coors_name(int i) {
         List<String> coors_name = new ArrayList<>();
         //  Add coordinate name
-        coors_name.add("Casa de las ciencias");
+        coors_name.add("Casa de las ciencias"); // Casa de las ciencias
 
         return coors_name.get(i);
     }
@@ -48,18 +47,18 @@ public class coordinates {
     public static String coors_desc(int i) {
         List<String> coors_desc = new ArrayList<>();
         //  Add coordinate description
-        coors_desc.add("Casa en la que ");
+        coors_desc.add("Casa en la que ");  // Casa de las ciencias
 
         return coors_desc.get(i);
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
-    public static Drawable icons(int i) {
-        List<Drawable> icons = new ArrayList<>();
+    public static Drawable coors_icons(int i) {
+        List<Drawable> coors_icons = new ArrayList<>();
         // Add coordinate icon
-        icons.add(resources.getDrawable(R.drawable.ic_torchlight_help_icon, null));
+        coors_icons.add(resources.getDrawable(R.drawable.ic_torchlight_help_icon, null));   // Casa de las ciencias
 
 
-        return icons.get(i);
+        return coors_icons.get(i);
     }
 }

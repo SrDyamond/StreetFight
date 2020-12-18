@@ -29,8 +29,9 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
     private MapView map = null;
     private Location loc;
-    private IMapController mapController;
     private LocationManager locManager;
+    private GeoPoint locPoint;
+    private IMapController mapController;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,14 +71,15 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         map.setTileSource(TileSourceFactory.MAPNIK);
         map.setMultiTouchControls(true);
         mapController = map.getController();
-        mapController.setZoom(20.0);
+        mapController.setZoom(20.0);    // Initial zoom
         MyLocationNewOverlay mLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(this), map);
         mLocationOverlay.enableMyLocation();
         map.getOverlays().add(mLocationOverlay);
-        GeoPoint locPoint = new GeoPoint(loc.getLatitude(), loc.getLongitude());
+        map.setMinZoomLevel(15.0);  // Max zoom out
+        locPoint = new GeoPoint(loc.getLatitude(), loc.getLongitude());
         mapController.setCenter(locPoint);
 
-        //  Se añaden las coordenadas
+        //  Add coordinates
         coordinates.coors(map);
 
         /*
@@ -108,20 +110,20 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
         requestPermissionsIfNecessary(new String[]{
                 // if you need to show the current location, uncomment the line below
-                // Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION,
                 // WRITE_EXTERNAL_STORAGE is required in order to show the map
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
         });
     }
 
-    //  Runs wen the ubi changes
+    //  Runs wen the location changes
     public void onLocationChanged(Location location) {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             return;
         }
         loc = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        GeoPoint locPoint = new GeoPoint(loc.getLatitude(), loc.getLongitude());
+        locPoint = new GeoPoint(loc.getLatitude(), loc.getLongitude());
         mapController.animateTo(locPoint);
     }
 
