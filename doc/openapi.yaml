@@ -685,6 +685,37 @@ paths:
       responses:
         '200':
           description: JSON array con el top indicado.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1568
+                    name:
+                      type: string
+                      example: "Pikachu67"
+                    captured_flags:
+                      type: integer
+                      example: 11
+                    clan_id:
+                      type: integer
+                      example: 132
+                    clan_name:
+                      type: string
+                      example: "Kakariko Select Club"
+                    clan_url_icon:
+                      type: string
+                      example: "https://i.imgur.com/Kbu3ErD.png"
+                    clan_acronym:
+                      type: string
+                      example: "KSC"
+                    clan_color:
+                        type: string
+                        example: "#FFFF55"
         '400':
           description: Cuando no mandas los query params correctamente.
           content:
