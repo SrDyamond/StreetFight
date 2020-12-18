@@ -824,6 +824,28 @@ paths:
       responses:
         '200':
           description: JSON array de clanes que coinciden con el nombre o fragmento introducido.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 132
+                    name:
+                      type: string
+                      example: "Kakariko Select Club"
+                    url_icon:
+                      type: string
+                      example: "https://i.imgur.com/Kbu3ErD.png"
+                    acronym:
+                      type: string
+                      example: "KSC"
+                    color:
+                        type: string
+                        example: "#FFFF55"
         '400':
           description: Cuando no mandas los query params correctamente.
           content:
