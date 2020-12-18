@@ -324,8 +324,6 @@ Ayúdame
 
 ## API REST
 
-Definición informal.
-
 ### Definición OpenAPI
 
 [Archivo de definición del OpenAPI](openapi.yaml)
