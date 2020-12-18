@@ -381,6 +381,25 @@ paths:
       responses:
         '200':
           description: JSON array de usuarios que coinciden con el nombre o fragmento introducido.
+        '400':
+          description: Cuando no mandas los query params correctamente.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  http_response:
+                    type: object
+                    properties:
+                      code:
+                        type: integer
+                        example: 400
+                      description:
+                        type: string
+                        example: "Bad Request"
+                      extra:
+                        type: string
+                        example: ""
         '500':
           description: Error interno del servidor.
           content:
@@ -555,6 +574,75 @@ paths:
                         extra:
                           type: string
                           example: ""
+  /user/{username}:
+    get:
+      summary: Devuelve la info del usuario en base a su nombre exacto. Esto es muy util para comprobar si un usuario existe ya en la BD.
+      parameters:
+        - name: username
+          in: path
+          required: true
+          description: El nombre exacto del usuario del que queremos obtener la información.
+          schema:
+            type: string
+            example: "Pikachu67"
+      responses:
+        '200':
+          description: Toda la info del usuario y un poco sobre el clan al que pertenece.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1568
+                  name:
+                    type: string
+                    example: "Pikachu67"
+                  captured_flags:
+                    type: integer
+                    example: 11
+                  clan_id:
+                    type: integer
+                    example: 132
+        '404':
+          description: Cuando el id consultado no existe.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 404
+                        description:
+                          type: string
+                          example: "Not found"
+                        extra:
+                          type: string
+                          example: ""
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 500
+                        description:
+                          type: string
+                          example: "Internal Server Error"
+                        extra:
+                          type: string
+                          example: ""
   /user/top:
     get:
       summary: Devuelve la lista de usuarios que mas banderas han capturado en funcion del tamaño indicado, por defecto devuelve 10.
@@ -569,6 +657,25 @@ paths:
       responses:
         '200':
           description: JSON array con el top indicado.
+        '400':
+          description: Cuando no mandas los query params correctamente.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  http_response:
+                    type: object
+                    properties:
+                      code:
+                        type: integer
+                        example: 400
+                      description:
+                        type: string
+                        example: "Bad Request"
+                      extra:
+                        type: string
+                        example: ""
         '500':
           description: Error interno del servidor.
           content:
@@ -601,6 +708,25 @@ paths:
       responses:
         '200':
           description: JSON array de clanes que coinciden con el nombre o fragmento introducido.
+        '400':
+          description: Cuando no mandas los query params correctamente.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  http_response:
+                    type: object
+                    properties:
+                      code:
+                        type: integer
+                        example: 400
+                      description:
+                        type: string
+                        example: "Bad Request"
+                      extra:
+                        type: string
+                        example: ""
         '500':
           description: Error interno del servidor.
           content:
@@ -710,6 +836,25 @@ paths:
       responses:
         '200':
           description: JSON array con el top indicado.
+        '400':
+          description: Cuando no mandas los query params correctamente.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  http_response:
+                    type: object
+                    properties:
+                      code:
+                        type: integer
+                        example: 400
+                      description:
+                        type: string
+                        example: "Bad Request"
+                      extra:
+                        type: string
+                        example: ""
         '500':
           description: Error interno del servidor.
           content:
