@@ -43,6 +43,25 @@ paths:
                   cookie:
                     type: string
                     example: "7323a5431d1c31072983a6a5bf23745b655ddf59"
+        '400':
+          description: Cuando mandas un JSON malformado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  http_response:
+                    type: object
+                    properties:
+                      code:
+                        type: integer
+                        example: 400
+                      description:
+                        type: string
+                        example: "Bad Request"
+                      extra:
+                        type: string
+                        example: ""
         '401':
           description: La contraseña es incorrecta.
           content:
@@ -133,6 +152,25 @@ paths:
                       extra:
                         type: string
                         example: "logout"
+        '400':
+          description: Cuando mandas un JSON malformado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  http_response:
+                    type: object
+                    properties:
+                      code:
+                        type: integer
+                        example: 400
+                      description:
+                        type: string
+                        example: "Bad Request"
+                      extra:
+                        type: string
+                        example: ""
         '401':
           description: Cookie de sesión inválida.
           content:
@@ -483,6 +521,25 @@ paths:
                   cookie:
                     type: string
                     example: "a6f8faa64204770ba3281fa515eca12f95d9a354"
+        '400':
+          description: Cuando mandas un JSON malformado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  http_response:
+                    type: object
+                    properties:
+                      code:
+                        type: integer
+                        example: 400
+                      description:
+                        type: string
+                        example: "Bad Request"
+                      extra:
+                        type: string
+                        example: ""
         '409':
           description: El nombre de usuario ya existe.
           content:
