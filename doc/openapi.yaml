@@ -377,12 +377,40 @@ paths:
           required: true
           schema:
             type: string
-            example: "Paki"
+            example: "Pika"
       responses:
         '200':
           description: JSON array de usuarios que coinciden con el nombre o fragmento introducido.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1568
+                    name:
+                      type: string
+                      example: "Pikachu67"
+                    clan_id:
+                      type: integer
+                      example: 132
+                    clan_name:
+                      type: string
+                      example: "Kakariko Select Club"
+                    clan_url_icon:
+                      type: string
+                      example: "https://i.imgur.com/Kbu3ErD.png"
+                    clan_acronym:
+                      type: string
+                      example: "KSC"
+                    clan_color:
+                        type: string
+                        example: "#FFFF55"
         '400':
-          description: Cuando no mandas los query params correctamente.
+          description: Cuando falta el query param "q" en la petición.
           content:
             application/json:
               schema:
@@ -753,6 +781,23 @@ paths:
           description: Clan creado.
         '401':
           description: Cookie de sesión inválida.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 401
+                        description:
+                          type: string
+                          example: "Unauthorized"
+                        extra:
+                          type: string
+                          example: ""
         '500':
           description: Error interno del servidor.
           content:
@@ -889,6 +934,23 @@ paths:
           description: Clan cambiado.
         '401':
           description: Cookie de sesión inválida.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 401
+                        description:
+                          type: string
+                          example: "Unauthorized"
+                        extra:
+                          type: string
+                          example: ""
         '500':
           description: Error interno del servidor.
           content:
@@ -929,6 +991,23 @@ paths:
           description: Intentando capturar la bandera.
         '401':
           description: Cookie de sesión inválida.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 401
+                        description:
+                          type: string
+                          example: "Unauthorized"
+                        extra:
+                          type: string
+                          example: ""
         '500':
           description: Error interno del servidor.
           content:
@@ -968,6 +1047,23 @@ paths:
           description: Intentando capturar la bandera.
         '401':
           description: Cookie de sesión inválida.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 401
+                        description:
+                          type: string
+                          example: "Unauthorized"
+                        extra:
+                          type: string
+                          example: ""
         '500':
           description: Error interno del servidor.
           content:
