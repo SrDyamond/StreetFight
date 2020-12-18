@@ -286,7 +286,7 @@ Ayúdame
 ### Tabla SESION
 - id INT PRIMARY KEY
 - id_usuario INT NOT NULL FOREIGN KEY
-- timestamp_caducidad BIGINT NOT NULL
+- timestamp_caducidad TIMESTAMP NOT NULL
 - valor_cookie VARCHAR(40) NOT NULL
 
 ### Tabla USARIO
@@ -303,7 +303,7 @@ Ayúdame
 - abreviatura CHAR(4)
 - color CHAR(7) NOT NULL
 - url_icono VARCHAR(300)
-- timestamp_fundacion BIGINT NOT NULL
+- timestamp_fundacion TIMESTAMP NOT NULL
 - id_fundador INT NOT NULL FOREIGN KEY
 
 ### Tabla BANDERA
@@ -317,8 +317,10 @@ Ayúdame
 ### Tabla INTENTO_CAPTURA
 - id_usuario INT NOT NULL FOREIGN KEY
 - id_bandera INT NOT NULL FOREIGN KEY
-- timestamp BIGINT NOT NULL
+- timestamp TIMESTAMP NOT NULL
 - PRIMARY KEY (id_usuario, id_bandera, timestamp)
+
+> Todos los datos de fecha (TIMESTAMP) se guaradrán en UTC. Se puede usar la sentencia `SET @@time_zone = '+00:00';` en MySQL para definir eu uso horário.
 
 ## API REST
 
