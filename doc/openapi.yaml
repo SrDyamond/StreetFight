@@ -1,0 +1,1514 @@
+openapi: 3.0.0
+info:
+  title: Street Fight
+  description: Street Fight es un MMORPG no lineal en el que escribes tu propia historia sin limitarte a seguir un camino prefijado, explora un amplio mundo abierto, todo cuanto hagas tendra su repercusíon en el mundo.
+  version: "0.1"
+
+servers:
+  - url: http://streetfight.rat.la:8271/
+  - url: http://localhost:8271/
+
+paths:
+  /session:
+    post:
+      summary: Inicia sesión un usuario registrado y se devuelve una cookie de sesión.
+      requestBody:
+        description: "Formato para enviar un POST de login."
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: "PepitoUJU"
+                password_sha:
+                  type: string
+                  example: "86f7e437faa5a7fce15d1ddcb9eaeaea377667b8"
+      responses:
+        '200':
+          description: Devolvemos la cookie de sesión generada y el id del usuario.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    type: integer
+                    example: 987
+                  cookie_id:
+                    type: integer
+                    example: 3982
+                  cookie:
+                    type: string
+                    example: "7323a5431d1c31072983a6a5bf23745b655ddf59"
+                  expiration:
+                    type: integer
+                    example: 1608372744
+        '400':
+          description: Cuando mandas un JSON malformado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  http_response:
+                    type: object
+                    properties:
+                      code:
+                        type: integer
+                        example: 400
+                      description:
+                        type: string
+                        example: "Bad Request"
+                      extra:
+                        type: string
+                        example: ""
+        '401':
+          description: La contraseña es incorrecta.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 401
+                        description:
+                          type: string
+                          example: "Unauthorized"
+                        extra:
+                          type: string
+                          example: ""
+        '404':
+          description: El nombre de usuario no existe.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 404
+                        description:
+                          type: string
+                          example: "Not found"
+                        extra:
+                          type: string
+                          example: ""
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 500
+                        description:
+                          type: string
+                          example: "Internal Server Error"
+                        extra:
+                          type: string
+                          example: ""
+    delete:
+      summary: Cierra la sesión en un dispositivo destruyendo la cookie indicada.
+      requestBody:
+        description: "Formato para enviar un DELETE de logout."
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cookie_id:
+                  type: integer
+                  example: 20819
+      responses:
+        '200':
+          description: Cookie borrada, por lo tanto esa sesión ya no es válida.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  http_response:
+                    type: object
+                    properties:
+                      code:
+                        type: integer
+                        example: 200
+                      description:
+                        type: string
+                        example: "OK"
+                      extra:
+                        type: string
+                        example: "logout"
+        '400':
+          description: Cuando mandas un JSON malformado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  http_response:
+                    type: object
+                    properties:
+                      code:
+                        type: integer
+                        example: 400
+                      description:
+                        type: string
+                        example: "Bad Request"
+                      extra:
+                        type: string
+                        example: ""
+        '401':
+          description: Cookie de sesión inválida.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 401
+                        description:
+                          type: string
+                          example: "Unauthorized"
+                        extra:
+                          type: string
+                          example: ""
+        '404':
+          description: El id de cookie no existe.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 404
+                        description:
+                          type: string
+                          example: "Not found"
+                        extra:
+                          type: string
+                          example: ""
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 500
+                        description:
+                          type: string
+                          example: "Internal Server Error"
+                        extra:
+                          type: string
+                          example: ""
+  /flags:
+    get:
+      summary: Devuelve una lista de banderas cercanas en base a tu localización y un rádio.
+      parameters:
+        - name: latitude
+          in: query
+          required: true
+          schema:
+            type: number
+            example: 43.36848
+          description: Latitud de la ubicación del usuario
+        - name: longitude
+          in: query
+          required: true
+          schema:
+            type: number
+            example: -8.40531
+          description: Longitud de la ubicación del usuario
+        - name: radius
+          in: query
+          required: true
+          schema:
+            type: integer
+            example: 1
+          description: Tamaño del rádio que se obtiene al trazar una circunferencia con centro en dichas coordenadas.
+      responses:
+        '200':
+          description: Un array JSON con las banderas dentro del radio especificado.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 6578
+                    latitude:
+                      type: number
+                      example: 43.36644
+                    longitude:
+                      type: number
+                      example: -8.40881
+                    clan_url_icon:
+                      type: string
+                      example: "https://i.imgur.com/Lbu3ErF.png"
+                    clan_acronym:
+                      type: string
+                      example: "LPA"
+                    clan_color:
+                      type: string
+                      example: "#FFFFFF"
+        '400':
+          description: Cuando no mandas los query params correctamente.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  http_response:
+                    type: object
+                    properties:
+                      code:
+                        type: integer
+                        example: 400
+                      description:
+                        type: string
+                        example: "Bad Request"
+                      extra:
+                        type: string
+                        example: ""
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 500
+                        description:
+                          type: string
+                          example: "Internal Server Error"
+                        extra:
+                          type: string
+                          example: ""
+  /flag/{id_flag}:
+    get:
+      summary: Devuelve toda la info de una bandera y su clan.
+      parameters:
+        - name: id_flag
+          in: path
+          required: true
+          description: El id de la bandera de la que queremos obtener información.
+          schema:
+            type: integer
+            example: 17895
+      responses:
+        '200':
+          description: Toda la info de la bandera y un poco sobre el clan al que pertenece.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 17895
+                  name:
+                    type: string
+                    example: "Estatua de María Pita"
+                  description:
+                    type: string
+                    example: "María Mayor Fernández de Cámara y Pita (Sigrás, Cambre, 1565-1643), conocida como María Pita, fue una heroína de la defensa de La Coruña en 1589 contra la Invencible Inglesa."
+                  latitude:
+                    type: number
+                    example: 43.77848
+                  longitude:
+                    type: number
+                    example: -8.45531
+                  clan_id:
+                    type: integer
+                    example: 256
+                  clan_name:
+                    type: string
+                    example: "El Mejor Clan"
+                  clan_url_icon:
+                    type: string
+                    example: "https://i.imgur.com/Lbu3ErD.png"
+                  clan_acronym:
+                    type: string
+                    example: "EMC"
+                  clan_color:
+                      type: string
+                      example: "#FFFF55"
+        '404':
+          description: Cuando el id consultado no existe.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 404
+                        description:
+                          type: string
+                          example: "Not found"
+                        extra:
+                          type: string
+                          example: ""
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 500
+                        description:
+                          type: string
+                          example: "Internal Server Error"
+                        extra:
+                          type: string
+                          example: ""
+  /user:
+    get:
+      summary: Devuelve la lista de usuarios que coincidan en nombre con el parámetro "q".
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema:
+            type: string
+            example: "Pika"
+      responses:
+        '200':
+          description: JSON array de usuarios que coinciden con el nombre o fragmento introducido.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1568
+                    name:
+                      type: string
+                      example: "Pikachu67"
+                    clan_id:
+                      type: integer
+                      example: 132
+                    clan_name:
+                      type: string
+                      example: "Kakariko Select Club"
+                    clan_url_icon:
+                      type: string
+                      example: "https://i.imgur.com/Kbu3ErD.png"
+                    clan_acronym:
+                      type: string
+                      example: "KSC"
+                    clan_color:
+                        type: string
+                        example: "#FFFF55"
+        '400':
+          description: Cuando falta el query param "q" en la petición.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  http_response:
+                    type: object
+                    properties:
+                      code:
+                        type: integer
+                        example: 400
+                      description:
+                        type: string
+                        example: "Bad Request"
+                      extra:
+                        type: string
+                        example: ""
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 500
+                        description:
+                          type: string
+                          example: "Internal Server Error"
+                        extra:
+                          type: string
+                          example: ""
+    post:
+      summary: Se registra un usuario nuevo y se devuelve una cookie de sesión.
+      requestBody:
+        description: "Formato para enviar un POST de registro."
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: "Nuevito2"
+                password_sha:
+                  type: string
+                  example: "e9d71f5ee7c92d6dc9e92ffdad17b8bd49418f98"
+                id_clan:
+                  type: integer
+                  example: 1056
+      responses:
+        '200':
+          description: Devolvemos la cookie de sesión generada.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    type: integer
+                    example: 561
+                  cookie_id:
+                    type: integer
+                    example: 12372
+                  cookie:
+                    type: string
+                    example: "a6f8faa64204770ba3281fa515eca12f95d9a354"
+                  expiration:
+                    type: integer
+                    example: 1608372744
+        '400':
+          description: Cuando mandas un JSON malformado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  http_response:
+                    type: object
+                    properties:
+                      code:
+                        type: integer
+                        example: 400
+                      description:
+                        type: string
+                        example: "Bad Request"
+                      extra:
+                        type: string
+                        example: ""
+        '409':
+          description: El nombre de usuario ya existe.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  http_response:
+                    type: object
+                    properties:
+                      code:
+                        type: integer
+                        example: 409
+                      description:
+                        type: string
+                        example: "Conflict"
+                      extra:
+                        type: string
+                        example: "El nombre de usuario ya existe."
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 500
+                        description:
+                          type: string
+                          example: "Internal Server Error"
+                        extra:
+                          type: string
+                          example: ""
+  /user/{id_user}:
+    get:
+      summary: Devuelve toda la info de un usuario y su clan.
+      parameters:
+        - name: id_user
+          in: path
+          required: true
+          description: El id del usuario de el que queremos obtener información.
+          schema:
+            type: integer
+            example: 1568
+      responses:
+        '200':
+          description: Toda la info del usuario y un poco sobre el clan al que pertenece.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1568
+                  name:
+                    type: string
+                    example: "Pikachu67"
+                  captured_flags:
+                    type: integer
+                    example: 11
+                  clan_id:
+                    type: integer
+                    example: 132
+                  clan_name:
+                    type: string
+                    example: "Kakariko Select Club"
+                  clan_url_icon:
+                    type: string
+                    example: "https://i.imgur.com/Kbu3ErD.png"
+                  clan_acronym:
+                    type: string
+                    example: "KSC"
+                  clan_color:
+                      type: string
+                      example: "#FFFF55"
+        '404':
+          description: Cuando el id consultado no existe.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 404
+                        description:
+                          type: string
+                          example: "Not found"
+                        extra:
+                          type: string
+                          example: ""
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 500
+                        description:
+                          type: string
+                          example: "Internal Server Error"
+                        extra:
+                          type: string
+                          example: ""
+  /user/{username}:
+    get:
+      summary: Devuelve la info del usuario en base a su nombre exacto. Esto es muy util para comprobar si un usuario existe ya en la BD.
+      parameters:
+        - name: username
+          in: path
+          required: true
+          description: El nombre exacto del usuario del que queremos obtener la información.
+          schema:
+            type: string
+            example: "Pikachu67"
+      responses:
+        '200':
+          description: Toda la info del usuario y un poco sobre el clan al que pertenece.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1568
+                  name:
+                    type: string
+                    example: "Pikachu67"
+                  captured_flags:
+                    type: integer
+                    example: 11
+                  clan_id:
+                    type: integer
+                    example: 132
+        '404':
+          description: Cuando el id consultado no existe.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 404
+                        description:
+                          type: string
+                          example: "Not found"
+                        extra:
+                          type: string
+                          example: ""
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 500
+                        description:
+                          type: string
+                          example: "Internal Server Error"
+                        extra:
+                          type: string
+                          example: ""
+  /user/top:
+    get:
+      summary: Devuelve la lista de usuarios que mas banderas han capturado en funcion del tamaño indicado, por defecto devuelve 10.
+      parameters:
+        - name: length
+          description: Número de resultados que quieres que se muestren en el top.
+          in: query
+          required: false
+          schema:
+            type: integer
+            example: 15
+      responses:
+        '200':
+          description: JSON array con el top indicado.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1568
+                    name:
+                      type: string
+                      example: "Pikachu67"
+                    captured_flags:
+                      type: integer
+                      example: 11
+                    clan_id:
+                      type: integer
+                      example: 132
+                    clan_name:
+                      type: string
+                      example: "Kakariko Select Club"
+                    clan_url_icon:
+                      type: string
+                      example: "https://i.imgur.com/Kbu3ErD.png"
+                    clan_acronym:
+                      type: string
+                      example: "KSC"
+                    clan_color:
+                        type: string
+                        example: "#FFFF55"
+        '400':
+          description: Cuando no mandas los query params correctamente.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  http_response:
+                    type: object
+                    properties:
+                      code:
+                        type: integer
+                        example: 400
+                      description:
+                        type: string
+                        example: "Bad Request"
+                      extra:
+                        type: string
+                        example: ""
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 500
+                        description:
+                          type: string
+                          example: "Internal Server Error"
+                        extra:
+                          type: string
+                          example: ""
+  /clan:
+    get:
+      summary: Devuelve la lista de clanes que coincidan en nombre con el parámetro "q".
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema:
+            type: string
+            example: "Clan Pat"
+      responses:
+        '200':
+          description: JSON array de clanes que coinciden con el nombre o fragmento introducido.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 132
+                    name:
+                      type: string
+                      example: "Kakariko Select Club"
+                    url_icon:
+                      type: string
+                      example: "https://i.imgur.com/Kbu3ErD.png"
+                    acronym:
+                      type: string
+                      example: "KSC"
+                    color:
+                        type: string
+                        example: "#FFFF55"
+        '400':
+          description: Cuando no mandas los query params correctamente.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  http_response:
+                    type: object
+                    properties:
+                      code:
+                        type: integer
+                        example: 400
+                      description:
+                        type: string
+                        example: "Bad Request"
+                      extra:
+                        type: string
+                        example: ""
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 500
+                        description:
+                          type: string
+                          example: "Internal Server Error"
+                        extra:
+                          type: string
+                          example: ""
+    post:
+      summary: Permite registrar un nuevo clan.
+      requestBody:
+        description: "Formato para enviar un POST de creación del nuevo clan."
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "Kakariko Select Club"
+                url_icon:
+                    type: string
+                    example: "https://i.imgur.com/Kbu3ErD.png"
+                acronym:
+                  type: string
+                  example: "KSC"
+                color:
+                    type: string
+                    example: "#FFFF55"
+      responses:
+        '201':
+          description: Clan creado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 132
+                  name:
+                    type: string
+                    example: "Kakariko Select Club"
+                  url_icon:
+                    type: string
+                    example: "https://i.imgur.com/Kbu3ErD.png"
+                  acronym:
+                    type: string
+                    example: "KSC"
+                  color:
+                      type: string
+                      example: "#FFFF55"
+        '401':
+          description: Cookie de sesión inválida.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 401
+                        description:
+                          type: string
+                          example: "Unauthorized"
+                        extra:
+                          type: string
+                          example: ""
+        '409':
+          description: El nombre de clan ya existe.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  http_response:
+                    type: object
+                    properties:
+                      code:
+                        type: integer
+                        example: 409
+                      description:
+                        type: string
+                        example: "Conflict"
+                      extra:
+                        type: string
+                        example: "El nombre de usuario ya existe."
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 500
+                        description:
+                          type: string
+                          example: "Internal Server Error"
+                        extra:
+                          type: string
+                          example: ""
+  /clan/{id_clan}:
+    get:
+      summary: Devuelve toda la info de un clan.
+      parameters:
+        - name: id_clan
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 765
+      responses:
+        '200':
+          description: JSON object con la info del clan indicado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 132
+                  name:
+                    type: string
+                    example: "Kakariko Select Club"
+                  url_icon:
+                    type: string
+                    example: "https://i.imgur.com/Kbu3ErD.png"
+                  acronym:
+                    type: string
+                    example: "KSC"
+                  color:
+                      type: string
+                      example: "#FFFF55"
+                  members:
+                    type: integer
+                    example: 70
+                  flags:
+                    type: integer
+                    example: 200
+        '404':
+          description: Cuando el id consultado no existe.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 404
+                        description:
+                          type: string
+                          example: "Not found"
+                        extra:
+                          type: string
+                          example: ""
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 500
+                        description:
+                          type: string
+                          example: "Internal Server Error"
+                        extra:
+                          type: string
+                          example: ""
+  /clan/{clan_name}:
+    get:
+      summary: Devuelve la info del clan en base a su nombre exacto. Esto es muy util para comprobar si un clan existe ya en la BD.
+      parameters:
+        - name: clan_name
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "Kakariko Select Club"
+      responses:
+        '200':
+          description: JSON object con la info del clan indicado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 132
+                  name:
+                    type: string
+                    example: "Kakariko Select Club"
+                  url_icon:
+                    type: string
+                    example: "https://i.imgur.com/Kbu3ErD.png"
+                  acronym:
+                    type: string
+                    example: "KSC"
+                  color:
+                      type: string
+                      example: "#FFFF55"
+        '404':
+          description: Cuando el id consultado no existe.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 404
+                        description:
+                          type: string
+                          example: "Not found"
+                        extra:
+                          type: string
+                          example: ""
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 500
+                        description:
+                          type: string
+                          example: "Internal Server Error"
+                        extra:
+                          type: string
+                          example: ""
+  /clan/top:
+    get:
+      summary: Devuelve la lista de clanes que mas banderas han capturado en funcion del tamaño indicado, por defecto devuelve 10.
+      parameters:
+        - name: length
+          in: query
+          required: false
+          schema:
+            type: integer
+            example: 6
+      responses:
+        '200':
+          description: JSON array con el top indicado.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 132
+                    name:
+                      type: string
+                      example: "Kakariko Select Club"
+                    url_icon:
+                      type: string
+                      example: "https://i.imgur.com/Kbu3ErD.png"
+                    acronym:
+                      type: string
+                      example: "KSC"
+                    color:
+                        type: string
+                        example: "#FFFF55"
+        '400':
+          description: Cuando no mandas los query params correctamente.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  http_response:
+                    type: object
+                    properties:
+                      code:
+                        type: integer
+                        example: 400
+                      description:
+                        type: string
+                        example: "Bad Request"
+                      extra:
+                        type: string
+                        example: ""
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 500
+                        description:
+                          type: string
+                          example: "Internal Server Error"
+                        extra:
+                          type: string
+                          example: ""
+  /{id_user}/clan/{id_clan}:
+    post:
+      summary: Permite que un usuario cambie de clan.
+      parameters:
+        - name: id_user
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 654
+        - name: id_clan
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 765
+      responses:
+        '200':
+          description: Clan cambiado.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 200
+                        description:
+                          type: string
+                          example: "OK"
+                        extra:
+                          type: string
+                          example: ""
+        '401':
+          description: Cookie de sesión inválida.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 401
+                        description:
+                          type: string
+                          example: "Unauthorized"
+                        extra:
+                          type: string
+                          example: ""
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 500
+                        description:
+                          type: string
+                          example: "Internal Server Error"
+                        extra:
+                          type: string
+                          example: ""
+  /{id_user}/catch/{id_flag}:
+    post:
+      summary: Un usuario inicia la captura de una bandera.
+      parameters:
+        - name: id_user
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 123
+        - name: id_flag
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 110
+      responses:
+        '200':
+          description: Bandera capturada.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 200
+                        description:
+                          type: string
+                          example: "OK"
+                        extra:
+                          type: string
+                          example: ""
+        '202':
+          description: Intentando capturar la bandera.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 202
+                        description:
+                          type: string
+                          example: "Accepted"
+                        extra:
+                          type: string
+                          example: "4/3"
+                          description: Los usuarios que están intentando capturar la bandera, los de tu clan/los de potros clanes.
+        '401':
+          description: Cookie de sesión inválida.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 401
+                        description:
+                          type: string
+                          example: "Unauthorized"
+                        extra:
+                          type: string
+                          example: ""
+        '404':
+          description: Cuando el id consultado no existe.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 404
+                        description:
+                          type: string
+                          example: "Not found"
+                        extra:
+                          type: string
+                          example: ""
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 500
+                        description:
+                          type: string
+                          example: "Internal Server Error"
+                        extra:
+                          type: string
+                          example: ""
+    get:
+      summary: Un usuario que ha iniciado una captura comprueba el estado de la captura.
+      parameters:
+        - name: id_user
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 778
+        - name: id_flag
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 321
+      responses:
+        '200':
+          description: Bandera capturada.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 200
+                        description:
+                          type: string
+                          example: "OK"
+                        extra:
+                          type: string
+                          example: ""
+        '202':
+          description: Intentando capturar la bandera.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 202
+                        description:
+                          type: string
+                          example: "Accepted"
+                        extra:
+                          type: string
+                          example: "4/9"
+                          description: Los usuarios que están intentando capturar la bandera, los de tu clan/los de potros clanes.
+        '401':
+          description: Cookie de sesión inválida.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 401
+                        description:
+                          type: string
+                          example: "Unauthorized"
+                        extra:
+                          type: string
+                          example: ""
+        '404':
+          description: Cuando el id consultado no existe.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 404
+                        description:
+                          type: string
+                          example: "Not found"
+                        extra:
+                          type: string
+                          example: ""
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    http_response:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          example: 500
+                        description:
+                          type: string
+                          example: "Internal Server Error"
+                        extra:
+                          type: string
+                          example: ""
