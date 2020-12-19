@@ -43,6 +43,9 @@ paths:
                   cookie:
                     type: string
                     example: "7323a5431d1c31072983a6a5bf23745b655ddf59"
+                  expiration:
+                    type: integer
+                    example: 1608372744
         '400':
           description: Cuando mandas un JSON malformado.
           content:
@@ -521,6 +524,9 @@ paths:
                   cookie:
                     type: string
                     example: "a6f8faa64204770ba3281fa515eca12f95d9a354"
+                  expiration:
+                    type: integer
+                    example: 1608372744
         '400':
           description: Cuando mandas un JSON malformado.
           content:
