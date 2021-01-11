@@ -9,7 +9,7 @@ servers:
   - url: http://localhost:8271/
 
 paths:
-  /session:
+  /user/{id_user}/session:
     post:
       summary: Inicia sesión un usuario registrado y se devuelve una cookie de sesión.
       requestBody:
@@ -231,7 +231,7 @@ paths:
                         extra:
                           type: string
                           example: ""
-  /flags:
+  /flag:
     get:
       summary: Devuelve una lista de banderas cercanas en base a tu localización y un rádio.
       parameters:
@@ -284,6 +284,9 @@ paths:
                     clan_color:
                       type: string
                       example: "#FFFFFF"
+                    capturing:
+                      type: boolean
+                      example: false
         '400':
           description: Cuando no mandas los query params correctamente.
           content:
@@ -665,75 +668,6 @@ paths:
                         extra:
                           type: string
                           example: ""
-  /user/{username}:
-    get:
-      summary: Devuelve la info del usuario en base a su nombre exacto. Esto es muy util para comprobar si un usuario existe ya en la BD.
-      parameters:
-        - name: username
-          in: path
-          required: true
-          description: El nombre exacto del usuario del que queremos obtener la información.
-          schema:
-            type: string
-            example: "Pikachu67"
-      responses:
-        '200':
-          description: Toda la info del usuario y un poco sobre el clan al que pertenece.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                    example: 1568
-                  name:
-                    type: string
-                    example: "Pikachu67"
-                  captured_flags:
-                    type: integer
-                    example: 11
-                  clan_id:
-                    type: integer
-                    example: 132
-        '404':
-          description: Cuando el id consultado no existe.
-          content:
-            application/json:
-              schema:
-                  type: object
-                  properties:
-                    http_response:
-                      type: object
-                      properties:
-                        code:
-                          type: integer
-                          example: 404
-                        description:
-                          type: string
-                          example: "Not found"
-                        extra:
-                          type: string
-                          example: ""
-        '500':
-          description: Error interno del servidor.
-          content:
-            application/json:
-              schema:
-                  type: object
-                  properties:
-                    http_response:
-                      type: object
-                      properties:
-                        code:
-                          type: integer
-                          example: 500
-                        description:
-                          type: string
-                          example: "Internal Server Error"
-                        extra:
-                          type: string
-                          example: ""
   /user/top:
     get:
       summary: Devuelve la lista de usuarios que mas banderas han capturado en funcion del tamaño indicado, por defecto devuelve 10.
@@ -972,7 +906,7 @@ paths:
                         example: "Conflict"
                       extra:
                         type: string
-                        example: "El nombre de usuario ya existe."
+                        example: "El nombre de clan ya existe."
         '500':
           description: Error interno del servidor.
           content:
@@ -1031,77 +965,6 @@ paths:
                   flags:
                     type: integer
                     example: 200
-        '404':
-          description: Cuando el id consultado no existe.
-          content:
-            application/json:
-              schema:
-                  type: object
-                  properties:
-                    http_response:
-                      type: object
-                      properties:
-                        code:
-                          type: integer
-                          example: 404
-                        description:
-                          type: string
-                          example: "Not found"
-                        extra:
-                          type: string
-                          example: ""
-        '500':
-          description: Error interno del servidor.
-          content:
-            application/json:
-              schema:
-                  type: object
-                  properties:
-                    http_response:
-                      type: object
-                      properties:
-                        code:
-                          type: integer
-                          example: 500
-                        description:
-                          type: string
-                          example: "Internal Server Error"
-                        extra:
-                          type: string
-                          example: ""
-  /clan/{clan_name}:
-    get:
-      summary: Devuelve la info del clan en base a su nombre exacto. Esto es muy util para comprobar si un clan existe ya en la BD.
-      parameters:
-        - name: clan_name
-          in: path
-          required: true
-          schema:
-            type: string
-            example: "Kakariko Select Club"
-      responses:
-        '200':
-          description: JSON object con la info del clan indicado.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                    example: 132
-                  name:
-                    type: string
-                    example: "Kakariko Select Club"
-                  url_icon:
-                    type: string
-                    example: "https://i.imgur.com/Kbu3ErD.png"
-                  acronym:
-                    type: string
-                    example: "KSC"
-                  color:
-                      type: string
-                      example: "#FFFF55"
         '404':
           description: Cuando el id consultado no existe.
           content:
