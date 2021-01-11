@@ -9,9 +9,17 @@ servers:
   - url: http://localhost:8271/
 
 paths:
-  /session:
+  /user/{username}/session:
     post:
       summary: Inicia sesión un usuario registrado y se devuelve una cookie de sesión.
+      parameters:
+        - name: username
+          in: path
+          required: true
+          description: El nombre del usuario con el que queremos loguearnos.
+          schema:
+            type: string
+            example: "Paco"
       requestBody:
         description: "Formato para enviar un POST de login."
         required: true
@@ -20,9 +28,6 @@ paths:
             schema:
               type: object
               properties:
-                username:
-                  type: string
-                  example: "PepitoUJU"
                 password_sha:
                   type: string
                   example: "86f7e437faa5a7fce15d1ddcb9eaeaea377667b8"
@@ -124,6 +129,14 @@ paths:
                           example: ""
     delete:
       summary: Cierra la sesión en un dispositivo destruyendo la cookie indicada.
+      parameters:
+        - name: username
+          in: path
+          required: true
+          description: El nombre del usuario de el que queremos cerrar la sesión.
+          schema:
+            type: string
+            example: "Paco"
       requestBody:
         description: "Formato para enviar un DELETE de logout."
         required: true
@@ -231,7 +244,7 @@ paths:
                         extra:
                           type: string
                           example: ""
-  /flags:
+  /flag:
     get:
       summary: Devuelve una lista de banderas cercanas en base a tu localización y un rádio.
       parameters:
@@ -284,6 +297,9 @@ paths:
                     clan_color:
                       type: string
                       example: "#FFFFFF"
+                    capturing:
+                      type: boolean
+                      example: false
         '400':
           description: Cuando no mandas los query params correctamente.
           content:
@@ -584,17 +600,17 @@ paths:
                         extra:
                           type: string
                           example: ""
-  /user/{id_user}:
+  /user/{username}:
     get:
       summary: Devuelve toda la info de un usuario y su clan.
       parameters:
-        - name: id_user
+        - name: username
           in: path
           required: true
-          description: El id del usuario de el que queremos obtener información.
+          description: El nombre del usuario de el que queremos obtener información.
           schema:
-            type: integer
-            example: 1568
+            type: string
+            example: "Paco"
       responses:
         '200':
           description: Toda la info del usuario y un poco sobre el clan al que pertenece.
@@ -628,76 +644,7 @@ paths:
                       type: string
                       example: "#FFFF55"
         '404':
-          description: Cuando el id consultado no existe.
-          content:
-            application/json:
-              schema:
-                  type: object
-                  properties:
-                    http_response:
-                      type: object
-                      properties:
-                        code:
-                          type: integer
-                          example: 404
-                        description:
-                          type: string
-                          example: "Not found"
-                        extra:
-                          type: string
-                          example: ""
-        '500':
-          description: Error interno del servidor.
-          content:
-            application/json:
-              schema:
-                  type: object
-                  properties:
-                    http_response:
-                      type: object
-                      properties:
-                        code:
-                          type: integer
-                          example: 500
-                        description:
-                          type: string
-                          example: "Internal Server Error"
-                        extra:
-                          type: string
-                          example: ""
-  /user/{username}:
-    get:
-      summary: Devuelve la info del usuario en base a su nombre exacto. Esto es muy util para comprobar si un usuario existe ya en la BD.
-      parameters:
-        - name: username
-          in: path
-          required: true
-          description: El nombre exacto del usuario del que queremos obtener la información.
-          schema:
-            type: string
-            example: "Pikachu67"
-      responses:
-        '200':
-          description: Toda la info del usuario y un poco sobre el clan al que pertenece.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                    example: 1568
-                  name:
-                    type: string
-                    example: "Pikachu67"
-                  captured_flags:
-                    type: integer
-                    example: 11
-                  clan_id:
-                    type: integer
-                    example: 132
-        '404':
-          description: Cuando el id consultado no existe.
+          description: Cuando el nombre de usuario consultado no existe.
           content:
             application/json:
               schema:
@@ -972,7 +919,7 @@ paths:
                         example: "Conflict"
                       extra:
                         type: string
-                        example: "El nombre de usuario ya existe."
+                        example: "El nombre de clan ya existe."
         '500':
           description: Error interno del servidor.
           content:
@@ -1031,77 +978,6 @@ paths:
                   flags:
                     type: integer
                     example: 200
-        '404':
-          description: Cuando el id consultado no existe.
-          content:
-            application/json:
-              schema:
-                  type: object
-                  properties:
-                    http_response:
-                      type: object
-                      properties:
-                        code:
-                          type: integer
-                          example: 404
-                        description:
-                          type: string
-                          example: "Not found"
-                        extra:
-                          type: string
-                          example: ""
-        '500':
-          description: Error interno del servidor.
-          content:
-            application/json:
-              schema:
-                  type: object
-                  properties:
-                    http_response:
-                      type: object
-                      properties:
-                        code:
-                          type: integer
-                          example: 500
-                        description:
-                          type: string
-                          example: "Internal Server Error"
-                        extra:
-                          type: string
-                          example: ""
-  /clan/{clan_name}:
-    get:
-      summary: Devuelve la info del clan en base a su nombre exacto. Esto es muy util para comprobar si un clan existe ya en la BD.
-      parameters:
-        - name: clan_name
-          in: path
-          required: true
-          schema:
-            type: string
-            example: "Kakariko Select Club"
-      responses:
-        '200':
-          description: JSON object con la info del clan indicado.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                    example: 132
-                  name:
-                    type: string
-                    example: "Kakariko Select Club"
-                  url_icon:
-                    type: string
-                    example: "https://i.imgur.com/Kbu3ErD.png"
-                  acronym:
-                    type: string
-                    example: "KSC"
-                  color:
-                      type: string
-                      example: "#FFFF55"
         '404':
           description: Cuando el id consultado no existe.
           content:
@@ -1213,16 +1089,16 @@ paths:
                         extra:
                           type: string
                           example: ""
-  /{id_user}/clan/{id_clan}:
+  /{username}/clan/{id_clan}:
     post:
       summary: Permite que un usuario cambie de clan.
       parameters:
-        - name: id_user
+        - name: username
           in: path
           required: true
           schema:
-            type: integer
-            example: 654
+            type: string
+            example: "Pepe"
         - name: id_clan
           in: path
           required: true
@@ -1287,16 +1163,16 @@ paths:
                         extra:
                           type: string
                           example: ""
-  /{id_user}/catch/{id_flag}:
+  /{username}/catch/{id_flag}:
     post:
       summary: Un usuario inicia la captura de una bandera.
       parameters:
-        - name: id_user
+        - name: username
           in: path
           required: true
           schema:
-            type: integer
-            example: 123
+            type: string
+            example: "Pablo"
         - name: id_flag
           in: path
           required: true
@@ -1403,7 +1279,7 @@ paths:
     get:
       summary: Un usuario que ha iniciado una captura comprueba el estado de la captura.
       parameters:
-        - name: id_user
+        - name: userame
           in: path
           required: true
           schema:
