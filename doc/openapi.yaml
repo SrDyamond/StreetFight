@@ -9,9 +9,17 @@ servers:
   - url: http://localhost:8271/
 
 paths:
-  /user/{id_user}/session:
+  /user/{username}/session:
     post:
       summary: Inicia sesión un usuario registrado y se devuelve una cookie de sesión.
+      parameters:
+        - name: username
+          in: path
+          required: true
+          description: El nombre del usuario con el que queremos loguearnos.
+          schema:
+            type: string
+            example: "Paco"
       requestBody:
         description: "Formato para enviar un POST de login."
         required: true
@@ -20,9 +28,6 @@ paths:
             schema:
               type: object
               properties:
-                username:
-                  type: string
-                  example: "PepitoUJU"
                 password_sha:
                   type: string
                   example: "86f7e437faa5a7fce15d1ddcb9eaeaea377667b8"
@@ -124,6 +129,14 @@ paths:
                           example: ""
     delete:
       summary: Cierra la sesión en un dispositivo destruyendo la cookie indicada.
+      parameters:
+        - name: username
+          in: path
+          required: true
+          description: El nombre del usuario de el que queremos cerrar la sesión.
+          schema:
+            type: string
+            example: "Paco"
       requestBody:
         description: "Formato para enviar un DELETE de logout."
         required: true
@@ -587,17 +600,17 @@ paths:
                         extra:
                           type: string
                           example: ""
-  /user/{id_user}:
+  /user/{username}:
     get:
       summary: Devuelve toda la info de un usuario y su clan.
       parameters:
-        - name: id_user
+        - name: username
           in: path
           required: true
-          description: El id del usuario de el que queremos obtener información.
+          description: El nombre del usuario de el que queremos obtener información.
           schema:
-            type: integer
-            example: 1568
+            type: string
+            example: "Paco"
       responses:
         '200':
           description: Toda la info del usuario y un poco sobre el clan al que pertenece.
@@ -631,7 +644,7 @@ paths:
                       type: string
                       example: "#FFFF55"
         '404':
-          description: Cuando el id consultado no existe.
+          description: Cuando el nombre de usuario consultado no existe.
           content:
             application/json:
               schema:
@@ -1076,16 +1089,16 @@ paths:
                         extra:
                           type: string
                           example: ""
-  /{id_user}/clan/{id_clan}:
+  /{username}/clan/{id_clan}:
     post:
       summary: Permite que un usuario cambie de clan.
       parameters:
-        - name: id_user
+        - name: username
           in: path
           required: true
           schema:
-            type: integer
-            example: 654
+            type: string
+            example: "Pepe"
         - name: id_clan
           in: path
           required: true
@@ -1150,16 +1163,16 @@ paths:
                         extra:
                           type: string
                           example: ""
-  /{id_user}/catch/{id_flag}:
+  /{username}/catch/{id_flag}:
     post:
       summary: Un usuario inicia la captura de una bandera.
       parameters:
-        - name: id_user
+        - name: username
           in: path
           required: true
           schema:
-            type: integer
-            example: 123
+            type: string
+            example: "Pablo"
         - name: id_flag
           in: path
           required: true
@@ -1266,7 +1279,7 @@ paths:
     get:
       summary: Un usuario que ha iniciado una captura comprueba el estado de la captura.
       parameters:
-        - name: id_user
+        - name: userame
           in: path
           required: true
           schema:
