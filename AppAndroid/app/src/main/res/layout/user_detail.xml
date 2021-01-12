@@ -1,44 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <org.osmdroid.views.MapView
-        android:id="@+id/map"
+    <include
+        layout="@layout/map"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/fab"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fab">
-
-    </org.osmdroid.views.MapView>
+        android:layout_height="wrap_content" />
 
     <Button
         android:id="@+id/button_change_clan4"
-        android:layout_width="426dp"
-        android:layout_height="82dp"
-        android:layout_marginStart="10dp"
+        android:layout_width="370dp"
+        android:layout_height="75dp"
         android:layout_marginTop="25dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginBottom="25dp"
         android:text="button_change_clan"
-        app:layout_constraintBottom_toTopOf="@+id/fab2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.666"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button_change_clan3" />
 
     <Button
         android:id="@+id/button_change_clan3"
-        android:layout_width="426dp"
-        android:layout_height="82dp"
-        android:layout_marginStart="10dp"
+        android:layout_width="370dp"
+        android:layout_height="75dp"
         android:layout_marginTop="45dp"
-        android:layout_marginEnd="15dp"
         android:text="button_change_clan"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -46,28 +32,13 @@
 
     <Button
         android:id="@+id/button_create_clan"
-        android:layout_width="210dp"
-        android:layout_height="63dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginBottom="45dp"
+        android:layout_width="160dp"
+        android:layout_height="65dp"
+        android:layout_marginTop="136dp"
         android:text="button_create_clan"
-        app:layout_constraintBottom_toTopOf="@+id/button_change_clan3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/button_change_clan"
-        app:layout_constraintTop_toBottomOf="@+id/logo2" />
-
-    <TextView
-        android:id="@+id/textView_clan_score"
-        android:layout_width="114dp"
-        android:layout_height="103dp"
-        android:layout_marginBottom="587dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toTopOf="@+id/fab2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/textView_user"
-        app:layout_constraintTop_toBottomOf="@+id/textView_user_score" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_clan_score" />
 
     <ImageView
         android:id="@+id/logo2"
@@ -86,35 +57,25 @@
 
     <TextView
         android:id="@+id/textView_clan"
-        android:layout_width="339dp"
-        android:layout_height="103dp"
-        android:layout_marginBottom="465dp"
+        android:layout_width="296dp"
+        android:layout_height="101dp"
         android:text="TextView"
-        app:layout_constraintBottom_toTopOf="@+id/fab2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_user"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_user" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="335dp"
-        android:layout_marginTop="650dp"
-        android:layout_marginEnd="15dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <TextView
+        android:id="@+id/textView_clan_score"
+        android:layout_width="115dp"
+        android:layout_height="101dp"
+        android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.979"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.895"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_user_score" />
 
     <TextView
         android:id="@+id/textView_user"
-        android:layout_width="339dp"
+        android:layout_width="296dp"
         android:layout_height="97dp"
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
@@ -127,22 +88,17 @@
         android:layout_width="115dp"
         android:layout_height="97dp"
         android:text="TextView"
-        app:layout_constraintBottom_toTopOf="@+id/textView_clan_score"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView_user"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/button_change_clan"
-        android:layout_width="210dp"
-        android:layout_height="63dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginBottom="45dp"
+        android:layout_width="160dp"
+        android:layout_height="65dp"
+        android:layout_marginTop="136dp"
         android:text="button_change_clan"
-        app:layout_constraintBottom_toTopOf="@+id/button_change_clan3"
         app:layout_constraintEnd_toStartOf="@+id/button_create_clan"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logo2" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_clan" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

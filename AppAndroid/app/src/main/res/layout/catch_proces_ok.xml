@@ -6,36 +6,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <org.osmdroid.views.MapView
-        android:id="@+id/map"
+    <include
+        layout="@layout/map"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/fab"
-        app:layout_constraintTop_toBottomOf="@+id/fab">
-
-    </org.osmdroid.views.MapView>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="340dp"
-        android:layout_marginTop="580dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginBottom="15dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_user_info"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/textView_user_info"
-        android:layout_width="412dp"
-        android:layout_height="83dp"
+        android:layout_width="410dp"
+        android:layout_height="100dp"
         android:text="TextView"
-        app:layout_constraintBottom_toTopOf="@+id/fab"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -48,8 +28,6 @@
         android:layout_marginStart="55dp"
         android:layout_marginTop="65dp"
         android:layout_marginEnd="55dp"
-        android:layout_marginBottom="245dp"
-        app:layout_constraintBottom_toTopOf="@+id/fab4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_user_info"
