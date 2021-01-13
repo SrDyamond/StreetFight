@@ -45,9 +45,6 @@ paths:
                   cookie_id:
                     type: integer
                     example: 3982
-                  cookie:
-                    type: string
-                    example: "7323a5431d1c31072983a6a5bf23745b655ddf59"
                   session-cookie:
                     type: string
                     example: "987-7323a5431d1c31072983a6a5bf23745b655ddf59"
@@ -1113,6 +1110,11 @@ paths:
           schema:
             type: integer
             example: 765
+        - in: header
+          name: session-cookie
+          schema:
+            type: string
+            example: "987-7323a5431d1c31072983a6a5bf23745b655ddf59"
       responses:
         '200':
           description: Clan cambiado.
@@ -1130,9 +1132,6 @@ paths:
                         description:
                           type: string
                           example: "OK"
-                        session-cookie:
-                          type: string
-                          example: "987-7323a5431d1c31072983a6a5bf23745b655ddf59"
                         extra:
                           type: string
                           example: ""
@@ -1190,6 +1189,11 @@ paths:
           schema:
             type: integer
             example: 110
+        - in: header
+          name: session-cookie
+          schema:
+            type: string
+            example: "987-7323a5431d1c31072983a6a5bf23745b655ddf59"
       responses:
         '200':
           description: Bandera capturada.
@@ -1207,9 +1211,6 @@ paths:
                         description:
                           type: string
                           example: "OK"
-                        session-cookie:
-                          type: string
-                          example: "987-7323a5431d1c31072983a6a5bf23745b655ddf59"
                         extra:
                           type: string
                           example: ""
