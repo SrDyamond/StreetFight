@@ -45,9 +45,9 @@ paths:
                   cookie_id:
                     type: integer
                     example: 3982
-                  cookie:
+                  session-cookie:
                     type: string
-                    example: "7323a5431d1c31072983a6a5bf23745b655ddf59"
+                    example: "987-7323a5431d1c31072983a6a5bf23745b655ddf59"
                   expiration:
                     type: integer
                     example: 1608372744
@@ -137,6 +137,11 @@ paths:
           schema:
             type: string
             example: "Paco"
+        - in: header
+          name: session-cookie
+          schema:
+            type: string
+            example: "987-7323a5431d1c31072983a6a5bf23745b655ddf59"
       requestBody:
         description: "Formato para enviar un DELETE de logout."
         required: true
@@ -1105,6 +1110,11 @@ paths:
           schema:
             type: integer
             example: 765
+        - in: header
+          name: session-cookie
+          schema:
+            type: string
+            example: "987-7323a5431d1c31072983a6a5bf23745b655ddf59"
       responses:
         '200':
           description: Clan cambiado.
@@ -1179,6 +1189,11 @@ paths:
           schema:
             type: integer
             example: 110
+        - in: header
+          name: session-cookie
+          schema:
+            type: string
+            example: "987-7323a5431d1c31072983a6a5bf23745b655ddf59"
       responses:
         '200':
           description: Bandera capturada.
