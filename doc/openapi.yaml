@@ -1173,7 +1173,7 @@ paths:
                         extra:
                           type: string
                           example: ""
-  /{username}/catch/{id_flag}:
+  /user/{username}/catch/{id_flag}:
     post:
       summary: Un usuario inicia la captura de una bandera.
       parameters:
