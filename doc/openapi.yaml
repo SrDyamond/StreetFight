@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: Street Fight
   description: Street Fight es un MMORPG no lineal en el que escribes tu propia historia sin limitarte a seguir un camino prefijado, explora un amplio mundo abierto, todo cuanto hagas tendra su repercusíon en el mundo.
-  version: "0.1"
+  version: "0.1.1"
 
 servers:
   - url: http://streetfight.rat.la:8271/
