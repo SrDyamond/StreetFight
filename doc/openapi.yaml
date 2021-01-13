@@ -524,13 +524,36 @@ paths:
               properties:
                 username:
                   type: string
-                  example: "Nuevito2"
                 password_sha:
                   type: string
-                  example: "e9d71f5ee7c92d6dc9e92ffdad17b8bd49418f98"
-                id_clan:
+                join_clan_id:
                   type: integer
-                  example: 1056
+                create_clan:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    acronym:
+                      type: string
+                    color:
+                      type: string
+                    url_icon:
+                      type: string
+            examples:
+              creating_clan:
+                value:
+                  username: "Nuevito2"
+                  password_sha: "e9d71f5ee7c92d6dc9e92ffdad17b8bd49418f98"
+                  create_clan:
+                    name: "Kakariko Select Club"
+                    acronym: "KSC"
+                    color: "#FFFF55"
+                    url_icon: "https://i.imgur.com/Kbu3ErD.png"
+              joining_clan:
+                value:
+                  username: "Nuevito2"
+                  password_sha: "e9d71f5ee7c92d6dc9e92ffdad17b8bd49418f98"
+                  join_clan_id: 1056
       responses:
         '200':
           description: Devolvemos la cookie de sesión generada.
@@ -858,15 +881,18 @@ paths:
                 name:
                   type: string
                   example: "Kakariko Select Club"
-                url_icon:
-                    type: string
-                    example: "https://i.imgur.com/Kbu3ErD.png"
                 acronym:
                   type: string
                   example: "KSC"
                 color:
                     type: string
                     example: "#FFFF55"
+                url_icon:
+                    type: string
+                    example: "https://i.imgur.com/Kbu3ErD.png"
+                founder_id:
+                  type: integer
+                  example: 1588
       responses:
         '201':
           description: Clan creado.
