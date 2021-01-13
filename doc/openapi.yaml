@@ -48,6 +48,9 @@ paths:
                   cookie:
                     type: string
                     example: "7323a5431d1c31072983a6a5bf23745b655ddf59"
+                  session-cookie:
+                    type: string
+                    example: "987-7323a5431d1c31072983a6a5bf23745b655ddf59"
                   expiration:
                     type: integer
                     example: 1608372744
@@ -137,6 +140,11 @@ paths:
           schema:
             type: string
             example: "Paco"
+        - in: header
+          name: session-cookie
+          schema:
+            type: string
+            example: "987-7323a5431d1c31072983a6a5bf23745b655ddf59"
       requestBody:
         description: "Formato para enviar un DELETE de logout."
         required: true
@@ -1048,6 +1056,9 @@ paths:
                     acronym:
                       type: string
                       example: "KSC"
+                    session-cookie:
+                      type: string
+                      example: "987-7323a5431d1c31072983a6a5bf23745b655ddf59"
                     color:
                         type: string
                         example: "#FFFF55"
@@ -1122,6 +1133,9 @@ paths:
                         description:
                           type: string
                           example: "OK"
+                        session-cookie:
+                          type: string
+                          example: "987-7323a5431d1c31072983a6a5bf23745b655ddf59"
                         extra:
                           type: string
                           example: ""
@@ -1196,6 +1210,9 @@ paths:
                         description:
                           type: string
                           example: "OK"
+                        session-cookie:
+                          type: string
+                          example: "987-7323a5431d1c31072983a6a5bf23745b655ddf59"
                         extra:
                           type: string
                           example: ""
