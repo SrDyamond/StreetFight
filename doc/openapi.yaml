@@ -390,8 +390,11 @@ paths:
                     type: string
                     example: "EMC"
                   clan_color:
-                      type: string
-                      example: "#FFFF55"
+                    type: string
+                    example: "#FFFF55"
+                  capturing:
+                    type: boolean
+                    example: false
         '404':
           description: Cuando el id consultado no existe.
           content:
@@ -542,9 +545,9 @@ paths:
                   cookie_id:
                     type: integer
                     example: 12372
-                  cookie:
+                  session-cookie:
                     type: string
-                    example: "a6f8faa64204770ba3281fa515eca12f95d9a354"
+                    example: "561-7323a5431d1c31072983a6a5bf23745b655ddf59"
                   expiration:
                     type: integer
                     example: 1608372744
@@ -1232,120 +1235,7 @@ paths:
                           example: "Accepted"
                         extra:
                           type: string
-                          example: "4/3"
-                          description: Los usuarios que están intentando capturar la bandera, los de tu clan/los de potros clanes.
-        '401':
-          description: Cookie de sesión inválida.
-          content:
-            application/json:
-              schema:
-                  type: object
-                  properties:
-                    http_response:
-                      type: object
-                      properties:
-                        code:
-                          type: integer
-                          example: 401
-                        description:
-                          type: string
-                          example: "Unauthorized"
-                        extra:
-                          type: string
                           example: ""
-        '404':
-          description: Cuando el id consultado no existe.
-          content:
-            application/json:
-              schema:
-                  type: object
-                  properties:
-                    http_response:
-                      type: object
-                      properties:
-                        code:
-                          type: integer
-                          example: 404
-                        description:
-                          type: string
-                          example: "Not found"
-                        extra:
-                          type: string
-                          example: ""
-        '500':
-          description: Error interno del servidor.
-          content:
-            application/json:
-              schema:
-                  type: object
-                  properties:
-                    http_response:
-                      type: object
-                      properties:
-                        code:
-                          type: integer
-                          example: 500
-                        description:
-                          type: string
-                          example: "Internal Server Error"
-                        extra:
-                          type: string
-                          example: ""
-    get:
-      summary: Un usuario que ha iniciado una captura comprueba el estado de la captura.
-      parameters:
-        - name: userame
-          in: path
-          required: true
-          schema:
-            type: integer
-            example: 778
-        - name: id_flag
-          in: path
-          required: true
-          schema:
-            type: integer
-            example: 321
-      responses:
-        '200':
-          description: Bandera capturada.
-          content:
-            application/json:
-              schema:
-                  type: object
-                  properties:
-                    http_response:
-                      type: object
-                      properties:
-                        code:
-                          type: integer
-                          example: 200
-                        description:
-                          type: string
-                          example: "OK"
-                        extra:
-                          type: string
-                          example: ""
-        '202':
-          description: Intentando capturar la bandera.
-          content:
-            application/json:
-              schema:
-                  type: object
-                  properties:
-                    http_response:
-                      type: object
-                      properties:
-                        code:
-                          type: integer
-                          example: 202
-                        description:
-                          type: string
-                          example: "Accepted"
-                        extra:
-                          type: string
-                          example: "4/9"
-                          description: Los usuarios que están intentando capturar la bandera, los de tu clan/los de potros clanes.
         '401':
           description: Cookie de sesión inválida.
           content:
