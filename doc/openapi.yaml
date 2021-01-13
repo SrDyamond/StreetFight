@@ -1056,9 +1056,6 @@ paths:
                     acronym:
                       type: string
                       example: "KSC"
-                    session-cookie:
-                      type: string
-                      example: "987-7323a5431d1c31072983a6a5bf23745b655ddf59"
                     color:
                         type: string
                         example: "#FFFF55"
