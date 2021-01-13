@@ -1094,7 +1094,7 @@ paths:
                         extra:
                           type: string
                           example: ""
-  /{username}/clan/{id_clan}:
+  /user/{username}/clan/{id_clan}:
     post:
       summary: Permite que un usuario cambie de clan.
       parameters:
