@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: Street Fight
   description: Street Fight es un MMORPG no lineal en el que escribes tu propia historia sin limitarte a seguir un camino prefijado, explora un amplio mundo abierto, todo cuanto hagas tendra su repercusíon en el mundo.
-  version: "0.1"
+  version: "0.1.1"
 
 servers:
   - url: http://streetfight.rat.la:8271/
@@ -142,17 +142,18 @@ paths:
           schema:
             type: string
             example: "987-7323a5431d1c31072983a6a5bf23745b655ddf59"
-      requestBody:
-        description: "Formato para enviar un DELETE de logout."
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                cookie_id:
-                  type: integer
-                  example: 20819
+      # PUEDE QUE YA QUE ENVIAMOS EL session-cookie EN EL HEADER YA NO HAGA FALTA EL requestBody
+      # requestBody:
+      #   description: "Formato para enviar un DELETE de logout."
+      #   required: true
+      #   content:
+      #     application/json:
+      #       schema:
+      #         type: object
+      #         properties:
+      #           cookie_id:
+      #             type: integer
+      #             example: 20819
       responses:
         '200':
           description: Cookie borrada, por lo tanto esa sesión ya no es válida.
@@ -293,18 +294,21 @@ paths:
                     longitude:
                       type: number
                       example: -8.40881
-                    clan_url_icon:
-                      type: string
-                      example: "https://i.imgur.com/Lbu3ErF.png"
-                    clan_acronym:
-                      type: string
-                      example: "LPA"
-                    clan_color:
-                      type: string
-                      example: "#FFFFFF"
                     capturing:
                       type: boolean
                       example: false
+                    clan:
+                      type: object
+                      properties:
+                        url_icon:
+                          type: string
+                          example: "https://i.imgur.com/Lbu3ErF.png"
+                        acronym:
+                          type: string
+                          example: "LPA"
+                        color:
+                          type: string
+                          example: "#FFFFFF"
         '400':
           description: Cuando no mandas los query params correctamente.
           content:
@@ -377,21 +381,27 @@ paths:
                   longitude:
                     type: number
                     example: -8.45531
-                  clan_id:
-                    type: integer
-                    example: 256
-                  clan_name:
-                    type: string
-                    example: "El Mejor Clan"
-                  clan_url_icon:
-                    type: string
-                    example: "https://i.imgur.com/Lbu3ErD.png"
-                  clan_acronym:
-                    type: string
-                    example: "EMC"
-                  clan_color:
-                      type: string
-                      example: "#FFFF55"
+                  capturing:
+                    type: boolean
+                    example: false
+                  clan:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 256
+                      name:
+                        type: string
+                        example: "El Mejor Clan"
+                      url_icon:
+                        type: string
+                        example: "https://i.imgur.com/Lbu3ErD.png"
+                      acronym:
+                        type: string
+                        example: "EMC"
+                      color:
+                        type: string
+                        example: "#FFFF55"
         '404':
           description: Cuando el id consultado no existe.
           content:
@@ -456,21 +466,24 @@ paths:
                     name:
                       type: string
                       example: "Pikachu67"
-                    clan_id:
-                      type: integer
-                      example: 132
-                    clan_name:
-                      type: string
-                      example: "Kakariko Select Club"
-                    clan_url_icon:
-                      type: string
-                      example: "https://i.imgur.com/Kbu3ErD.png"
-                    clan_acronym:
-                      type: string
-                      example: "KSC"
-                    clan_color:
-                        type: string
-                        example: "#FFFF55"
+                    clan:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 132
+                        name:
+                          type: string
+                          example: "Kakariko Select Club"
+                        url_icon:
+                          type: string
+                          example: "https://i.imgur.com/Kbu3ErD.png"
+                        acronym:
+                          type: string
+                          example: "KSC"
+                        color:
+                          type: string
+                          example: "#FFFF55"
         '400':
           description: Cuando falta el query param "q" en la petición.
           content:
@@ -521,13 +534,36 @@ paths:
               properties:
                 username:
                   type: string
-                  example: "Nuevito2"
                 password_sha:
                   type: string
-                  example: "e9d71f5ee7c92d6dc9e92ffdad17b8bd49418f98"
-                id_clan:
+                join_clan_id:
                   type: integer
-                  example: 1056
+                create_clan:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    acronym:
+                      type: string
+                    color:
+                      type: string
+                    url_icon:
+                      type: string
+            examples:
+              creating_clan:
+                value:
+                  username: "Nuevito2"
+                  password_sha: "e9d71f5ee7c92d6dc9e92ffdad17b8bd49418f98"
+                  create_clan:
+                    name: "Kakariko Select Club"
+                    acronym: "KSC"
+                    color: "#FFFF55"
+                    url_icon: "https://i.imgur.com/Kbu3ErD.png"
+              joining_clan:
+                value:
+                  username: "Nuevito2"
+                  password_sha: "e9d71f5ee7c92d6dc9e92ffdad17b8bd49418f98"
+                  join_clan_id: 1056
       responses:
         '200':
           description: Devolvemos la cookie de sesión generada.
@@ -542,9 +578,9 @@ paths:
                   cookie_id:
                     type: integer
                     example: 12372
-                  cookie:
+                  session-cookie:
                     type: string
-                    example: "a6f8faa64204770ba3281fa515eca12f95d9a354"
+                    example: "561-7323a5431d1c31072983a6a5bf23745b655ddf59"
                   expiration:
                     type: integer
                     example: 1608372744
@@ -633,21 +669,24 @@ paths:
                   captured_flags:
                     type: integer
                     example: 11
-                  clan_id:
-                    type: integer
-                    example: 132
-                  clan_name:
-                    type: string
-                    example: "Kakariko Select Club"
-                  clan_url_icon:
-                    type: string
-                    example: "https://i.imgur.com/Kbu3ErD.png"
-                  clan_acronym:
-                    type: string
-                    example: "KSC"
-                  clan_color:
-                      type: string
-                      example: "#FFFF55"
+                  clan:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 132
+                      name:
+                        type: string
+                        example: "Kakariko Select Club"
+                      url_icon:
+                        type: string
+                        example: "https://i.imgur.com/Kbu3ErD.png"
+                      acronym:
+                        type: string
+                        example: "KSC"
+                      color:
+                        type: string
+                        example: "#FFFF55"
         '404':
           description: Cuando el nombre de usuario consultado no existe.
           content:
@@ -716,21 +755,24 @@ paths:
                     captured_flags:
                       type: integer
                       example: 11
-                    clan_id:
-                      type: integer
-                      example: 132
-                    clan_name:
-                      type: string
-                      example: "Kakariko Select Club"
-                    clan_url_icon:
-                      type: string
-                      example: "https://i.imgur.com/Kbu3ErD.png"
-                    clan_acronym:
-                      type: string
-                      example: "KSC"
-                    clan_color:
-                        type: string
-                        example: "#FFFF55"
+                    clan:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 132
+                        name:
+                          type: string
+                          example: "Kakariko Select Club"
+                        url_icon:
+                          type: string
+                          example: "https://i.imgur.com/Kbu3ErD.png"
+                        acronym:
+                          type: string
+                          example: "KSC"
+                        color:
+                          type: string
+                          example: "#FFFF55"
         '400':
           description: Cuando no mandas los query params correctamente.
           content:
@@ -802,8 +844,8 @@ paths:
                       type: string
                       example: "KSC"
                     color:
-                        type: string
-                        example: "#FFFF55"
+                      type: string
+                      example: "#FFFF55"
         '400':
           description: Cuando no mandas los query params correctamente.
           content:
@@ -855,15 +897,18 @@ paths:
                 name:
                   type: string
                   example: "Kakariko Select Club"
-                url_icon:
-                    type: string
-                    example: "https://i.imgur.com/Kbu3ErD.png"
                 acronym:
                   type: string
                   example: "KSC"
                 color:
-                    type: string
-                    example: "#FFFF55"
+                  type: string
+                  example: "#FFFF55"
+                url_icon:
+                  type: string
+                  example: "https://i.imgur.com/Kbu3ErD.png"
+                founder_id:
+                  type: integer
+                  example: 1588
       responses:
         '201':
           description: Clan creado.
@@ -885,8 +930,8 @@ paths:
                     type: string
                     example: "KSC"
                   color:
-                      type: string
-                      example: "#FFFF55"
+                    type: string
+                    example: "#FFFF55"
         '401':
           description: Cookie de sesión inválida.
           content:
@@ -975,8 +1020,8 @@ paths:
                     type: string
                     example: "KSC"
                   color:
-                      type: string
-                      example: "#FFFF55"
+                    type: string
+                    example: "#FFFF55"
                   members:
                     type: integer
                     example: 70
@@ -1054,8 +1099,8 @@ paths:
                       type: string
                       example: "KSC"
                     color:
-                        type: string
-                        example: "#FFFF55"
+                      type: string
+                      example: "#FFFF55"
         '400':
           description: Cuando no mandas los query params correctamente.
           content:
@@ -1094,7 +1139,7 @@ paths:
                         extra:
                           type: string
                           example: ""
-  /{username}/clan/{id_clan}:
+  /user/{username}/clan/{id_clan}:
     post:
       summary: Permite que un usuario cambie de clan.
       parameters:
@@ -1173,7 +1218,7 @@ paths:
                         extra:
                           type: string
                           example: ""
-  /{username}/catch/{id_flag}:
+  /user/{username}/catch/{id_flag}:
     post:
       summary: Un usuario inicia la captura de una bandera.
       parameters:
@@ -1232,120 +1277,7 @@ paths:
                           example: "Accepted"
                         extra:
                           type: string
-                          example: "4/3"
-                          description: Los usuarios que están intentando capturar la bandera, los de tu clan/los de potros clanes.
-        '401':
-          description: Cookie de sesión inválida.
-          content:
-            application/json:
-              schema:
-                  type: object
-                  properties:
-                    http_response:
-                      type: object
-                      properties:
-                        code:
-                          type: integer
-                          example: 401
-                        description:
-                          type: string
-                          example: "Unauthorized"
-                        extra:
-                          type: string
                           example: ""
-        '404':
-          description: Cuando el id consultado no existe.
-          content:
-            application/json:
-              schema:
-                  type: object
-                  properties:
-                    http_response:
-                      type: object
-                      properties:
-                        code:
-                          type: integer
-                          example: 404
-                        description:
-                          type: string
-                          example: "Not found"
-                        extra:
-                          type: string
-                          example: ""
-        '500':
-          description: Error interno del servidor.
-          content:
-            application/json:
-              schema:
-                  type: object
-                  properties:
-                    http_response:
-                      type: object
-                      properties:
-                        code:
-                          type: integer
-                          example: 500
-                        description:
-                          type: string
-                          example: "Internal Server Error"
-                        extra:
-                          type: string
-                          example: ""
-    get:
-      summary: Un usuario que ha iniciado una captura comprueba el estado de la captura.
-      parameters:
-        - name: userame
-          in: path
-          required: true
-          schema:
-            type: integer
-            example: 778
-        - name: id_flag
-          in: path
-          required: true
-          schema:
-            type: integer
-            example: 321
-      responses:
-        '200':
-          description: Bandera capturada.
-          content:
-            application/json:
-              schema:
-                  type: object
-                  properties:
-                    http_response:
-                      type: object
-                      properties:
-                        code:
-                          type: integer
-                          example: 200
-                        description:
-                          type: string
-                          example: "OK"
-                        extra:
-                          type: string
-                          example: ""
-        '202':
-          description: Intentando capturar la bandera.
-          content:
-            application/json:
-              schema:
-                  type: object
-                  properties:
-                    http_response:
-                      type: object
-                      properties:
-                        code:
-                          type: integer
-                          example: 202
-                        description:
-                          type: string
-                          example: "Accepted"
-                        extra:
-                          type: string
-                          example: "4/9"
-                          description: Los usuarios que están intentando capturar la bandera, los de tu clan/los de potros clanes.
         '401':
           description: Cookie de sesión inválida.
           content:
