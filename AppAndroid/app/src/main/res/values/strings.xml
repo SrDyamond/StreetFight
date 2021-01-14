@@ -8,7 +8,12 @@
     <string name="repeat_pass">Repeat pass</string>
     <string name="create_clan">Create Clan</string>
     <string name="join_clan">Join clan</string>
-    <string name="todo">TODO</string>
     <string name="login_with_google">Login with Google</string>
     <string name="register">Register</string>
+    <string name="clan_acronym">Clan Acronym</string>
+    <string name="clan_icon_url">Clan icon URL</string>
+    <string name="clan_name">Clan Name</string>
+    <string name="clan_color">Clan Color</string>
+    <string name="crear_clan">Crear Clan</string>
+    <string name="todo">TODO</string>
 </resources>
