@@ -1,2 +1,4 @@
 *.odt#
 __pycache__/
+config.py
+credentials.json
