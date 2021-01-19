@@ -27,11 +27,13 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+CORS_ALLOW_ALL_ORIGINS = DEBUG # https://github.com/adamchainz/django-cors-headers
 
 # Application definition
 
 INSTALLED_APPS = [
     'streetfight.apps.StreetfightConfig',
+    'corsheaders', # django-cors-headers
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -41,6 +43,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware', # django-cors-headers
+    'django.middleware.common.CommonMiddleware', # django-cors-headers
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
