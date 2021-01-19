@@ -283,11 +283,14 @@ Ayúdame
 
 ## Tipos de datos
 
-### Tabla SESION
+### Tabla CLAN
 - id INT PRIMARY KEY
-- id_usuario INT NOT NULL FOREIGN KEY
-- fecha_caducidad DATETIME NOT NULL
-- valor_cookie VARCHAR(40) NOT NULL
+- nombre VARCHAR(25) NOT NULL
+- abreviatura CHAR(4)
+- color CHAR(7) NOT NULL
+- url_icono VARCHAR(300)
+- fecha_fundacion DATETIME NOT NULL
+- id_fundador INT FOREIGN KEY
 
 ### Tabla USARIO
 - id INT PRIMARY KEY
@@ -297,14 +300,11 @@ Ayúdame
 - clave_sha_concatenada VARCHAR(40) NOT NULL
 - id_clan INT NOT NULL FOREIGN KEY
 
-### Tabla CLAN
+### Tabla SESION
 - id INT PRIMARY KEY
-- nombre VARCHAR(25) NOT NULL
-- abreviatura CHAR(4)
-- color CHAR(7) NOT NULL
-- url_icono VARCHAR(300)
-- fecha_fundacion DATETIME NOT NULL
-- id_fundador INT NOT NULL FOREIGN KEY
+- id_usuario INT NOT NULL FOREIGN KEY
+- fecha_caducidad DATETIME NOT NULL
+- valor_cookie VARCHAR(40) NOT NULL
 
 ### Tabla BANDERA
 - id INT PRIMARY KEY
