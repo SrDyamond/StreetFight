@@ -29,15 +29,14 @@ def get_tweets(api):
 		except tweepy.TweepError as error:
 		    if error.api_code == 187:
 			    print('duplicate message')
-
 	#Comprobamos nuestros followers
 	logger.info("Revisando followers")
 	for follower in tweepy.Cursor(api.followers).items():
 	#si nos siguen y no los seguimos,los seguimos y lo mencinamos
 	#en un tweet con un mensaje aleatorio de bienvenida
 		if not follower.following:
-			logger.info(f"Following {follower.name}")
-			api.update_status(random.choice(array)+str(follower.name))
+			logger.info(f"Following {follower.screen_name}")
+			api.update_status(random.choice(array)+str(follower.screen_name))
 			follower.follow()
 def main():
 	api = create_api()
