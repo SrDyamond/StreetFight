@@ -6,18 +6,32 @@
     android:layout_height="fill_parent">
 
     <include
+        android:id="@+id/include2"
         layout="@layout/map"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <TextView
-        android:id="@+id/textView_user_info"
-        android:layout_width="410dp"
-        android:layout_height="100dp"
-        android:background="@color/teal_700"
-        android:text="TextView"
+    <ImageButton
+        android:id="@+id/imageButton4"
+        android:layout_width="405dp"
+        android:layout_height="160dp"
+        android:background="@drawable/fondo_boton"
+        android:contentDescription="@string/todo"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="401dp"
+        android:layout_height="155dp"
+        android:fontFamily="@font/bungee"
+        android:gravity="center"
+        android:text="(Info juga)"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@id/imageButton4"
+        app:layout_constraintEnd_toEndOf="@id/imageButton4"
+        app:layout_constraintTop_toTopOf="@id/imageButton4" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
