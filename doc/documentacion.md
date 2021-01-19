@@ -292,7 +292,7 @@ Ayúdame
 - fecha_fundacion DATETIME NOT NULL
 - id_fundador INT FOREIGN KEY
 
-### Tabla USARIO
+### Tabla USUARIO
 - id INT PRIMARY KEY
 - nombre VARCHAR(25) NOT NULL
 - banderas_capturadas INT NOT NULL
