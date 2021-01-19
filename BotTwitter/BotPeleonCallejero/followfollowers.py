@@ -8,10 +8,12 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()
 
 def follow_followers(api):
+    #api = tweepy.API(auth)
     logger.info("Retrieving and following followers")
     for follower in tweepy.Cursor(api.followers).items():
         if not follower.following:
             logger.info(f"Following {follower.name}")
+            api.update_status("Gracias por seguirnos @"+str(follower.name))
             follower.follow()
 
 def main():
