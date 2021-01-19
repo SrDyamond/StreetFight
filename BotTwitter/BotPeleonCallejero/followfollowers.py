@@ -12,7 +12,9 @@ array=[]
 array.append("Gracias por seguirnos @");
 array.append("Lucha por tu clan @");
 array.append("Esperamos que disfrutes del juego @");
-array.append("Follow por follow bro @");
+array.append("Follow por follow @");
+array.append("Bienvenid@ @");
+array.append("¿Eres tu la leyenda que capturo 20 banderas en un dia? @");
 print (array)
 
 
