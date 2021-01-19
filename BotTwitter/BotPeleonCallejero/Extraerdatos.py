@@ -19,7 +19,7 @@ array.append("¿Eres tu la leyenda que capturo 20 banderas en un dia? @");
 def get_tweets(api):
 
 
-	mentions = api.mentions_timeline()
+	mentions = api.mentions_timeline(count=5)
 	logger.info("Revisando menciones")
 	for mention in mentions:
 		try:
