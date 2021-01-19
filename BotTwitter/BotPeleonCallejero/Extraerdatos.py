@@ -26,9 +26,12 @@ def get_tweets(api):
 			if (mention.text == "@StreetFightSP Funcionas?"):
 				api.update_status("Soy un buen bot, mi creador es un genio @"+str(mention.user.screen_name))
 				print ("Mensaje enviado a "+str(mention.user.screen_name))
+			#AÑADIR TODAS LAS COMPROBACIONES PARA COMANDOS
 		except tweepy.TweepError as error:
 		    if error.api_code == 187:
 			    print('duplicate message')
+
+	#FOLLOWFORFOLLOW AND SEND RANDOM WELCOME MESSAGE		
 	#Comprobamos nuestros followers
 	logger.info("Revisando followers")
 	for follower in tweepy.Cursor(api.followers).items():
@@ -42,7 +45,7 @@ def main():
 	api = create_api()
 	while True:
 		get_tweets(api)
-		logger.info("Dormido...ZzZzZzZ")
+		logger.info("Estoy dormido...ZzZzZzZ")
 		time.sleep(60)
 
 if __name__ == "__main__":
