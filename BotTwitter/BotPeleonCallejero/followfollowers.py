@@ -3,17 +3,27 @@ import logging
 from config import create_api
 import json
 import time
+import random
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()
 
+array=[]
+array.append("Gracias por seguirnos @");
+array.append("Lucha por tu clan @");
+array.append("Esperamos que disfrutes del juego @");
+array.append("Follow por folow bro @");
+array.append("Hijo de fruta @");
+print (array)
+
+
 def follow_followers(api):
-    #api = tweepy.API(auth)
+
     logger.info("Retrieving and following followers")
     for follower in tweepy.Cursor(api.followers).items():
         if not follower.following:
             logger.info(f"Following {follower.name}")
-            api.update_status("Gracias por seguirnos @"+str(follower.name))
+            api.update_status(random.choice(array)+str(follower.name))
             follower.follow()
 
 def main():
