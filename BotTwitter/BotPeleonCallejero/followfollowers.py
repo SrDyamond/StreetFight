@@ -21,7 +21,10 @@ array.append("¿Eres tu la leyenda que capturo 20 banderas en un dia? @");
 def follow_followers(api):
 
     logger.info("Retrieving and following followers")
+    #Comprobamos nuestros followers
     for follower in tweepy.Cursor(api.followers).items():
+        #si nos siguen y no los seguimos,los seguimos y lo mencinamos
+        #en un tweet con un mensaje aleatorio de bienvenida
         if not follower.following:
             logger.info(f"Following {follower.name}")
             api.update_status(random.choice(array)+str(follower.name))
