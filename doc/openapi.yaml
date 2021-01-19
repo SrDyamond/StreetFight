@@ -142,18 +142,6 @@ paths:
           schema:
             type: string
             example: "987-7323a5431d1c31072983a6a5bf23745b655ddf59"
-      # PUEDE QUE YA QUE ENVIAMOS EL session_cookie EN EL HEADER YA NO HAGA FALTA EL requestBody
-      # requestBody:
-      #   description: "Formato para enviar un DELETE de logout."
-      #   required: true
-      #   content:
-      #     application/json:
-      #       schema:
-      #         type: object
-      #         properties:
-      #           cookie_id:
-      #             type: integer
-      #             example: 20819
       responses:
         '200':
           description: Cookie borrada, por lo tanto esa sesión ya no es válida.
@@ -209,25 +197,6 @@ paths:
                         description:
                           type: string
                           example: "Unauthorized"
-                        extra:
-                          type: string
-                          example: ""
-        '404':
-          description: El id de cookie no existe.
-          content:
-            application/json:
-              schema:
-                  type: object
-                  properties:
-                    http_response:
-                      type: object
-                      properties:
-                        code:
-                          type: integer
-                          example: 404
-                        description:
-                          type: string
-                          example: "Not found"
                         extra:
                           type: string
                           example: ""
@@ -1240,25 +1209,6 @@ paths:
             type: string
             example: "987-7323a5431d1c31072983a6a5bf23745b655ddf59"
       responses:
-        '200':
-          description: Bandera capturada.
-          content:
-            application/json:
-              schema:
-                  type: object
-                  properties:
-                    http_response:
-                      type: object
-                      properties:
-                        code:
-                          type: integer
-                          example: 200
-                        description:
-                          type: string
-                          example: "OK"
-                        extra:
-                          type: string
-                          example: ""
         '202':
           description: Intentando capturar la bandera.
           content:
