@@ -286,7 +286,7 @@ Ayúdame
 ### Tabla SESION
 - id INT PRIMARY KEY
 - id_usuario INT NOT NULL FOREIGN KEY
-- timestamp_caducidad TIMESTAMP NOT NULL
+- fecha_caducidad DATETIME NOT NULL
 - valor_cookie VARCHAR(40) NOT NULL
 
 ### Tabla USARIO
@@ -303,7 +303,7 @@ Ayúdame
 - abreviatura CHAR(4)
 - color CHAR(7) NOT NULL
 - url_icono VARCHAR(300)
-- timestamp_fundacion TIMESTAMP NOT NULL
+- fecha_fundacion DATETIME NOT NULL
 - id_fundador INT NOT NULL FOREIGN KEY
 
 ### Tabla BANDERA
@@ -317,10 +317,10 @@ Ayúdame
 ### Tabla INTENTO_CAPTURA
 - id_usuario INT NOT NULL FOREIGN KEY
 - id_bandera INT NOT NULL FOREIGN KEY
-- timestamp TIMESTAMP NOT NULL
+- fecha DATETIME NOT NULL
 - PRIMARY KEY (id_usuario, id_bandera, timestamp)
 
-> Todos los datos de fecha (TIMESTAMP) se guaradrán en UTC. Se puede usar la sentencia `SET @@time_zone = '+00:00';` en MySQL para definir eu uso horário.
+> Todos los datos de fecha (DATE) se guaradrán en Europe/Madrid. Se puede modificar la sentencia `TIME_ZONE = 'Europe/Madrid'` en el archivo `settings.py` de tu proyecto Django para definir el uso horário.
 
 ## API REST
 
