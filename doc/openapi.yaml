@@ -45,7 +45,7 @@ paths:
                   cookie_id:
                     type: integer
                     example: 3982
-                  session-cookie:
+                  session_cookie:
                     type: string
                     example: "987-7323a5431d1c31072983a6a5bf23745b655ddf59"
                   expiration:
@@ -138,11 +138,11 @@ paths:
             type: string
             example: "Paco"
         - in: header
-          name: session-cookie
+          name: session_cookie
           schema:
             type: string
             example: "987-7323a5431d1c31072983a6a5bf23745b655ddf59"
-      # PUEDE QUE YA QUE ENVIAMOS EL session-cookie EN EL HEADER YA NO HAGA FALTA EL requestBody
+      # PUEDE QUE YA QUE ENVIAMOS EL session_cookie EN EL HEADER YA NO HAGA FALTA EL requestBody
       # requestBody:
       #   description: "Formato para enviar un DELETE de logout."
       #   required: true
@@ -578,7 +578,7 @@ paths:
                   cookie_id:
                     type: integer
                     example: 12372
-                  session-cookie:
+                  session_cookie:
                     type: string
                     example: "561-7323a5431d1c31072983a6a5bf23745b655ddf59"
                   expiration:
@@ -1156,7 +1156,7 @@ paths:
             type: integer
             example: 765
         - in: header
-          name: session-cookie
+          name: session_cookie
           schema:
             type: string
             example: "987-7323a5431d1c31072983a6a5bf23745b655ddf59"
@@ -1235,7 +1235,7 @@ paths:
             type: integer
             example: 110
         - in: header
-          name: session-cookie
+          name: session_cookie
           schema:
             type: string
             example: "987-7323a5431d1c31072983a6a5bf23745b655ddf59"
