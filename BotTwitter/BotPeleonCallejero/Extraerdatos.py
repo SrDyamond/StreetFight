@@ -8,27 +8,22 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()
 
 # Function to extract tweets
-def get_tweets(username,api):
+def get_tweets(api):
 
 
-        # 200 tweets to be extracted
-        number_of_tweets=200
-        tweets = api.user_timeline(screen_name=username)
+    mentions = api.mentions_timeline()
 
-        # Empty Array
-        tmp=[]
-
-        # create array of tweet information: username,
-        # tweet id, date/time, text
-        tweets_for_csv = [tweet.text for tweet in tweets] # CSV file created
-        for j in tweets_for_csv:
-            tmp.append(j)
-        # Printing the tweets
-        print(tmp)
+    for mention in mentions:
+        try:
+            if (mention.text == "@StreetFightSP Funcionas?"):
+                api.update_status("Soy un buen bot, mi creador es un genio @"+str(mention.user.screen_name))
+        except tweepy.TweepError as error:
+            if error.api_code == 187:
+                print('duplicate message')
 def main():
     api = create_api()
     while True:
-        get_tweets("Street Fight",api)
+        get_tweets(api)
         logger.info("Waiting...")
         time.sleep(60)
 
