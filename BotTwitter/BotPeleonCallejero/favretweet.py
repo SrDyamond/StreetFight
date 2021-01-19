@@ -40,4 +40,5 @@ def main(keywords):
     stream.filter(track=keywords, languages=["en"])
 
 if __name__ == "__main__":
-    main(["Street Fight", "La Coruña", "A Coruña","Galicia"])
+    main(["Street Fight", "La Coruña", "A Coruña","Galicia","la coruña","a coruña","galicia",
+    "street fight"])
