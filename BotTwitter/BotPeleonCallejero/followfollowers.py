@@ -15,7 +15,7 @@ array.append("Esperamos que disfrutes del juego @");
 array.append("Follow por follow @");
 array.append("Bienvenid@ @");
 array.append("¿Eres tu la leyenda que capturo 20 banderas en un dia? @");
-print (array)
+#print (array)
 
 
 def follow_followers(api):
