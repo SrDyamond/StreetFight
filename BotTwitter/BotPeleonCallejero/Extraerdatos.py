@@ -4,20 +4,11 @@ from config import create_api
 from controlador_menciones import parse_text
 import json
 import time
-import random
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()
 
 
-
-array=[]
-array.append("Gracias por seguirnos @");
-array.append("Lucha por tu clan @");
-array.append("Esperamos que disfrutes del juego @");
-array.append("Follow por follow @");
-array.append("Bienvenid@ @");
-array.append("¿Eres tu la leyenda que capturo 20 banderas en un dia? @");
 # Function to extract tweets
 def get_tweets(api):
 
@@ -25,17 +16,7 @@ def get_tweets(api):
 	mentions = api.mentions_timeline(count=5)
 	logger.info("Revisando menciones")
 	for mention in mentions:
-		parse_text(mention.text)
-	#
-	#	try:
-	#		if (mention.text == "@StreetFightSP Ayudame!"):
-	#			api.update_status("Ayuda\n- Top clanes <número>\n- Top usuarios <número>\n- Info del clan <nombre>\n- Info del usuario <nombre>\n @"+str(mention.user.screen_name))
-	#				#metodo
-	#		#AÑADIR TODAS LAS COMPROBACIONES PARA COMANDOS
-	#	except tweepy.TweepError as error:
-	#		if error.api_code == 187:
-	#			print('duplicate message')
-
+		parse_text(mention.text,mention.user.screen_name,api)
 	#FOLLOWFORFOLLOW AND SEND RANDOM WELCOME MESSAGE
 	#Comprobamos nuestros followers
 	logger.info("Revisando followers")
@@ -44,7 +25,7 @@ def get_tweets(api):
 	#en un tweet con un mensaje aleatorio de bienvenida
 		if not follower.following:
 			logger.info(f"Following {follower.screen_name}")
-			api.update_status(random.choice(array)+str(follower.screen_name))
+			api.update_status("Hola @"+str(follower.screen_name)+"!Gracias por darnos follow :D.\nPara saber los comandos que acepto escribe <Ayudame!>")
 			follower.follow()
 
 def main():
