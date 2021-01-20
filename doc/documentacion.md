@@ -290,7 +290,6 @@ Ayúdame
 - color CHAR(7) NOT NULL
 - url_icono VARCHAR(300)
 - fecha_fundacion DATETIME NOT NULL
-- id_fundador INT FOREIGN KEY
 
 ### Tabla USUARIO
 - id INT PRIMARY KEY
@@ -299,6 +298,7 @@ Ayúdame
 - salt VARCHAR(40) NOT NULL
 - clave_sha_concatenada VARCHAR(40) NOT NULL
 - id_clan INT NOT NULL FOREIGN KEY
+- fundador BOOLEAN NOT NULL
 
 ### Tabla SESION
 - id INT PRIMARY KEY
@@ -315,10 +315,10 @@ Ayúdame
 - id_clan INT NOT NULL FOREIGN KEY
 
 ### Tabla INTENTO_CAPTURA
+- id INT PRIMARY KEY
 - id_usuario INT NOT NULL FOREIGN KEY
 - id_bandera INT NOT NULL FOREIGN KEY
 - fecha DATETIME NOT NULL
-- PRIMARY KEY (id_usuario, id_bandera, timestamp)
 
 > Todos los datos de fecha (DATE) se guaradrán en Europe/Madrid. Se puede modificar la sentencia `TIME_ZONE = 'Europe/Madrid'` en el archivo `settings.py` de tu proyecto Django para definir el uso horário.
 
