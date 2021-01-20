@@ -1,12 +1,14 @@
 import tweepy
 import logging
 from config import create_api
+from controlador_menciones import parse_text
 import json
 import time
 import random
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()
+
 
 
 array=[]
@@ -23,14 +25,16 @@ def get_tweets(api):
 	mentions = api.mentions_timeline(count=5)
 	logger.info("Revisando menciones")
 	for mention in mentions:
-		try:
-			if (mention.text == "@StreetFightSP Ayudame!"):
-				api.update_status("Ayuda\n- Top clanes <número>\n- Top usuarios <número>\n- Info del clan <nombre>\n- Info del usuario <nombre>\n @"+str(mention.user.screen_name))
-					#metodo
-			#AÑADIR TODAS LAS COMPROBACIONES PARA COMANDOS
-		except tweepy.TweepError as error:
-			if error.api_code == 187:
-				print('duplicate message')
+		parse_text(mention.text)
+	#
+	#	try:
+	#		if (mention.text == "@StreetFightSP Ayudame!"):
+	#			api.update_status("Ayuda\n- Top clanes <número>\n- Top usuarios <número>\n- Info del clan <nombre>\n- Info del usuario <nombre>\n @"+str(mention.user.screen_name))
+	#				#metodo
+	#		#AÑADIR TODAS LAS COMPROBACIONES PARA COMANDOS
+	#	except tweepy.TweepError as error:
+	#		if error.api_code == 187:
+	#			print('duplicate message')
 
 	#FOLLOWFORFOLLOW AND SEND RANDOM WELCOME MESSAGE
 	#Comprobamos nuestros followers
