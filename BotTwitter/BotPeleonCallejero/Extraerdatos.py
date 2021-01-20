@@ -26,7 +26,7 @@ def get_tweets(api):
 	#en un tweet con un mensaje aleatorio de bienvenida
 		if not follower.following:
 			logger.info(f"Following {follower.screen_name}")
-			api.update_status("Hola @"+str(follower.screen_name)+"!Gracias por darnos follow :D.\nPara saber los comandos que acepto escribe <Ayudame!>")
+			api.update_status("Hola @"+str(follower.screen_name)+"!Gracias por darnos follow :D.\nPara saber los comandos que acepto escribe <Ayuda!>")
 			follower.follow()
 
 def main():
