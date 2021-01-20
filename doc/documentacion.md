@@ -327,3 +327,26 @@ Ayúdame
 ### Definición OpenAPI
 
 [Archivo de definición del OpenAPI](openapi.yaml)
+
+### Errores propios de la aplicación:
+
+Cada error, además de ir acompañado de su correspondiente código HTTP, se devolverá en un formato JSON como el siguiente:
+
+```
+{
+    "error": 1,
+    "description": "logout-ok"
+}
+```
+
+#### Lista de errores:
+
+- 2001, logout_ok (http: 200)
+- 2002, clan_changed (http: 200)
+- 2003, capture_started (http: 202)
+- 4001, bad_request (http: 400)
+- 4002, bad_password (http: 401)
+- 4003, bad_cookie (http: 401)
+- 4004, not_found (http: 404)
+- 4005, already_exists (http: 409)
+- 5001, server_error (http: 500)
