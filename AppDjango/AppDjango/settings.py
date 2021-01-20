@@ -28,12 +28,14 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 CORS_ALLOW_ALL_ORIGINS = DEBUG # https://github.com/adamchainz/django-cors-headers
+STATIC_ROOT = "static_root" # https://github.com/fabiocaccamo/django-colorfield
 
 # Application definition
 
 INSTALLED_APPS = [
     'streetfight.apps.StreetfightConfig',
     'corsheaders', # django-cors-headers
+    'colorfield', # django-colorfield
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
