@@ -42,9 +42,9 @@ paths:
                   user_id:
                     type: integer
                     example: 987
-                  cookie_id:
-                    type: integer
-                    example: 3982
+                  # cookie_id:
+                  #   type: integer
+                  #   example: 3982
                   session_cookie:
                     type: string
                     example: "987-7323a5431d1c31072983a6a5bf23745b655ddf59"
@@ -460,9 +460,9 @@ paths:
                   user_id:
                     type: integer
                     example: 561
-                  cookie_id:
-                    type: integer
-                    example: 12372
+                  # cookie_id:
+                  #   type: integer
+                  #   example: 12372
                   session_cookie:
                     type: string
                     example: "561-7323a5431d1c31072983a6a5bf23745b655ddf59"
@@ -536,6 +536,9 @@ paths:
                   captured_flags:
                     type: integer
                     example: 11
+                  founder:
+                    type: boolean
+                    example: true
                   clan:
                     type: object
                     properties:
@@ -841,6 +844,12 @@ paths:
                   flags:
                     type: integer
                     example: 200
+                  founder_names:
+                    type: array
+                    items:
+                      type: string
+                      example: "Nuevito2"
+                      
         '404':
           description: Cuando el id consultado no existe.
           content:
