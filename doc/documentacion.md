@@ -288,14 +288,14 @@ Ayúdame
 - nombre VARCHAR(25) NOT NULL
 - abreviatura CHAR(4)
 - color CHAR(7) NOT NULL
-- url_icono VARCHAR(300)
+- url_icono VARCHAR(300) DEFAULT NULL
 - fecha_fundacion DATETIME NOT NULL
 
 ### Tabla USUARIO
 - id INT PRIMARY KEY
 - nombre VARCHAR(25) NOT NULL
-- banderas_capturadas INT NOT NULL
-- salt VARCHAR(40) NOT NULL
+- banderas_capturadas INT NOT NULL DEFAULT 0
+- salt VARCHAR(16) NOT NULL
 - clave_sha_concatenada VARCHAR(40) NOT NULL
 - id_clan INT NOT NULL FOREIGN KEY
 - fundador BOOLEAN NOT NULL
@@ -309,7 +309,7 @@ Ayúdame
 ### Tabla BANDERA
 - id INT PRIMARY KEY
 - nombre VARCHAR(50) NOT NULL
-- descripcion VARCHAR(500) NOT NULL
+- descripcion VARCHAR(500)
 - latitud DOUBLE NOT NULL
 - longitud DOUBLE NOT NULL
 - id_clan INT NOT NULL FOREIGN KEY
