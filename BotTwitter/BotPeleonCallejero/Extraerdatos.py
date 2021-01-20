@@ -8,7 +8,6 @@ import random
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()
 
-nombre_bot="@StreetFightSP"
 
 array=[]
 array.append("Gracias por seguirnos @");
