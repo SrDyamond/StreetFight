@@ -25,9 +25,6 @@ def get_tweets(api):
 	logger.info("Revisando menciones")
 	for mention in mentions:
 		try:
-			if (mention.text == "@StreetFightSP Funcionas?"):
-				api.update_status("Soy un buen bot, mi creador es un genio @"+str(mention.user.screen_name))
-				print ("Mensaje enviado a "+str(mention.user.screen_name))
 			if (mention.text == "@StreetFightSP Ayudame!"):
 				api.update_status("Ayuda\n- Top clanes <número>\n- Top usuarios <número>\n- Info del clan <nombre>\n- Info del usuario <nombre>\n @"+str(mention.user.screen_name))
 					#metodo
