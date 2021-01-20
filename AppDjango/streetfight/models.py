@@ -7,10 +7,10 @@ class Clan(models.Model):
     color = models.CharField(max_length=7)
     url_icon = models.CharField(max_length=300, blank=True, null=True)
     fecha_fundacion = models.DateTimeField()
+    # id_fundador = models.ForeignKey('usuario', blank=True, null=True, related_name='usuario', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.nombre
-    
 
 
 class Usuario(models.Model):
