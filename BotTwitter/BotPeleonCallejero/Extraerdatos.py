@@ -18,7 +18,6 @@ def get_tweets(api):
 	for mention in mentions:
 		parse_text(mention.text,mention.user.screen_name,api)
 
-
 	#FOLLOWFORFOLLOW AND SEND RANDOM WELCOME MESSAGE
 	logger.info("Revisando followers")
 	for follower in tweepy.Cursor(api.followers).items():
