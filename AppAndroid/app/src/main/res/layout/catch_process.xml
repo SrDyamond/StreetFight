@@ -49,4 +49,33 @@
         app:layout_constraintStart_toStartOf="@+id/flag_captured_button"
         app:layout_constraintTop_toTopOf="@+id/flag_captured_button" />
 
+    <TextView
+        android:id="@+id/flag_capture_fight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="260dp"
+        android:fontFamily="@font/bungee"
+        android:gravity="center"
+        android:text="@string/fight"
+        android:textColor="#000000"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="@+id/Flag_captured_image"
+        app:layout_constraintEnd_toEndOf="@+id/Flag_captured_image"
+        app:layout_constraintStart_toStartOf="@+id/Flag_captured_image"
+        app:layout_constraintTop_toTopOf="@+id/Flag_captured_image" />
+
+    <TextView
+        android:id="@+id/flag_capture_capture_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="135dp"
+        android:fontFamily="@font/bungee"
+        android:gravity="center"
+        android:text="@string/capture_start"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/Flag_captured_image"
+        app:layout_constraintEnd_toEndOf="@+id/Flag_captured_image"
+        app:layout_constraintStart_toStartOf="@+id/Flag_captured_image"
+        app:layout_constraintTop_toTopOf="@+id/Flag_captured_image" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
