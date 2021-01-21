@@ -42,9 +42,9 @@ paths:
                   user_id:
                     type: integer
                     example: 987
-                  cookie_id:
-                    type: integer
-                    example: 3982
+                  # cookie_id:
+                  #   type: integer
+                  #   example: 3982
                   session_cookie:
                     type: string
                     example: "987-7323a5431d1c31072983a6a5bf23745b655ddf59"
@@ -113,8 +113,9 @@ paths:
           schema:
             type: string
             example: "Paco"
-        - in: header
-          name: session_cookie
+        - name: session_cookie
+          in: header
+          required: true
           schema:
             type: string
             example: "987-7323a5431d1c31072983a6a5bf23745b655ddf59"
@@ -460,9 +461,9 @@ paths:
                   user_id:
                     type: integer
                     example: 561
-                  cookie_id:
-                    type: integer
-                    example: 12372
+                  # cookie_id:
+                  #   type: integer
+                  #   example: 12372
                   session_cookie:
                     type: string
                     example: "561-7323a5431d1c31072983a6a5bf23745b655ddf59"
@@ -536,6 +537,9 @@ paths:
                   captured_flags:
                     type: integer
                     example: 11
+                  founder:
+                    type: boolean
+                    example: true
                   clan:
                     type: object
                     properties:
@@ -663,7 +667,7 @@ paths:
           required: true
           schema:
             type: string
-            example: "Clan Pat"
+            example: "select"
       responses:
         '200':
           description: JSON array de clanes que coinciden con el nombre o fragmento introducido.
@@ -811,7 +815,7 @@ paths:
           required: true
           schema:
             type: integer
-            example: 765
+            example: 132
       responses:
         '200':
           description: JSON object con la info del clan indicado.
@@ -841,6 +845,12 @@ paths:
                   flags:
                     type: integer
                     example: 200
+                  founder_names:
+                    type: array
+                    items:
+                      type: string
+                      example: "Nuevito2"
+                      
         '404':
           description: Cuando el id consultado no existe.
           content:
@@ -944,8 +954,9 @@ paths:
           schema:
             type: integer
             example: 765
-        - in: header
-          name: session_cookie
+        - name: session_cookie
+          in: header
+          required: true
           schema:
             type: string
             example: "987-7323a5431d1c31072983a6a5bf23745b655ddf59"
@@ -1005,8 +1016,9 @@ paths:
           schema:
             type: integer
             example: 110
-        - in: header
-          name: session_cookie
+        - name: session_cookie
+          in: header
+          required: true
           schema:
             type: string
             example: "987-7323a5431d1c31072983a6a5bf23745b655ddf59"

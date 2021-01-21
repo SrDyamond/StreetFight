@@ -283,44 +283,44 @@ Ayúdame
 
 ## Tipos de datos
 
-### Tabla SESION
-- id INT PRIMARY KEY
-- id_usuario INT NOT NULL FOREIGN KEY
-- timestamp_caducidad TIMESTAMP NOT NULL
-- valor_cookie VARCHAR(40) NOT NULL
-
-### Tabla USARIO
-- id INT PRIMARY KEY
-- nombre VARCHAR(25) NOT NULL
-- banderas_capturadas INT NOT NULL
-- salt VARCHAR(40) NOT NULL
-- clave_sha_concatenada VARCHAR(40) NOT NULL
-- id_clan INT NOT NULL FOREIGN KEY
-
 ### Tabla CLAN
 - id INT PRIMARY KEY
 - nombre VARCHAR(25) NOT NULL
 - abreviatura CHAR(4)
 - color CHAR(7) NOT NULL
-- url_icono VARCHAR(300)
-- timestamp_fundacion TIMESTAMP NOT NULL
-- id_fundador INT NOT NULL FOREIGN KEY
+- url_icono VARCHAR(300) DEFAULT NULL
+- fecha_fundacion DATETIME NOT NULL
+
+### Tabla USUARIO
+- id INT PRIMARY KEY
+- nombre VARCHAR(25) NOT NULL
+- banderas_capturadas INT NOT NULL DEFAULT 0
+- salt VARCHAR(16) NOT NULL
+- clave_sha_concatenada VARCHAR(40) NOT NULL
+- id_clan INT NOT NULL FOREIGN KEY
+- fundador BOOLEAN NOT NULL
+
+### Tabla SESION
+- id INT PRIMARY KEY
+- id_usuario INT NOT NULL FOREIGN KEY
+- fecha_caducidad DATETIME NOT NULL
+- valor_cookie VARCHAR(75) NOT NULL
 
 ### Tabla BANDERA
 - id INT PRIMARY KEY
 - nombre VARCHAR(50) NOT NULL
-- descripcion VARCHAR(500) NOT NULL
+- descripcion VARCHAR(500)
 - latitud DOUBLE NOT NULL
 - longitud DOUBLE NOT NULL
 - id_clan INT NOT NULL FOREIGN KEY
 
 ### Tabla INTENTO_CAPTURA
+- id INT PRIMARY KEY
 - id_usuario INT NOT NULL FOREIGN KEY
 - id_bandera INT NOT NULL FOREIGN KEY
-- timestamp TIMESTAMP NOT NULL
-- PRIMARY KEY (id_usuario, id_bandera, timestamp)
+- fecha DATETIME NOT NULL
 
-> Todos los datos de fecha (TIMESTAMP) se guaradrán en UTC. Se puede usar la sentencia `SET @@time_zone = '+00:00';` en MySQL para definir eu uso horário.
+> Todos los datos de fecha (DATE) se guaradrán en Europe/Madrid. Se puede modificar la sentencia `TIME_ZONE = 'Europe/Madrid'` en el archivo `settings.py` de tu proyecto Django para definir el uso horário.
 
 ## API REST
 
