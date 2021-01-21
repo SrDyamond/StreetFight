@@ -147,6 +147,19 @@ paths:
                   description:
                     type: string
                     example: "bad_cookie"
+        '404':
+          description: El nombre de usuario no existe.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: integer
+                    example: 4004
+                  description:
+                    type: string
+                    example: "not_found"
   /flag:
     get:
       summary: Devuelve una lista de banderas cercanas en base a tu localización y un rádio.

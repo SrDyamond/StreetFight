@@ -31,7 +31,7 @@ ALLOWED_HOSTS = []
 from corsheaders.defaults import default_headers
 CORS_ALLOW_ALL_ORIGINS = DEBUG 
 CORS_ALLOW_HEADERS = list(default_headers) + [
-    'session_cookie'
+    'sessioncookie'
 ]
 
 STATIC_ROOT = "static_root" # https://github.com/fabiocaccamo/django-colorfield
