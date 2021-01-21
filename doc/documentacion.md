@@ -350,3 +350,5 @@ Cada error, además de ir acompañado de su correspondiente código HTTP, se dev
 - 4004, not_found (http: 404)
 - 4005, already_exists (http: 409)
 - 5001, server_error (http: 500)
+
+> El error 5001 acabará por ser eliminado de la documentación cuando se acaben de implementar todos los endopints en Django.

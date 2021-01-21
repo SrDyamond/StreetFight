@@ -90,19 +90,6 @@ paths:
                   description:
                     type: string
                     example: "not_found"
-        '500':
-          description: Error interno del servidor.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: integer
-                    example: 5001
-                  description:
-                    type: string
-                    example: "server_error"
     delete:
       summary: Cierra la sesión en un dispositivo destruyendo la cookie indicada.
       parameters:
@@ -116,9 +103,10 @@ paths:
         - name: session_cookie
           in: header
           required: true
+          description: El token de sesión (cookie) que queremos validar para cerrar esta sesión.
           schema:
             type: string
-            example: "987-7323a5431d1c31072983a6a5bf23745b655ddf59"
+            example: "8-gmqDwAsH7X6kQdb0Hw6yd-W0N3cFn_v5FcTujIZJWDBdWUmoj0i2gxIixF7ExUHs-0FN8fWRHsRCOWV17_gvPA"
       responses:
         '200':
           description: Cookie borrada, por lo tanto esa sesión ya no es válida.
@@ -159,19 +147,6 @@ paths:
                   description:
                     type: string
                     example: "bad_cookie"
-        '500':
-          description: Error interno del servidor.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: integer
-                    example: 5001
-                  description:
-                    type: string
-                    example: "server_error"
   /flag:
     get:
       summary: Devuelve una lista de banderas cercanas en base a tu localización y un rádio.
