@@ -7,7 +7,7 @@ class Clan(models.Model):
     nombre = models.CharField(max_length=25, unique=True)
     abreviatura = models.CharField(max_length=4, blank=True, null=True)
     color = ColorField(format='hexa', default="#FF0000")
-    url_icon = models.CharField(max_length=300, blank=True, null=True, default=None)
+    url_icon = models.URLField(max_length=300, blank=True, null=True, default=None)
     fecha_fundacion = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -55,4 +55,4 @@ class IntentoCaptura(models.Model):
     fecha = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.id_usuario.nombre + " captura " + self.id_bandera.nombre + " (" + self.fecha + ")"
+        return self.id_usuario.nombre + " captura " + self.id_bandera.nombre + " (" + str(self.fecha) + ")"
