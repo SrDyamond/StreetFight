@@ -304,7 +304,7 @@ Ayúdame
 - id INT PRIMARY KEY
 - id_usuario INT NOT NULL FOREIGN KEY
 - fecha_caducidad DATETIME NOT NULL
-- valor_cookie VARCHAR(40) NOT NULL
+- valor_cookie VARCHAR(75) NOT NULL
 
 ### Tabla BANDERA
 - id INT PRIMARY KEY
