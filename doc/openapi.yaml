@@ -30,7 +30,7 @@ paths:
               properties:
                 password_sha:
                   type: string
-                  example: "86f7e437faa5a7fce15d1ddcb9eaeaea377667b8"
+                  example: "95c95febca051a5cac3a586aa4db35968e8f2790" # sha1("abc123..")
       responses:
         '200':
           description: Devolvemos la cookie de sesión generada y el id del usuario.
