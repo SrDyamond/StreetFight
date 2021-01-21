@@ -19,4 +19,7 @@
     <string name="clan_change">Cambiar clan</string>
     <string name="logout">Cerrar sesion</string>
     <string name="donate">Donar</string>
+    <string name="flag_ok">OK</string>
+    <string name="fight">Luchad!!!</string>
+    <string name="capture_start">Captura     comenzada</string>
 </resources>
