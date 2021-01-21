@@ -5,9 +5,9 @@ info:
   version: "0.1.1"
 
 servers:
+  - url: http://localhost:8000/ # para probar en local
   - url: http://streetfight.rat.la:8271/
-  - url: http://localhost:8271/
-
+  
 paths:
   /user/{username}/session:
     post:
