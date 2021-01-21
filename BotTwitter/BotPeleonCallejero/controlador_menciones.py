@@ -14,6 +14,7 @@ def existe_posicion(array, posicion):
 def parse_text(texto,user,api):
 	texto_separado=texto.split()
 	is_int=False
+	comando_fail="Comando no valido,escribe <Ayuda!> @"+str(user)"Comando no valido,escribe <Ayuda!> @"+str(user)
 
 	if existe_posicion(texto_separado,3):
 		try :
@@ -28,9 +29,16 @@ def parse_text(texto,user,api):
 			print("Mensaje enviado a"+str())
 			#AÑADIR TODAS LAS COMPROBACIONES PARA COMANDOS
 		if (texto_separado[1] == "Top" and texto_separado[2] == "clanes" and is_int==True):
+			#tweet enseñado el top clanes
 			print(cantidad)
 		else:
-			#Aqui va tweet diciendo que ponga bien el comando
+			api.update_status(comando_fail)
+			print("Introduce comando valido")
+		if (texto_separado[1] == "Top" and texto_separado[2] == "usuarios" and is_int==True):
+			#tweet enseñado el top clanes
+			print(cantidad)
+		else:
+			api.update_status(comando_fail)
 			print("Introduce comando valido")
 	except tweepy.TweepError as error:
 		if error.api_code == 187:
