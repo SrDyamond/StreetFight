@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseNotAllowed, JsonResponse
 import secrets
 import hashlib
 import datetime
+from django.utils import timezone
 import json
 
 from .models import Usuario, Sesion
@@ -35,7 +36,7 @@ def login(request, username):
     if clave_sha_concatenada_db == clave_sha_concatenada_request:
         # Genero un token de sesion
         session_cookie = str(user.id) + "-" + secrets.token_urlsafe(64)
-        expiartion_date = datetime.datetime.now() + datetime.timedelta(days=7)
+        expiartion_date = timezone.now() + datetime.timedelta(days=7)
         response = {
             "user_id": user.id,
             "session_cookie": session_cookie,
