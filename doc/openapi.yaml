@@ -100,7 +100,7 @@ paths:
           schema:
             type: string
             example: "Paco"
-        - name: session_cookie
+        - name: sessioncookie
           in: header
           required: true
           description: El token de sesión (cookie) que queremos validar para cerrar esta sesión.
@@ -439,7 +439,7 @@ paths:
                   # cookie_id:
                   #   type: integer
                   #   example: 12372
-                  session_cookie:
+                  sessioncookie:
                     type: string
                     example: "561-7323a5431d1c31072983a6a5bf23745b655ddf59"
                   expiration:
@@ -929,7 +929,7 @@ paths:
           schema:
             type: integer
             example: 765
-        - name: session_cookie
+        - name: sessioncookie
           in: header
           required: true
           schema:
@@ -991,7 +991,7 @@ paths:
           schema:
             type: integer
             example: 110
-        - name: session_cookie
+        - name: sessioncookie
           in: header
           required: true
           schema:
