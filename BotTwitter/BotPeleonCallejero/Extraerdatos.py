@@ -1,36 +1,38 @@
 import tweepy
 import logging
 from config import create_api
-import json
+from controlador_menciones import parse_text
 import time
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()
 
+
 # Function to extract tweets
-def get_tweets(username,api):
+def get_tweets(api):
 
 
-        # 200 tweets to be extracted
-        number_of_tweets=200
-        tweets = api.user_timeline(screen_name=username)
+	mentions = api.mentions_timeline(count=5)
+	logger.info("Revisando menciones")
+	for mention in mentions:
+		parse_text(mention.text,mention.user.screen_name,api)
 
-        # Empty Array
-        tmp=[]
+	#FOLLOWFORFOLLOW AND SEND RANDOM WELCOME MESSAGE
+	logger.info("Revisando followers")
+	for follower in tweepy.Cursor(api.followers).items():
+	#si nos siguen y no los seguimos,los seguimos y lo mencinamos
+	#en un tweet con un mensaje aleatorio de bienvenida
+		if not follower.following:
+			logger.info(f"Following {follower.screen_name}")
+			api.update_status("Hola @"+str(follower.screen_name)+"!Gracias por darnos follow :D.\nPara saber los comandos que acepto escribe <Ayuda!>")
+			follower.follow()
 
-        # create array of tweet information: username,
-        # tweet id, date/time, text
-        tweets_for_csv = [tweet.text for tweet in tweets] # CSV file created
-        for j in tweets_for_csv:
-            tmp.append(j)
-        # Printing the tweets
-        print(tmp)
 def main():
-    api = create_api()
-    while True:
-        get_tweets("Street Fight",api)
-        logger.info("Waiting...")
-        time.sleep(60)
+	api = create_api()
+	while True:
+		get_tweets(api)
+		logger.info("Estoy dormido...ZzZzZzZ")
+		time.sleep(60)
 
 if __name__ == "__main__":
-    main()
+	main()
