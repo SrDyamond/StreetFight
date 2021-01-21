@@ -2,7 +2,6 @@ import tweepy
 import logging
 from config import create_api
 from controlador_menciones import parse_text
-import json
 import time
 
 logging.basicConfig(level=logging.INFO)
