@@ -6,7 +6,7 @@ import datetime
 from django.utils import timezone
 import json
 
-from .models import Usuario, Sesion
+from .models import Clan, Usuario, Sesion, Bandera, IntentoCaptura
 from django.views.decorators.csrf import csrf_exempt
 
 from . import custom_error_response
@@ -56,7 +56,6 @@ def login(request, username):
 
 
 def logout(request, username):
-
     if not 'sessioncookie' in request.headers:
         return JsonResponse(custom_error_response.BAD_REQUEST, status=400)
     
@@ -80,3 +79,33 @@ def logout(request, username):
         return JsonResponse(custom_error_response.LOGOUT_OK, status=200)
     else:
         return JsonResponse(custom_error_response.BAD_COOKIE, status=401)
+
+
+@csrf_exempt
+def flag_by_id(request, id_flag):
+    try:
+        flag = Bandera.objects.get(pk=id_flag)
+    except Bandera.DoesNotExist:
+        return JsonResponse(custom_error_response.NOT_FOUND, status=404)
+
+    response = {
+        "id": flag.id,
+        "name": flag.nombre,
+        "description": flag.descripcion,
+        "latitude": flag.latitud,
+        "longitude": flag.longitud,
+        "capturing": flag.capturando,
+        "clan": {
+            "id": flag.id_clan.id,
+            "name": flag.id_clan.nombre,
+            "color": flag.id_clan.color
+        }
+    }
+
+    if not flag.id_clan.url_icon is None:
+        response["clan"]["url_icon"] = flag.id_clan.url_icon
+
+    if not flag.id_clan.abreviatura is None:
+        response["clan"]["acronym"] = flag.id_clan.abreviatura
+
+    return JsonResponse(response, status=200)
