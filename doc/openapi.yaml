@@ -42,12 +42,9 @@ paths:
                   user_id:
                     type: integer
                     example: 987
-                  # cookie_id:
-                  #   type: integer
-                  #   example: 3982
                   session_cookie:
                     type: string
-                    example: "987-7323a5431d1c31072983a6a5bf23745b655ddf59"
+                    example: "8-lRcQ7w4SWmkqy6y5kOr9ErZ-S8Zr9D2RTwQvEgMP_aHj5gfKA0bpGTkuBcs46rHzjdydXT2hWBBbmkY5Ywqy7w"
                   expiration:
                     type: integer
                     example: 1608372744
@@ -232,19 +229,6 @@ paths:
                   description:
                     type: string
                     example: "bad_request"
-        '500':
-          description: Error interno del servidor.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: integer
-                    example: 5001
-                  description:
-                    type: string
-                    example: "server_error"
   /flag/{id_flag}:
     get:
       summary: Devuelve toda la info de una bandera y su clan.
@@ -313,19 +297,6 @@ paths:
                   description:
                     type: string
                     example: "not_found"
-        '500':
-          description: Error interno del servidor.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: integer
-                    example: 5001
-                  description:
-                    type: string
-                    example: "server_error"
   /user:
     get:
       summary: Devuelve la lista de usuarios que coincidan en nombre con el parámetro "q".
@@ -383,19 +354,6 @@ paths:
                   description:
                     type: string
                     example: "bad_request"
-        '500':
-          description: Error interno del servidor.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: integer
-                    example: 5001
-                  description:
-                    type: string
-                    example: "server_error"
     post:
       summary: Se registra un usuario nuevo y se devuelve una cookie de sesión.
       requestBody:
@@ -449,12 +407,9 @@ paths:
                   user_id:
                     type: integer
                     example: 561
-                  # cookie_id:
-                  #   type: integer
-                  #   example: 12372
                   sessioncookie:
                     type: string
-                    example: "561-7323a5431d1c31072983a6a5bf23745b655ddf59"
+                    example: "8-lRcQ7w4SWmkqy6y5kOr9ErZ-S8Zr9D2RTwQvEgMP_aHj5gfKA0bpGTkuBcs46rHzjdydXT2hWBBbmkY5Ywqy7w"
                   expiration:
                     type: integer
                     example: 1608372744
@@ -484,19 +439,6 @@ paths:
                   description:
                     type: string
                     example: "already_exists"
-        '500':
-          description: Error interno del servidor.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: integer
-                    example: 5001
-                  description:
-                    type: string
-                    example: "server_error"
   /user/{username}:
     get:
       summary: Devuelve toda la info de un usuario y su clan.
@@ -559,19 +501,6 @@ paths:
                   description:
                     type: string
                     example: "not_found"
-        '500':
-          description: Error interno del servidor.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: integer
-                    example: 5001
-                  description:
-                    type: string
-                    example: "server_error"
   /user/top:
     get:
       summary: Devuelve la lista de usuarios que mas banderas han capturado en funcion del tamaño indicado, por defecto devuelve 10.
@@ -633,19 +562,6 @@ paths:
                   description:
                     type: string
                     example: "bad_request"
-        '500':
-          description: Error interno del servidor.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: integer
-                    example: 5001
-                  description:
-                    type: string
-                    example: "server_error"
   /clan:
     get:
       summary: Devuelve la lista de clanes que coincidan en nombre con el parámetro "q".
@@ -694,19 +610,6 @@ paths:
                   description:
                     type: string
                     example: "bad_request"
-        '500':
-          description: Error interno del servidor.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: integer
-                    example: 5001
-                  description:
-                    type: string
-                    example: "server_error"
     post:
       summary: Permite registrar un nuevo clan.
       requestBody:
@@ -781,19 +684,6 @@ paths:
                   description:
                     type: string
                     example: "already_exists"
-        '500':
-          description: Error interno del servidor.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: integer
-                    example: 5001
-                  description:
-                    type: string
-                    example: "server_error"
   /clan/{id_clan}:
     get:
       summary: Devuelve toda la info de un clan.
@@ -852,19 +742,6 @@ paths:
                   description:
                     type: string
                     example: "not_found"
-        '500':
-          description: Error interno del servidor.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: integer
-                    example: 5001
-                  description:
-                    type: string
-                    example: "server_error"
   /clan/top:
     get:
       summary: Devuelve la lista de clanes que mas banderas han capturado en funcion del tamaño indicado, por defecto devuelve 10.
@@ -913,19 +790,6 @@ paths:
                   description:
                     type: string
                     example: "bad_request"
-        '500':
-          description: Error interno del servidor.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: integer
-                    example: 5001
-                  description:
-                    type: string
-                    example: "server_error"
   /user/{username}/clan/{id_clan}:
     post:
       summary: Permite que un usuario cambie de clan.
@@ -947,7 +811,7 @@ paths:
           required: true
           schema:
             type: string
-            example: "987-7323a5431d1c31072983a6a5bf23745b655ddf59"
+            example: "8-lRcQ7w4SWmkqy6y5kOr9ErZ-S8Zr9D2RTwQvEgMP_aHj5gfKA0bpGTkuBcs46rHzjdydXT2hWBBbmkY5Ywqy7w"
       responses:
         '200':
           description: Clan cambiado.
@@ -975,19 +839,6 @@ paths:
                   description:
                     type: string
                     example: "bad_cookie"
-        '500':
-          description: Error interno del servidor.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: integer
-                    example: 5001
-                  description:
-                    type: string
-                    example: "server_error"
   /user/{username}/catch/{id_flag}:
     post:
       summary: Un usuario inicia la captura de una bandera.
@@ -1009,7 +860,7 @@ paths:
           required: true
           schema:
             type: string
-            example: "987-7323a5431d1c31072983a6a5bf23745b655ddf59"
+            example: "8-lRcQ7w4SWmkqy6y5kOr9ErZ-S8Zr9D2RTwQvEgMP_aHj5gfKA0bpGTkuBcs46rHzjdydXT2hWBBbmkY5Ywqy7w"
       responses:
         '202':
           description: Intentando capturar la bandera.
@@ -1050,16 +901,3 @@ paths:
                   description:
                     type: string
                     example: "not_found"
-        '500':
-          description: Error interno del servidor.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: integer
-                    example: 5001
-                  description:
-                    type: string
-                    example: "server_error"
