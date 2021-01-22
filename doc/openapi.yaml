@@ -5,9 +5,9 @@ info:
   version: "0.1.1"
 
 servers:
+  - url: http://localhost:8000/ # para probar en local
   - url: http://streetfight.rat.la:8271/
-  - url: http://localhost:8271/
-
+  
 paths:
   /user/{username}/session:
     post:
@@ -30,7 +30,7 @@ paths:
               properties:
                 password_sha:
                   type: string
-                  example: "86f7e437faa5a7fce15d1ddcb9eaeaea377667b8"
+                  example: "95c95febca051a5cac3a586aa4db35968e8f2790" # sha1("abc123..")
       responses:
         '200':
           description: Devolvemos la cookie de sesión generada y el id del usuario.
@@ -90,19 +90,6 @@ paths:
                   description:
                     type: string
                     example: "not_found"
-        '500':
-          description: Error interno del servidor.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: integer
-                    example: 5001
-                  description:
-                    type: string
-                    example: "server_error"
     delete:
       summary: Cierra la sesión en un dispositivo destruyendo la cookie indicada.
       parameters:
@@ -113,12 +100,13 @@ paths:
           schema:
             type: string
             example: "Paco"
-        - name: session_cookie
+        - name: sessioncookie
           in: header
           required: true
+          description: El token de sesión (cookie) que queremos validar para cerrar esta sesión.
           schema:
             type: string
-            example: "987-7323a5431d1c31072983a6a5bf23745b655ddf59"
+            example: "8-gmqDwAsH7X6kQdb0Hw6yd-W0N3cFn_v5FcTujIZJWDBdWUmoj0i2gxIixF7ExUHs-0FN8fWRHsRCOWV17_gvPA"
       responses:
         '200':
           description: Cookie borrada, por lo tanto esa sesión ya no es válida.
@@ -159,8 +147,8 @@ paths:
                   description:
                     type: string
                     example: "bad_cookie"
-        '500':
-          description: Error interno del servidor.
+        '404':
+          description: El nombre de usuario no existe.
           content:
             application/json:
               schema:
@@ -168,10 +156,10 @@ paths:
                 properties:
                   error:
                     type: integer
-                    example: 5001
+                    example: 4004
                   description:
                     type: string
-                    example: "server_error"
+                    example: "not_found"
   /flag:
     get:
       summary: Devuelve una lista de banderas cercanas en base a tu localización y un rádio.
@@ -464,7 +452,7 @@ paths:
                   # cookie_id:
                   #   type: integer
                   #   example: 12372
-                  session_cookie:
+                  sessioncookie:
                     type: string
                     example: "561-7323a5431d1c31072983a6a5bf23745b655ddf59"
                   expiration:
@@ -954,7 +942,7 @@ paths:
           schema:
             type: integer
             example: 765
-        - name: session_cookie
+        - name: sessioncookie
           in: header
           required: true
           schema:
@@ -1016,7 +1004,7 @@ paths:
           schema:
             type: integer
             example: 110
-        - name: session_cookie
+        - name: sessioncookie
           in: header
           required: true
           schema:

@@ -27,7 +27,13 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-CORS_ALLOW_ALL_ORIGINS = DEBUG # https://github.com/adamchainz/django-cors-headers
+# https://github.com/adamchainz/django-cors-headers
+from corsheaders.defaults import default_headers
+CORS_ALLOW_ALL_ORIGINS = DEBUG 
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    'sessioncookie'
+]
+
 STATIC_ROOT = "static_root" # https://github.com/fabiocaccamo/django-colorfield
 
 # Application definition
