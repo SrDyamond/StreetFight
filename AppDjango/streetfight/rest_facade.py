@@ -82,7 +82,25 @@ def logout(request, username):
 
 
 @csrf_exempt
+def flag(request):
+    # Si recibimos una peticion que no es GET, devolvemos un 405
+    if request.method != 'GET':
+        return HttpResponseNotAllowed(['GET'])
+
+    print(request.GET)
+
+    # if not 'latitude' in request.GET or not 'longitude' in request.GET
+
+    # ciudad = request.GET.get('ciudad', None)
+    return JsonResponse({}, status=200)
+
+
+@csrf_exempt
 def flag_by_id(request, id_flag):
+    # Si recibimos una peticion que no es GET, devolvemos un 405
+    if request.method != 'GET':
+        return HttpResponseNotAllowed(['GET'])
+    
     try:
         flag = Bandera.objects.get(pk=id_flag)
     except Bandera.DoesNotExist:
