@@ -181,6 +181,7 @@ paths:
           schema:
             type: number
             example: 0.0000013
+            maximum: 0.2
           description: Tamaño del rádio que se obtiene al trazar una circunferencia con centro en dichas coordenadas.
       responses:
         '200':
