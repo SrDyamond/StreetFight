@@ -166,21 +166,21 @@ paths:
           required: true
           schema:
             type: number
-            example: 43.36848
+            example: 43.370682
           description: Latitud de la ubicación del usuario
         - name: longitude
           in: query
           required: true
           schema:
             type: number
-            example: -8.40531
+            example: -8.395913
           description: Longitud de la ubicación del usuario
         - name: radius
           in: query
           required: true
           schema:
-            type: integer
-            example: 1
+            type: number
+            example: 0.0000013
           description: Tamaño del rádio que se obtiene al trazar una circunferencia con centro en dichas coordenadas.
       responses:
         '200':
