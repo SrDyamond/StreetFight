@@ -5,6 +5,7 @@ import hashlib
 import datetime
 from django.utils import timezone
 import json
+import math
 
 from .models import Clan, Usuario, Sesion, Bandera, IntentoCaptura
 from django.views.decorators.csrf import csrf_exempt
@@ -87,12 +88,54 @@ def flag(request):
     if request.method != 'GET':
         return HttpResponseNotAllowed(['GET'])
 
-    print(request.GET)
+    # if not 'latitude' in request.GET or not 'longitude' in request.GET or not 'radius' in request.GET:
+    #     return JsonResponse(custom_error_response.BAD_REQUEST, status=400)
 
-    # if not 'latitude' in request.GET or not 'longitude' in request.GET
+    user_latitude = request.GET.get('latitude', None)
+    user_longitude = request.GET.get('longitude', None)
+    search_radius = request.GET.get('radius', None)
 
-    # ciudad = request.GET.get('ciudad', None)
-    return JsonResponse({}, status=200)
+    try:
+        if user_latitude is None or user_longitude is None or search_radius is None:
+            raise ValueError
+        user_latitude = float(user_latitude)
+        user_longitude = float(user_longitude)
+        search_radius = float(search_radius)
+        # https://www.movable-type.co.uk/scripts/latlong.html
+        if search_radius > 0.200000: # 0.2 = 16.26 km (ese es el radio máximo permitido)
+            raise ValueError
+    except ValueError:
+        return JsonResponse(custom_error_response.BAD_REQUEST, status=400)
+
+    all_flags_list = Bandera.objects.all()
+    flags_in_area_list = []
+    
+    for flag in all_flags_list:
+        distance_to_location = math.sqrt((flag.latitud - user_latitude) ** 2 + (flag.longitud - user_longitude) ** 2)
+        # if distance_to_location < search_radius:
+        print(distance_to_location, "<=", search_radius, distance_to_location <= search_radius)
+        if distance_to_location <= search_radius:
+            flags_in_area_list.append(flag)
+
+    response = []
+    for flag in flags_in_area_list:
+        flag_response = {
+            "id": flag.id,
+            "latitude": flag.latitud,
+            "longitude": flag.longitud,
+            "capturing": flag.capturando
+        }
+        
+        if not flag.id_clan is None:
+            flag_response["clan"] = {
+                "url_icon": flag.id_clan.id,
+                "acronym": flag.id_clan.abreviatura,
+                "color": flag.id_clan.color
+            }
+
+        response.append(flag_response)
+
+    return JsonResponse(response, safe=False, status=200)
 
 
 @csrf_exempt
@@ -110,8 +153,8 @@ def flag_by_id(request, id_flag):
         "id": flag.id,
         "name": flag.nombre,
         "description": flag.descripcion,
-        "latitude": flag.latitud,
-        "longitude": flag.longitud,
+        "user_latitude": flag.latitud,
+        "user_longitude": flag.longitud,
         "capturing": flag.capturando,
         "clan": {
             "id": flag.id_clan.id,
