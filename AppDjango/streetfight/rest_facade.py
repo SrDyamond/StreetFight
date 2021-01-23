@@ -112,8 +112,8 @@ def flag(request):
     
     for flag in all_flags_list:
         distance_to_location = math.sqrt((flag.latitud - user_latitude) ** 2 + (flag.longitud - user_longitude) ** 2)
+        # print(distance_to_location, "<=", search_radius, distance_to_location <= search_radius)
         # if distance_to_location < search_radius:
-        print(distance_to_location, "<=", search_radius, distance_to_location <= search_radius)
         if distance_to_location <= search_radius:
             flags_in_area_list.append(flag)
 
