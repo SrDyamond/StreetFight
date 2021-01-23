@@ -40,6 +40,7 @@ class Bandera(models.Model):
     descripcion = models.CharField(max_length=500, blank=True, null=True)
     latitud = models.FloatField(default=43.370682)
     longitud = models.FloatField(default=-8.395913)
+    capturando = models.BooleanField(default=False)
     id_clan = models.ForeignKey(Clan, on_delete=models.CASCADE, blank=True, null=True, default=None)
 
     def __str__(self):

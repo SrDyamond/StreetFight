@@ -312,6 +312,7 @@ Ayúdame
 - descripcion VARCHAR(500)
 - latitud DOUBLE NOT NULL
 - longitud DOUBLE NOT NULL
+- capturando BOOLEAN NOT NULL DEFAULT FALSE
 - id_clan INT NOT NULL FOREIGN KEY
 
 ### Tabla INTENTO_CAPTURA
