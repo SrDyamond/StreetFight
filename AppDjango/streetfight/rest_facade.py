@@ -170,3 +170,18 @@ def flag_by_id(request, id_flag):
         response["clan"]["acronym"] = flag.id_clan.abreviatura
 
     return JsonResponse(response, status=200)
+
+@csrf_exempt
+def user(request):
+    try:
+        request_body = json.loads(request.body)
+        if not 'password_sha' in request_body or not 'user_id' in request_body:
+            raise ValueError
+    except ValueError:
+        return JsonResponse(custom_error_response.BAD_REQUEST, status=400)
+
+    try: # MIra si existe el usuario, y si existe devuelvo 409
+        user = Usuario.objects.get(nombre__exact=request_body.get('username'))
+    except Usuario.ALREADY_EXISTS:
+        return JsonResponse(custom_error_response.ALREADY_EXISTS, status=409)
+
