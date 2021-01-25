@@ -15,5 +15,11 @@
     <string name="clan_name">Clan Name</string>
     <string name="clan_color">Clan Color</string>
     <string name="crear_clan">Crear Clan</string>
-    <string name="todo">TODO</string>
+    <string name="todo">TODO</string>C
+    <string name="clan_change">Cambiar clan</string>
+    <string name="logout">Cerrar sesion</string>
+    <string name="donate">Donar</string>
+    <string name="flag_ok">OK</string>
+    <string name="fight">Luchad!!!</string>
+    <string name="capture_start">Captura     comenzada</string>
 </resources>
