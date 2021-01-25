@@ -30,25 +30,26 @@ def parse_text(texto,user,api):
 			print("Este string no contiene un int")
 
 	try:
+		#ComandoBotAyuda
 		if (texto_separado[1] == "Ayuda!"):
 			api.update_status("Ayuda\n- Top clanes <número>\n- Top usuarios <número>\n- Info del clan <nombre>\n- Info del usuario <nombre>\n @"+str(user))
-			print("Mensaje enviado a"+str(user))
-			# print(Usuario.objects.all())
-			#AÑADIR TODAS LAS COMPROBACIONES PARA COMANDOS
-
-
+			print("Mensaje de ayuda enviado a"+str(user))
+		#ComandoTopClanes
 		if (texto_separado[1] == "Top" and texto_separado[2] == "clanes" and is_int==True):
-			api.update_status("Hola @"+str(user)+" el top "+str(cantidad)+" clanes  es: ")
-			#tweet enseñado el top clanes
-			print(cantidad)
+			pass
+		#ComandoTopUsuarios
 		elif (texto_separado[1] == "Top" and texto_separado[2] == "usuarios" and is_int==True):
-			api.update_status("Hola @"+str(user)+" el top "+str(cantidad)+" usuarios  es: ")
-			#tweet enseñado el top usuarios
-			print(cantidad)
+			lista = Usuario.objects.all().order_by('-banderas_capturadas')[:cantidad]
+			lista_usuarios=[]
+			for usuario in lista:
+				lista_usuarios.append(usuario.nombre)
+			api.update_status("Hola @"+str(user)+" el top "+str(cantidad)+" usuarios  es: \n"+str(lista_usuarios))
+			# <QuerySet [<Usuario: Paco (pF)>, <Usuario: frank (<3)>]>   Estos es l oque devuelve la lista
 		else:
+		#ComandoNoValido
 			api.update_status("Comando no valido, escribe <Ayuda!> @"+str(user))
-			print("Introduce comando valido")
+			print("Enviadondo ayuda")
 
 	except tweepy.TweepError as error:
 		if error.api_code == 187:
-			print('duplicate message')
+			 print('duplicate message')
