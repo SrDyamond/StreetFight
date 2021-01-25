@@ -184,4 +184,16 @@ def user(request):
         user = Usuario.objects.get(nombre__exact=request_body.get('username'))
     except Usuario.ALREADY_EXISTS:
         return JsonResponse(custom_error_response.ALREADY_EXISTS, status=409)
+    
+    
 
+    session_cookie = str(user.id) + "-" + secrets.token_urlsafe(64)
+    expiartion_date = timezone.now() + datetime.timedelta(days=7)
+    response = {
+        "user_id": user.id,
+        "session_cookie": session_cookie,
+        "expiration": expiartion_date.timestamp() # considerar si es la mejor forma
+    }
+    new_session = Sesion(id_usuario=user, fecha_caducidad=expiartion_date, valor_cookie=session_cookie)
+    new_session.save()
+    return JsonResponse(response, status=200)
