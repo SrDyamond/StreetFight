@@ -36,10 +36,11 @@ def parse_text(texto,user,api):
 			print("Mensaje de ayuda enviado a"+str(user))
 		#ComandoTopClanes
 		if (texto_separado[1] == "Top" and texto_separado[2] == "clanes" and is_int==True):
-			pass
+			lista = Usuario.objects.all().order_by('-banderas_capturadas')[:cantidad]
+
 		#ComandoTopUsuarios
 		elif (texto_separado[1] == "Top" and texto_separado[2] == "usuarios" and is_int==True):
-			lista = Usuario.objects.all().order_by('-banderas_capturadas')[:cantidad]
+			lista = Usuario.objects.all()
 			lista_usuarios=[]
 			for usuario in lista:
 				lista_usuarios.append(usuario.nombre)
@@ -47,7 +48,7 @@ def parse_text(texto,user,api):
 		else:
 		#ComandoNoValido
 			api.update_status("Comando no valido, escribe <Ayuda!> @"+str(user))
-			print("Enviadondo ayuda")
+			print("Enviandodo ayuda")
 
 	except tweepy.TweepError as error:
 		if error.api_code == 187:
