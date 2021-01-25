@@ -28,10 +28,13 @@ def parse_text(texto,user,api):
 			print("Mensaje enviado a"+str())
 			#AÑADIR TODAS LAS COMPROBACIONES PARA COMANDOS
 
+
 		if (texto_separado[1] == "Top" and texto_separado[2] == "clanes" and is_int==True):
+			api.update_status("Hola @"+str(user)+" el top "+@cantidad+" clanes  es: ")
 			#tweet enseñado el top clanes
 			print(cantidad)
 		elif (texto_separado[1] == "Top" and texto_separado[2] == "usuarios" and is_int==True):
+			api.update_status("Hola @"+str(user)+" el top "+@cantidad+" usuarios  es: ")
 			#tweet enseñado el top usuarios
 			print(cantidad)
 		else:
