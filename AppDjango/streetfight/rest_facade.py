@@ -12,6 +12,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from . import custom_error_response
 
+
 @csrf_exempt
 def session(request, username):
     # Si recibimos una peticion que no es PUT, devolvemos un 405
@@ -31,15 +32,17 @@ def login(request, username):
     except ValueError:
         return JsonResponse(custom_error_response.BAD_REQUEST, status=400)
 
-    try: # Recupero el user de base de datos, y si no existe devuelvo 404
+    try:  # Recupero el user de base de datos, y si no existe devuelvo 404
         user = Usuario.objects.get(nombre__exact=username)
     except Usuario.DoesNotExist:
         return JsonResponse(custom_error_response.NOT_FOUND, status=404)
 
-    clave_sha_concatenada_request_no_hash = request_body.get('password_sha') + user.salt
-    clave_sha_concatenada_request = hashlib.sha1(str.encode(clave_sha_concatenada_request_no_hash)).hexdigest()
+    clave_sha_concatenada_request_no_hash = request_body.get(
+        'password_sha') + user.salt
+    clave_sha_concatenada_request = hashlib.sha1(
+        str.encode(clave_sha_concatenada_request_no_hash)).hexdigest()
     clave_sha_concatenada_db = user.clave_sha_concatenada
-    
+
     if clave_sha_concatenada_db == clave_sha_concatenada_request:
         # Genero un token de sesion
         session_cookie = str(user.id) + "-" + secrets.token_urlsafe(64)
@@ -47,9 +50,10 @@ def login(request, username):
         response = {
             "user_id": user.id,
             "session_cookie": session_cookie,
-            "expiration": expiartion_date.timestamp() # considerar si es la mejor forma
+            "expiration": expiartion_date.timestamp()  # considerar si es la mejor forma
         }
-        new_session = Sesion(id_usuario=user, fecha_caducidad=expiartion_date, valor_cookie=session_cookie)
+        new_session = Sesion(
+            id_usuario=user, fecha_caducidad=expiartion_date, valor_cookie=session_cookie)
         new_session.save()
         return JsonResponse(response, status=200)
 
@@ -59,10 +63,10 @@ def login(request, username):
 def logout(request, username):
     if not 'sessioncookie' in request.headers:
         return JsonResponse(custom_error_response.BAD_REQUEST, status=400)
-    
+
     session_cookie = request.headers.get('sessioncookie')
 
-    try: # Recupero el user de base de datos, y si no existe devuelvo 404
+    try:  # Recupero el user de base de datos, y si no existe devuelvo 404
         user = Usuario.objects.get(nombre__exact=username)
     except Usuario.DoesNotExist:
         return JsonResponse(custom_error_response.NOT_FOUND, status=404)
@@ -75,7 +79,7 @@ def logout(request, username):
             valid_session = True
             session.delete()
             break
-    
+
     if valid_session:
         return JsonResponse(custom_error_response.LOGOUT_OK, status=200)
     else:
@@ -102,16 +106,18 @@ def flag(request):
         user_longitude = float(user_longitude)
         search_radius = float(search_radius)
         # https://www.movable-type.co.uk/scripts/latlong.html
-        if search_radius > 0.200000: # 0.2 = 16.26 km (ese es el radio máximo permitido)
+        # 0.2 = 16.26 km (ese es el radio máximo permitido)
+        if search_radius > 0.200000:
             raise ValueError
     except ValueError:
         return JsonResponse(custom_error_response.BAD_REQUEST, status=400)
 
     all_flags_list = Bandera.objects.all()
     flags_in_area_list = []
-    
+
     for flag in all_flags_list:
-        distance_to_location = math.sqrt((flag.latitud - user_latitude) ** 2 + (flag.longitud - user_longitude) ** 2)
+        distance_to_location = math.sqrt(
+            (flag.latitud - user_latitude) ** 2 + (flag.longitud - user_longitude) ** 2)
         # print(distance_to_location, "<=", search_radius, distance_to_location <= search_radius)
         # if distance_to_location < search_radius:
         if distance_to_location <= search_radius:
@@ -125,7 +131,7 @@ def flag(request):
             "longitude": flag.longitud,
             "capturing": flag.capturando
         }
-        
+
         if not flag.id_clan is None:
             flag_response["clan"] = {
                 "url_icon": flag.id_clan.id,
@@ -143,7 +149,7 @@ def flag_by_id(request, id_flag):
     # Si recibimos una peticion que no es GET, devolvemos un 405
     if request.method != 'GET':
         return HttpResponseNotAllowed(['GET'])
-    
+
     try:
         flag = Bandera.objects.get(pk=id_flag)
     except Bandera.DoesNotExist:
@@ -171,29 +177,100 @@ def flag_by_id(request, id_flag):
 
     return JsonResponse(response, status=200)
 
+
 @csrf_exempt
 def user(request):
-    try:
+    try:  # Compruevo la existencia del username y del password_sha
         request_body = json.loads(request.body)
-        if not 'password_sha' in request_body or not 'user_id' in request_body:
+        if not 'password_sha' in request_body or not 'username' in request_body:
             raise ValueError
     except ValueError:
         return JsonResponse(custom_error_response.BAD_REQUEST, status=400)
 
-    try: # MIra si existe el usuario, y si existe devuelvo 409
+    try:  # MIra si existe el usuario, y si existe devuelvo 409
         user = Usuario.objects.get(nombre__exact=request_body.get('username'))
     except Usuario.ALREADY_EXISTS:
         return JsonResponse(custom_error_response.ALREADY_EXISTS, status=409)
-    
-    
+
+    # Falta el registro del usuario!!!!
 
     session_cookie = str(user.id) + "-" + secrets.token_urlsafe(64)
     expiartion_date = timezone.now() + datetime.timedelta(days=7)
     response = {
         "user_id": user.id,
         "session_cookie": session_cookie,
-        "expiration": expiartion_date.timestamp() # considerar si es la mejor forma
+        "expiration": expiartion_date.timestamp()
     }
-    new_session = Sesion(id_usuario=user, fecha_caducidad=expiartion_date, valor_cookie=session_cookie)
+    new_session = Sesion(
+        id_usuario=user, fecha_caducidad=expiartion_date, valor_cookie=session_cookie)
     new_session.save()
     return JsonResponse(response, status=200)
+
+
+def user_search(request, username):
+    if request.method != 'GET':
+        return HttpResponseNotAllowed(['GET'])
+
+    try:  # Recupero el user de base de datos, y si no existe devuelvo 404
+        user = Usuario.objects.get(nombre__exact=username)
+    except Usuario.DoesNotExist:
+        return JsonResponse(custom_error_response.NOT_FOUND, status=404)
+
+    try:  # Recupero el clan de base de datos, y si no existe devuelvo 404
+        flag = Bandera.objects.get(pk=user.id_clan)
+    except Bandera.DoesNotExist:
+        return JsonResponse(custom_error_response.NOT_FOUND, status=404)
+
+    User_info(user, flag)
+
+    if not flag.id_clan.url_icon is None:
+        response["clan"]["url_icon"] = flag.id_clan.url_icon
+
+    if not flag.id_clan.abreviatura is None:
+        response["clan"]["acronym"] = flag.id_clan.abreviatura
+
+    return JsonResponse(response, status=200)
+
+
+def user_top(request):
+    if request.method != 'GET':
+        return HttpResponseNotAllowed(['GET'])
+
+    try:  # Compruevo la existencia del username y del password_sha
+        request_body = json.loads(request.body)
+        if not 'length' in request_body:
+            raise ValueError
+    except ValueError:
+        return JsonResponse(custom_error_response.BAD_REQUEST, status=400)
+
+    all_users_list = sorted(
+        Usuario.objects.all(), key=lambda Usuario: Usuario.banderas_capturadas)
+    # Comprobar funcionalidad
+
+    response = []
+    for user in all_users_list:
+        try:
+            flag = Bandera.objects.get(pk=id_flag)
+        except Bandera.DoesNotExist:
+            return JsonResponse(custom_error_response.NOT_FOUND, status=404)
+
+        response.append(User_info(user, flag))
+
+    return JsonResponse(response, safe=False, status=200)
+
+
+def User_info(request, user, flag):
+    response = {
+        # "id": user.id,
+        "name": user.nombre,
+        "captured_flags": user.banderas_capturadas,
+        "founder": user.fundador,
+        "clan": {
+            "id": user.id_clan,
+            "name": flag.id_clan.nombre,
+            "url_icon": flag.id_clan.nombre,
+            "acronym": flag.id_clan.nombre,
+            "color": flag.id_clan.color
+        }
+    }
+    return response
