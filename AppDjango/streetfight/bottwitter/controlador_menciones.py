@@ -44,7 +44,6 @@ def parse_text(texto,user,api):
 			for usuario in lista:
 				lista_usuarios.append(usuario.nombre)
 			api.update_status("Hola @"+str(user)+" el top "+str(cantidad)+" usuarios  es: \n"+str(lista_usuarios))
-			# <QuerySet [<Usuario: Paco (pF)>, <Usuario: frank (<3)>]>   Estos es l oque devuelve la lista
 		else:
 		#ComandoNoValido
 			api.update_status("Comando no valido, escribe <Ayuda!> @"+str(user))
