@@ -1,9 +1,10 @@
 import tweepy
 import logging
-from config import create_api
 import time
 
-from models import Clan, Usuario, Sesion, Bandera, IntentoCaptura
+from AppDjango.asgi import application # no entendemos porqué pero hace falta para importar los models
+from streetfight.models import Clan, Usuario, Sesion, Bandera, IntentoCaptura
+
 
 def existe_posicion(array, posicion):
 	try:
@@ -16,6 +17,8 @@ def existe_posicion(array, posicion):
 def parse_text(texto,user,api):
 	texto_separado=texto.split()
 	is_int=False
+	# print(Usuario.objects.all())
+
 
 	if existe_posicion(texto_separado,3):
 		try :
@@ -27,7 +30,8 @@ def parse_text(texto,user,api):
 	try:
 		if (texto_separado[1] == "Ayuda!"):
 			api.update_status("Ayuda\n- Top clanes <número>\n- Top usuarios <número>\n- Info del clan <nombre>\n- Info del usuario <nombre>\n @"+str(user))
-			print("Mensaje enviado a"+str())
+			print("Mensaje enviado a"+str(user))
+			# print(Usuario.objects.all())
 			#AÑADIR TODAS LAS COMPROBACIONES PARA COMANDOS
 
 
@@ -35,7 +39,6 @@ def parse_text(texto,user,api):
 			api.update_status("Hola @"+str(user)+" el top "+str(cantidad)+" clanes  es: ")
 			#tweet enseñado el top clanes
 			print(cantidad)
-			# print(Usuario.objects.all())
 		elif (texto_separado[1] == "Top" and texto_separado[2] == "usuarios" and is_int==True):
 			api.update_status("Hola @"+str(user)+" el top "+str(cantidad)+" usuarios  es: ")
 			#tweet enseñado el top usuarios
