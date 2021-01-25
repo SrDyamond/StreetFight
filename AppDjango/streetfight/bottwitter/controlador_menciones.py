@@ -19,6 +19,8 @@ def parse_text(texto,user,api):
 	is_int=False
 	# print(Usuario.objects.all())
 
+	# lista = Usuario.objects.all().order_by('-banderas_capturadas')[:2]
+	# print (lista)
 
 	if existe_posicion(texto_separado,3):
 		try :
