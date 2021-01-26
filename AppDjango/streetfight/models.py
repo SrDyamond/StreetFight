@@ -16,7 +16,7 @@ class Clan(models.Model):
 
 class Usuario(models.Model):
     nombre = models.CharField(max_length=25, unique=True)
-    banderas_capturadas = models.IntegerField(default=0, editable=False)
+    banderas_capturadas = models.IntegerField(default=0, editable=True)
     salt = models.CharField(max_length=16)
     clave_sha_concatenada = models.CharField(max_length=40)
     id_clan = models.ForeignKey(Clan, on_delete=models.CASCADE)
