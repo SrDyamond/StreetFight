@@ -32,7 +32,7 @@ def login(request, username):
     except ValueError:
         return JsonResponse(custom_error_response.BAD_REQUEST, status=400)
 
-    try:  # Recupero el user de base de datos, y si no existe devuelvo 404
+    try: # Recupero el user de base de datos, y si no existe devuelvo 404
         user = Usuario.objects.get(nombre__exact=username)
     except Usuario.DoesNotExist:
         return JsonResponse(custom_error_response.NOT_FOUND, status=404)
@@ -50,7 +50,7 @@ def login(request, username):
         response = {
             "user_id": user.id,
             "session_cookie": session_cookie,
-            "expiration": expiartion_date.timestamp()  # considerar si es la mejor forma
+            "expiration": expiartion_date.timestamp() # considerar si es la mejor forma
         }
         new_session = Sesion(
             id_usuario=user, fecha_caducidad=expiartion_date, valor_cookie=session_cookie)
@@ -66,7 +66,7 @@ def logout(request, username):
 
     session_cookie = request.headers.get('sessioncookie')
 
-    try:  # Recupero el user de base de datos, y si no existe devuelvo 404
+    try: # Recupero el user de base de datos, y si no existe devuelvo 404
         user = Usuario.objects.get(nombre__exact=username)
     except Usuario.DoesNotExist:
         return JsonResponse(custom_error_response.NOT_FOUND, status=404)
@@ -177,7 +177,7 @@ def flag_by_id(request, id_flag):
 
     return JsonResponse(response, status=200)
 
-
+"""
 @csrf_exempt
 def user(request):
     try:  # Compruevo la existencia del username y del password_sha
@@ -205,9 +205,10 @@ def user(request):
         id_usuario=user, fecha_caducidad=expiartion_date, valor_cookie=session_cookie)
     new_session.save()
     return JsonResponse(response, status=200)
+"""
 
 
-def user_search(request, username):
+def usuer_by_username(request, username):
     if request.method != 'GET':
         return HttpResponseNotAllowed(['GET'])
 
@@ -216,22 +217,12 @@ def user_search(request, username):
     except Usuario.DoesNotExist:
         return JsonResponse(custom_error_response.NOT_FOUND, status=404)
 
-    try:  # Recupero el clan de base de datos, y si no existe devuelvo 404
-        flag = Bandera.objects.get(pk=user.id_clan)
-    except Bandera.DoesNotExist:
-        return JsonResponse(custom_error_response.NOT_FOUND, status=404)
-
-    User_info(user, flag)
-
-    if not flag.id_clan.url_icon is None:
-        response["clan"]["url_icon"] = flag.id_clan.url_icon
-
-    if not flag.id_clan.abreviatura is None:
-        response["clan"]["acronym"] = flag.id_clan.abreviatura
+    response = user_info(user)
 
     return JsonResponse(response, status=200)
 
 
+"""
 def user_top(request):
     if request.method != 'GET':
         return HttpResponseNotAllowed(['GET'])
@@ -257,20 +248,25 @@ def user_top(request):
         response.append(User_info(user, flag))
 
     return JsonResponse(response, safe=False, status=200)
+"""
 
-
-def User_info(request, user, flag):
+def user_info(user):
     response = {
-        # "id": user.id,
+        "id": user.id, # autogenerado por django
         "name": user.nombre,
         "captured_flags": user.banderas_capturadas,
         "founder": user.fundador,
         "clan": {
-            "id": user.id_clan,
-            "name": flag.id_clan.nombre,
-            "url_icon": flag.id_clan.nombre,
-            "acronym": flag.id_clan.nombre,
-            "color": flag.id_clan.color
+            "id": user.id_clan.id, # autogenerado por django
+            "name": user.id_clan.nombre,
+            "color": user.id_clan.color
         }
     }
+
+    if not user.id_clan.url_icon is None:
+        response["clan"]["url_icon"] = user.id_clan.url_icon
+
+    if not user.id_clan.abreviatura is None:
+        response["clan"]["acronym"] = user.id_clan.abreviatura
+    
     return response
