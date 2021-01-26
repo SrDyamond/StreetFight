@@ -188,11 +188,12 @@ def user(request):
     else:
         return HttpResponseNotAllowed(['POST', 'GET'])
 
+
 def search_user(request):
     q = request.GET.get('q', None)
     if q is None:
         return JsonResponse(custom_error_response.BAD_REQUEST, status=400)
-    
+
     user_list = Usuario.objects.filter(nombre__icontains=q)
 
     response = []
@@ -213,11 +214,11 @@ def search_user(request):
 
         if not user.id_clan.abreviatura is None:
             user_info_dict["clan"]["acronym"] = user.id_clan.abreviatura
-        
+
         response.append(user_info_dict)
 
     return JsonResponse(response, safe=False, status=200)
-    
+
 
 """
 def create_user(request):
@@ -248,6 +249,7 @@ def create_user(request):
     return JsonResponse(response, status=200)
 """
 
+
 @csrf_exempt
 def user_by_username(request, username):
     if request.method != 'GET':
@@ -263,11 +265,8 @@ def user_by_username(request, username):
     return JsonResponse(response, status=200)
 
 
-
 @csrf_exempt
 def user_top(request):
-
-    print("####################### HOLA")
 
     if request.method != 'GET':
         return HttpResponseNotAllowed(['GET'])
@@ -276,18 +275,31 @@ def user_top(request):
 
     try:
         length = int(length)
-        if length > 200:
+        if length > 200 or length == 0:
             raise ValueError
     except ValueError:
         return JsonResponse(custom_error_response.BAD_REQUEST, status=400)
 
-    all_users_list = sorted(Usuario.objects.all(), key=lambda Usuario: Usuario.banderas_capturadas)
+    #all_users_list = sorted(Usuario.objects.all(), key=lambda Usuario: Usuario.banderas_capturadas)
     # Comprobar funcionalidad
+
+    all_users_list = Usuario.objects.all().order_by('-banderas_capturadas')
 
     response = []
     for i in range(length):
-        response.append(user_info(user))
+        try:
+            response.append(user_info(all_users_list[i]))
+        except IndexError:
+            break
 
+    """
+    i = 0
+    for user in all_users_list:
+        if i >= length:
+            break
+        response.append(user_info(user))
+        i += 1
+    """
     return JsonResponse(response, safe=False, status=200)
 
 
