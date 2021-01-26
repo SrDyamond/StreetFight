@@ -36,13 +36,17 @@ def parse_text(texto,user,api):
 			print("Mensaje de ayuda enviado a"+str(user))
 		#ComandoTopClanes
 		if (texto_separado[1] == "Top" and texto_separado[2] == "clanes" and is_int==True):
-			lista = Usuario.objects.all()
+			lista = Usuario.objects.all().order_by('-banderas_capturadas')[:4]
 			lista_clan=[]
 			for usuario in lista:
+				print("BAN"+str(usuario.nombre))
+				print("BAN"+str(usuario.banderas_capturadas))
 				print("ID:"+str(usuario.id_clan.nombre))
-				print("LISTA"+str(lista_clan))
 				if (usuario.id_clan.nombre not in lista_clan):
 					lista_clan.append(usuario.id_clan.nombre)
+					lista_clan.append(usuario.banderas_capturadas)
+				# else:
+				# 	lista_clan.append(usuario.banderas_capturadas)
 
 			print("LISTAFINAL"+str(lista_clan))
 		#ComandoTopUsuarios
