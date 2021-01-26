@@ -184,7 +184,7 @@ def user(request):
     if request.method == 'GET':
         return search_user(request)
     elif request.method == 'POST':
-         return create_user(request)
+        return create_user(request)
     else:
         return HttpResponseNotAllowed(['POST', 'GET'])
 
@@ -220,8 +220,30 @@ def search_user(request):
     return JsonResponse(response, safe=False, status=200)
 
 
-# def create_clan():
-#     return Clan()
+def create_clan(new_clan_json):
+    try:  # Compruevo la existencia del name, color
+        if not 'name' in new_clan_json or not 'color' in new_clan_json:
+            raise ValueError
+    except ValueError:
+        return None, JsonResponse(custom_error_response.BAD_REQUEST, status=400)
+
+    if Clan.objects.filter(nombre__exact=new_clan_json.get('name')).exists():
+        return None, JsonResponse(custom_error_response.ALREADY_EXISTS, status=409)
+
+    new_clan = Clan(nombre=new_clan_json.get('name'),
+                    color=new_clan_json.get('color'))
+
+    if 'acronym' in new_clan_json and 'url_icon' in new_clan_json:
+        new_clan.abreviatura = new_clan_json.get('acronym')
+        new_clan.url_icon = new_clan_json.get('url_icon')
+    elif 'acronym' in new_clan_json:
+        new_clan.abreviatura = new_clan_json.get('acronym')
+    elif 'url_icon' in new_clan_json:
+        new_clan.url_icon = new_clan_json.get('url_icon')
+
+    new_clan.save()
+
+    return new_clan, None
 
 
 def create_user(request):
@@ -234,24 +256,27 @@ def create_user(request):
     except ValueError:
         return JsonResponse(custom_error_response.BAD_REQUEST, status=400)
 
+    # Mira si existe el usuario, y si existe devuelvo 409
+    if Usuario.objects.filter(nombre__exact=request_body.get('username')).exists():
+        return JsonResponse(custom_error_response.ALREADY_EXISTS, status=409)
+
     clan = None
 
     if 'create_clan' in request_body:
-        # clan = create_clan() # revisar
-        pass
+        clan, error = create_clan(request_body.get('create_clan'))
+        if error is not None:
+            return error
     else:
         try:  # Obtenemos el objeto clan al que unirnos, sino 404
             clan = Clan.objects.get(pk=request_body.get('join_clan_id'))
         except Clan.DoesNotExist:
             return JsonResponse(custom_error_response.NOT_FOUND, status=404)
 
-    # Mira si existe el usuario, y si existe devuelvo 409
-    if Usuario.objects.filter(nombre__exact=request_body.get('username')).exists():
-        return JsonResponse(custom_error_response.ALREADY_EXISTS, status=409)
-
-    salt = secrets.token_urlsafe(16)
-    clave_sha_concatenada_request_no_hash = request_body.get('password_sha') + salt
-    clave_sha_concatenada_request = hashlib.sha1(str.encode(clave_sha_concatenada_request_no_hash)).hexdigest()
+    salt = secrets.token_urlsafe(64)[:16]
+    clave_sha_concatenada_request_no_hash = request_body.get(
+        'password_sha') + salt
+    clave_sha_concatenada_request = hashlib.sha1(
+        str.encode(clave_sha_concatenada_request_no_hash)).hexdigest()
 
     new_user = Usuario(
         nombre=request_body.get('username'),
@@ -260,7 +285,10 @@ def create_user(request):
         id_clan=clan
     )
 
-    new_user.save() # guardamos el usuario en la DB
+    if 'create_clan' in request_body:
+        new_user.fundador = True
+
+    new_user.save()  # guardamos el usuario en la DB
 
     session_cookie = str(new_user.id) + "-" + secrets.token_urlsafe(64)
     expiartion_date = timezone.now() + datetime.timedelta(days=7)
@@ -271,13 +299,14 @@ def create_user(request):
         "expiration": expiartion_date.timestamp()
     }
 
-    new_session = Sesion(id_usuario=new_user, fecha_caducidad=expiartion_date, valor_cookie=session_cookie)
-    new_session.save() # guardamos la nueva sesion en la DB
+    new_session = Sesion(
+        id_usuario=new_user, fecha_caducidad=expiartion_date, valor_cookie=session_cookie)
+    new_session.save()  # guardamos la nueva sesion en la DB
 
     return JsonResponse(response, status=200)
 
 
-@csrf_exempt
+@ csrf_exempt
 def user_by_username(request, username):
     if request.method != 'GET':
         return HttpResponseNotAllowed(['GET'])
@@ -292,7 +321,7 @@ def user_by_username(request, username):
     return JsonResponse(response, status=200)
 
 
-@csrf_exempt
+@ csrf_exempt
 def user_top(request):
 
     if request.method != 'GET':
@@ -307,7 +336,7 @@ def user_top(request):
     except ValueError:
         return JsonResponse(custom_error_response.BAD_REQUEST, status=400)
 
-    #all_users_list = sorted(Usuario.objects.all(), key=lambda Usuario: Usuario.banderas_capturadas)
+    # all_users_list = sorted(Usuario.objects.all(), key=lambda Usuario: Usuario.banderas_capturadas)
     # Comprobar funcionalidad
 
     all_users_list = Usuario.objects.all().order_by('-banderas_capturadas')
