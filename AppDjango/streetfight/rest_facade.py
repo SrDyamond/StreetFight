@@ -219,7 +219,6 @@ def search_user(request):
     return JsonResponse(response, safe=False, status=200)
     
 
-
 """
 def create_user(request):
     try:  # Compruevo la existencia del username y del password_sha
@@ -264,33 +263,32 @@ def user_by_username(request, username):
     return JsonResponse(response, status=200)
 
 
-"""
+
+@csrf_exempt
 def user_top(request):
+
+    print("####################### HOLA")
+
     if request.method != 'GET':
         return HttpResponseNotAllowed(['GET'])
 
-    try:  # Compruevo la existencia del username y del password_sha
-        request_body = json.loads(request.body)
-        if not 'length' in request_body:
+    length = request.GET.get('length', 5)
+
+    try:
+        length = int(length)
+        if length > 200:
             raise ValueError
     except ValueError:
         return JsonResponse(custom_error_response.BAD_REQUEST, status=400)
 
-    all_users_list = sorted(
-        Usuario.objects.all(), key=lambda Usuario: Usuario.banderas_capturadas)
+    all_users_list = sorted(Usuario.objects.all(), key=lambda Usuario: Usuario.banderas_capturadas)
     # Comprobar funcionalidad
 
     response = []
-    for user in all_users_list:
-        try:
-            flag = Bandera.objects.get(pk=id_flag)
-        except Bandera.DoesNotExist:
-            return JsonResponse(custom_error_response.NOT_FOUND, status=404)
-
-        response.append(User_info(user, flag))
+    for i in range(length):
+        response.append(user_info(user))
 
     return JsonResponse(response, safe=False, status=200)
-"""
 
 
 def user_info(user):
