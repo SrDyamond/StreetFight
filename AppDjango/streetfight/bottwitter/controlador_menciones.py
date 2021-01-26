@@ -41,7 +41,7 @@ def parse_text(texto,user,api):
 			for usuario in lista:
 				print("ID:"+str(usuario.id_clan.nombre))
 				print("LISTA"+str(lista_clan))
-				if (usuario.id_clan.nombre != lista_clan):
+				if (usuario.id_clan.nombre not in lista_clan):
 					lista_clan.append(usuario.id_clan.nombre)
 
 			print("LISTAFINAL"+str(lista_clan))
