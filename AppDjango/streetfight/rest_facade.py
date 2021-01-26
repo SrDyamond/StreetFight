@@ -379,3 +379,60 @@ def user_info(user):
         response["clan"]["acronym"] = user.id_clan.abreviatura
 
     return response
+
+
+"""
+def clan(request):
+    if request.method == 'GET':
+        return search_clan(request)
+    elif request.method == 'POST':
+        return create_clan(request)
+    else:
+        return HttpResponseNotAllowed(['POST', 'GET'])
+
+
+def clan_top(request):
+"""
+
+
+def clan_by_id(request, id_clan):
+    if request.method != 'GET':
+        return HttpResponseNotAllowed(['GET'])
+
+    try:  # Recupero el user de base de datos, y si no existe devuelvo 404
+        clan = Clan.objects.get(clan__exact=id_clan)
+    except Usuario.DoesNotExist:
+        return JsonResponse(custom_error_response.NOT_FOUND, status=404)
+
+    all_clan_users_list, fundador = clan_members(id_clan, False)
+    clan_point = clan_members(id_clan, True)
+
+    for
+
+    response = {
+        "id": clan.id,
+        "name": clan.nombre,
+        "url_icon": clan.url_icon,
+        "acronym": clan.abreviatura,
+        "color": clan.color,
+        "members": all_clan_users_list.nombre,
+        "flags": clan_point,
+        "founder_names": [
+            "Nuevito2"
+        ]
+    }
+
+    return JsonResponse(response, status=200)
+
+
+def clan_members(clan, i):
+
+    response = []
+    if i == False:
+        lista = Usuario.objects.get(clan_id=clan)
+        return list
+    else:
+        suma = 0
+        for user in lista:
+            suma += user.banderas_capturadas
+        return suma
