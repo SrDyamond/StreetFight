@@ -532,6 +532,9 @@ paths:
                     captured_flags:
                       type: integer
                       example: 11
+                    founder:
+                      type: boolean
+                      example: false
                     clan:
                       type: object
                       properties:
