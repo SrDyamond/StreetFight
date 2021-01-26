@@ -183,8 +183,8 @@ def user(request):
     # Si recibimos una peticion que no es PUT, devolvemos un 405
     if request.method == 'GET':
         return search_user(request)
-    # elif request.method == 'POST':
-    #     return create_user(request)
+    elif request.method == 'POST':
+         return create_user(request)
     else:
         return HttpResponseNotAllowed(['POST', 'GET'])
 
@@ -220,34 +220,61 @@ def search_user(request):
     return JsonResponse(response, safe=False, status=200)
 
 
-"""
+# def create_clan():
+#     return Clan()
+
+
 def create_user(request):
     try:  # Compruevo la existencia del username y del password_sha
         request_body = json.loads(request.body)
         if not 'password_sha' in request_body or not 'username' in request_body:
             raise ValueError
+        if not 'create_clan' in request_body and not 'join_clan_id' in request_body:
+            raise ValueError
     except ValueError:
         return JsonResponse(custom_error_response.BAD_REQUEST, status=400)
 
-    try:  # MIra si existe el usuario, y si existe devuelvo 409
-        user = Usuario.objects.get(nombre__exact=request_body.get('username'))
-    except Usuario.ALREADY_EXISTS:
+    clan = None
+
+    if 'create_clan' in request_body:
+        # clan = create_clan() # revisar
+        pass
+    else:
+        try:  # Obtenemos el objeto clan al que unirnos, sino 404
+            clan = Clan.objects.get(pk=request_body.get('join_clan_id'))
+        except Clan.DoesNotExist:
+            return JsonResponse(custom_error_response.NOT_FOUND, status=404)
+
+    # Mira si existe el usuario, y si existe devuelvo 409
+    if Usuario.objects.filter(nombre__exact=request_body.get('username')).exists():
         return JsonResponse(custom_error_response.ALREADY_EXISTS, status=409)
 
-    # Falta el registro del usuario!!!!
+    salt = secrets.token_urlsafe(16)
+    clave_sha_concatenada_request_no_hash = request_body.get('password_sha') + salt
+    clave_sha_concatenada_request = hashlib.sha1(str.encode(clave_sha_concatenada_request_no_hash)).hexdigest()
 
-    session_cookie = str(user.id) + "-" + secrets.token_urlsafe(64)
+    new_user = Usuario(
+        nombre=request_body.get('username'),
+        salt=salt,
+        clave_sha_concatenada=clave_sha_concatenada_request,
+        id_clan=clan
+    )
+
+    new_user.save() # guardamos el usuario en la DB
+
+    session_cookie = str(new_user.id) + "-" + secrets.token_urlsafe(64)
     expiartion_date = timezone.now() + datetime.timedelta(days=7)
+
     response = {
-        "user_id": user.id,
+        "user_id": new_user.id,
         "session_cookie": session_cookie,
         "expiration": expiartion_date.timestamp()
     }
-    new_session = Sesion(
-        id_usuario=user, fecha_caducidad=expiartion_date, valor_cookie=session_cookie)
-    new_session.save()
+
+    new_session = Sesion(id_usuario=new_user, fecha_caducidad=expiartion_date, valor_cookie=session_cookie)
+    new_session.save() # guardamos la nueva sesion en la DB
+
     return JsonResponse(response, status=200)
-"""
 
 
 @csrf_exempt
