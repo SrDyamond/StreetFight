@@ -1,6 +1,6 @@
 import tweepy
 import logging
-from config import create_api
+# from config import create_api
 import json
 
 logging.basicConfig(level=logging.INFO)
@@ -22,23 +22,23 @@ class FavRetweetListener(tweepy.StreamListener):
             try:
                 tweet.favorite()
             except Exception as e:
-                logger.error("Error on fav", exc_info=True)
+                logger.error("Error on fav")
         if not tweet.retweeted:
             # Retweet, since we have not retweeted it yet
             try:
                 tweet.retweet()
             except Exception as e:
-                logger.error("Error on fav and retweet", exc_info=True)
+                logger.error("Error on fav and retweet")
 
     def on_error(self, status):
         logger.error(status)
 
-def main(keywords):
-    api = create_api()
-    tweets_listener = FavRetweetListener(api)
-    stream = tweepy.Stream(api.auth, tweets_listener)
-    stream.filter(track=keywords, languages=["en"])
-
-if __name__ == "__main__":
-    main(["Street Fight", "La Coruña", "A Coruña","Galicia","la coruña","a coruña","galicia",
-    "street fight"])
+# def main(keywords):
+#     api = create_api()
+#     tweets_listener = FavRetweetListener(api)
+#     stream = tweepy.Stream(api.auth, tweets_listener)
+#     stream.filter(track=keywords, languages=["es"])
+#
+# if __name__ == "__main__":
+#     main(["Street Fight", "La Coruña", "A Coruña","Galicia","la coruña","a coruña","galicia",
+#     "street fight"])
