@@ -5,14 +5,12 @@ import time
 from AppDjango.asgi import application # no entendemos porqué pero hace falta para importar los models
 from streetfight.models import Clan, Usuario, Sesion, Bandera, IntentoCaptura
 
-
 def existe_posicion(array, posicion):
 	try:
 		a = array[posicion]
 		return True
 	except IndexError:
 		return False
-
 
 def parse_text(texto,user,api):
 	texto_separado=texto.split()
@@ -36,19 +34,16 @@ def parse_text(texto,user,api):
 			print("Mensaje de ayuda enviado a"+str(user))
 		#ComandoTopClanes
 		if (texto_separado[1] == "Top" and texto_separado[2] == "clanes" and is_int==True):
-			lista = Usuario.objects.all().order_by('-banderas_capturadas')[:4]
+			lista = Usuario.objects.all().order_by('-banderas_capturadas')[:cantidad]
 			lista_clan=[]
 			for usuario in lista:
-				print("BAN"+str(usuario.nombre))
-				print("BAN"+str(usuario.banderas_capturadas))
-				print("ID:"+str(usuario.id_clan.nombre))
 				if (usuario.id_clan.nombre not in lista_clan):
 					lista_clan.append(usuario.id_clan.nombre)
 					lista_clan.append(usuario.banderas_capturadas)
-				# else:
-				# 	lista_clan.append(usuario.banderas_capturadas)
-
-			print("LISTAFINAL"+str(lista_clan))
+				else:
+					lista_clan.append(usuario.banderas_capturadas)
+			print(lista_clan)
+			# api.update_status("Hola @"+str(user)+" el top "+str(cantidad)+" clanes es  es: \n"+str(lista_clan))
 		#ComandoTopUsuarios
 		elif (texto_separado[1] == "Top" and texto_separado[2] == "usuarios" and is_int==True):
 			lista = Usuario.objects.all().order_by('-banderas_capturadas')[:cantidad]
