@@ -1,70 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fondo_pantalla">
+    android:background="@drawable/fondo_azul_1000">
 
     <ImageView
         android:id="@+id/logo"
-        android:layout_width="146dp"
-        android:layout_height="163dp"
+        android:layout_width="220dp"
+        android:layout_height="220dp"
         android:layout_marginTop="32dp"
-        android:background="@drawable/logo_grande"
+        android:background="@drawable/flag_blue_500t"
+        android:contentDescription="@string/todo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:contentDescription="@string/todo" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/password"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/fondo_boton"
+        android:layout_width="220dp"
+        android:layout_height="69dp"
+        android:layout_marginTop="8dp"
+        android:autofillHints=""
+        android:background="@drawable/fondo_boton_220"
         android:ems="10"
         android:fontFamily="@font/bungee"
         android:hint="@string/password"
         android:inputType="textPassword"
         android:textAlignment="center"
-        android:textColorHint="#000000"
-        app:layout_constraintBottom_toTopOf="@+id/logear"
+        android:textColorHint="@color/texto_hint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:autofillHints="" />
+        app:layout_constraintTop_toBottomOf="@+id/username" />
 
     <EditText
         android:id="@+id/username"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/fondo_boton"
+        android:layout_width="220dp"
+        android:layout_height="69dp"
+        android:layout_marginTop="32dp"
+        android:autofillHints=""
+        android:background="@drawable/fondo_boton_220"
         android:ems="10"
         android:fontFamily="@font/bungee"
         android:hint="@string/username"
         android:inputType="textPersonName"
         android:textAlignment="center"
-        android:textColorHint="#040404"
-        app:layout_constraintBottom_toTopOf="@+id/password"
+        android:textColorHint="@color/texto_hint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:autofillHints="" />
+        app:layout_constraintTop_toBottomOf="@+id/logo" />
 
     <ImageButton
         android:id="@+id/logear"
-        android:layout_width="218dp"
-        android:layout_height="76dp"
-        android:layout_marginBottom="296dp"
-        android:background="@drawable/fondo_boton"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="220dp"
+        android:layout_height="69dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/fondo_boton_220"
+        android:contentDescription="@string/todo"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.512"
         app:layout_constraintStart_toStartOf="parent"
-        android:contentDescription="@string/todo" />
+        app:layout_constraintTop_toBottomOf="@+id/password" />
 
     <TextView
         android:id="@+id/texto_login_pantalla_2"
-        android:layout_width="102dp"
-        android:layout_height="38dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:fontFamily="@font/bungee"
         android:text="@string/login"
         android:textAlignment="center"
@@ -73,6 +73,6 @@
         app:layout_constraintBottom_toBottomOf="@+id/logear"
         app:layout_constraintEnd_toEndOf="@+id/logear"
         app:layout_constraintStart_toStartOf="@+id/logear"
-        app:layout_constraintTop_toBottomOf="@+id/password" />
+        app:layout_constraintTop_toTopOf="@+id/logear" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
