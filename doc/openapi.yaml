@@ -616,6 +616,14 @@ paths:
                     example: "bad_request"
     post:
       summary: Permite registrar un nuevo clan.
+      parameters:
+        - name: sessioncookie
+          in: header
+          required: true
+          description: El token de sesión (cookie) que queremos validar para cerrar esta sesión.
+          schema:
+            type: string
+            example: "8-gmqDwAsH7X6kQdb0Hw6yd-W0N3cFn_v5FcTujIZJWDBdWUmoj0i2gxIixF7ExUHs-0FN8fWRHsRCOWV17_gvPA"
       requestBody:
         description: "Formato para enviar un POST de creación del nuevo clan."
         required: true
