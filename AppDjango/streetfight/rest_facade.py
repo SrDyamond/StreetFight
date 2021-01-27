@@ -240,6 +240,8 @@ def create_clan(new_clan_json):
         new_clan.abreviatura = new_clan_json.get('acronym')
     elif 'url_icon' in new_clan_json:
         new_clan.url_icon = new_clan_json.get('url_icon')
+    if 'founder_id' in new_clan_json:
+        new_clan.founder_id = new_clan_json.get('founder_id')
 
     new_clan.save()
 
@@ -381,13 +383,36 @@ def user_info(user):
     return response
 
 
+@ csrf_exempt
 def clan(request):
     if request.method == 'GET':
         return search_clan(request)
     elif request.method == 'POST':
-        return create_clan(request)
+        return create_clan_only(request)
     else:
         return HttpResponseNotAllowed(['POST', 'GET'])
+
+
+def create_clan_only(request):
+    request_body = json.loads(request.body)
+    if Clan.objects.filter(nombre__exact=request_body.get('name')).exists():
+        return JsonResponse(custom_error_response.ALREADY_EXISTS, status=409)
+    session_cookie = request.headers.get('sessioncookie')
+    try:
+        session_list = Sesion.objects.filter(valor_cookie=session_cookie)
+    except:
+        return JsonResponse(custom_error_response.BAD_COOKIE, status=401)
+    clan, error = create_clan(request_body)
+    if error is not None:
+        response = {
+            "id": clan.id,
+            "name": clan.name,
+            "url_icon": clan.url_icon,
+            "acronym": clan.abreviatura,
+            "color": clan.color
+        }
+
+    return JsonResponse(response, status=201)
 
 
 def search_clan(request):
