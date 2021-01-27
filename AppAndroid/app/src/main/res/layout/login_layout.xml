@@ -51,7 +51,7 @@
         app:layout_constraintTop_toBottomOf="@+id/input_username" />
 
     <ImageButton
-        android:id="@+id/button_logging"
+        android:id="@+id/button_login"
         android:layout_width="220dp"
         android:layout_height="69dp"
         android:layout_marginTop="32dp"
@@ -70,9 +70,9 @@
         android:textAlignment="center"
         android:textColor="#000000"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/button_logging"
-        app:layout_constraintEnd_toEndOf="@+id/button_logging"
-        app:layout_constraintStart_toStartOf="@+id/button_logging"
-        app:layout_constraintTop_toTopOf="@+id/button_logging" />
+        app:layout_constraintBottom_toBottomOf="@+id/button_login"
+        app:layout_constraintEnd_toEndOf="@+id/button_login"
+        app:layout_constraintStart_toStartOf="@+id/button_login"
+        app:layout_constraintTop_toTopOf="@+id/button_login" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
