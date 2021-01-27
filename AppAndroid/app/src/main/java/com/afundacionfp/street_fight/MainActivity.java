@@ -33,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
                 String password = input_password.getText().toString();
                 if (!username.equals("") && !password.equals("")) {
                     Log.d("############USER, PASSWORD", username + ", " + password);
+                    LoginRequestThread loginRequestThread = new LoginRequestThread(username, password);
+                    loginRequestThread.start();
                 } else {
                     Toast.makeText(MainActivity.this, "Introduce usuario y contraseña", Toast.LENGTH_SHORT).show();
                 }

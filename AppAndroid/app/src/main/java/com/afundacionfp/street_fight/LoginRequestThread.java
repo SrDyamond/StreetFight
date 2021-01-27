@@ -46,23 +46,23 @@ public class LoginRequestThread extends Thread {
             con.setRequestProperty("Content-Type", "application/json; utf-8");
             con.setRequestProperty("Accept", "application/json");
             con.setDoOutput(true);
-            String jsonInputString = "{\"password_sha\": \"" + password_sha + "\"}";
-            Log.d("####REQUEST BODY", jsonInputString);
 
-            try(OutputStream os = con.getOutputStream()) {
-                byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
-                os.write(input, 0, input.length);
+            String requestBody = "{\"password_sha\": \"" + password_sha + "\"}";
+            Log.d("####REQUEST BODY", requestBody);
+
+            OutputStream os = con.getOutputStream();
+            byte[] requestBodyBytes = requestBody.getBytes(StandardCharsets.UTF_8);
+            os.write(requestBodyBytes, 0, requestBodyBytes.length);
+
+            InputStreamReader inputStreamReader = new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8);
+            BufferedReader br = new BufferedReader(inputStreamReader);
+            StringBuilder response = new StringBuilder();
+            String responseLine;
+            while ((responseLine = br.readLine()) != null) {
+                response.append(responseLine.trim());
             }
 
-            try(BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
-                StringBuilder response = new StringBuilder();
-                String responseLine;
-                while ((responseLine = br.readLine()) != null) {
-                    response.append(responseLine.trim());
-                }
-//                System.out.println(response.toString());
-                Log.d("########RESPONSEEEEE", response.toString());
-            }
+            Log.d("########RESPONSEEEEE", response.toString());
 
         } catch (IOException e) {
             e.printStackTrace();
