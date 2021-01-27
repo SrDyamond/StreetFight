@@ -327,7 +327,7 @@ def user_top(request):
     if request.method != 'GET':
         return HttpResponseNotAllowed(['GET'])
 
-    length = request.GET.get('length', 5)
+    length = request.GET.get('length', 10)
 
     try:
         length = int(length)
@@ -390,42 +390,71 @@ def clan(request):
     else:
         return HttpResponseNotAllowed(['POST', 'GET'])
 
+"""
+
 
 def clan_top(request):
-"""
+    if request.method != 'GET':
+        return HttpResponseNotAllowed(['GET'])
+
+    length = request.GET.get('length', 10)
+    try:
+        length = int(length)
+        if length > 200 or length == 0:
+            raise ValueError
+    except ValueError:
+        return JsonResponse(custom_error_response.BAD_REQUEST, status=400)
+
+    try:  # Recupero el clan de base de datos, y si no existe devuelvo 404
+        clan_list = Clan.objects.all 
+    except Clan.DoesNotExist:
+        return JsonResponse(custom_error_response.NOT_FOUND, status=404)
+
+    top_clan = []
+
+    for clan in clan_list:
+        try:  # Recupero los user de base de datos, y si no existe devuelvo 404
+            lista = Usuario.objects.filter(id_clan=clan)
+        except Usuario.DoesNotExist:
+            return JsonResponse(custom_error_response.NOT_FOUND, status=404)
+
+        points = 0
+        for user in lista:  # Sumo los puntos
+            points += user.banderas_capturadas
 
 
 def clan_by_id(request, id_clan):
     if request.method != 'GET':
         return HttpResponseNotAllowed(['GET'])
 
-    try:  # Recupero el user de base de datos, y si no existe devuelvo 404
-        lista = Usuario.objects.filter(id_clan_id=id_clan)
+    try:  # Recupero el clan de base de datos, y si no existe devuelvo 404
+        clan = Clan.objects.get(pk=id_clan)
+    except Clan.DoesNotExist:
+        return JsonResponse(custom_error_response.NOT_FOUND, status=404)
+
+    try:  # Recupero los user de base de datos, y si no existe devuelvo 404
+        lista = Usuario.objects.filter(id_clan=clan)
     except Usuario.DoesNotExist:
         return JsonResponse(custom_error_response.NOT_FOUND, status=404)
 
     fundadores = []
     cont = 0
-    suma = 0
-    for user in lista:
-        suma += user.banderas_capturadas
-        if user.fundador == True:
+    points = 0
+    for user in lista:  # Sumo los puntos
+        points += user.banderas_capturadas
+        if user.fundador == True:  # Recojo el/los nombres de los fundadores
             fundadores.append(user.nombre)
             cont += 1
 
-    for user in lista:
-        print(user)
-
-    user = lista[:1].user.id_clan.id
     response = {
-        "id": user.id_clan.id,
-        "name": user.id_clan.nombre,
-        "url_icon": user.id_clan.url_icon,
-        "acronym": user.id_clan.abreviatura,
-        "color": user.id_clan.color,
-        "members": lista.user.nombre,
-        "flags": suma,
-        "founder_names": fundadores,
+        "id":  clan.id,
+        "name": clan.nombre,
+        "url_icon": clan.url_icon,
+        "acronym": clan.abreviatura,
+        "color": clan.color,
+        "members": cont,
+        "flags": points,
+        "founder_names": fundadores
     }
 
     return JsonResponse(response, status=200)
