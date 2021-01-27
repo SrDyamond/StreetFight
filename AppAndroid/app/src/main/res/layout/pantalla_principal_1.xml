@@ -7,7 +7,7 @@
     android:background="@drawable/fondo_pantalla">
 
     <ImageView
-        android:id="@+id/logo"
+        android:id="@+id/app_logo"
         android:layout_width="146dp"
         android:layout_height="163dp"
         android:layout_marginTop="32dp"
@@ -28,7 +28,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logo"
+        app:layout_constraintTop_toBottomOf="@+id/app_logo"
         app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/fondo_boton" />
 
