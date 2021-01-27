@@ -1,5 +1,6 @@
 package com.afundacionfp.street_fight;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -49,54 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if (!username.equals("") && !password.equals("")) {
                     Log.d("############USER, PASSWORD", username + ", " + password);
-
-                    String password_sha = null;
-                    try {
-                        password_sha = calculateSHA1(password);
-                    } catch (NoSuchAlgorithmException e) {
-                        e.printStackTrace();
-                    }
-
-                    // Instantiate the RequestQueue.
-                    RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-                    String url = "http://192.168.111.111:8000/user/" + username + "/session";
-
-                    JSONObject requestBodyJson = new JSONObject();
-                    try {
-                        requestBodyJson.put("password_sha", password_sha);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                    JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                        (Request.Method.POST, url, requestBodyJson, new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-
-                                Log.d("########RESPONSE", response.toString());
-                            }
-                        }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                String responseBodyString = new String(error.networkResponse.data, StandardCharsets.UTF_8);
-                                JSONObject responseBodyJson = null;
-                                try {
-                                    responseBodyJson = new JSONObject(responseBodyString);
-                                } catch (JSONException e) {
-                                    // e.printStackTrace();
-                                    Log.d("########ERROR-L1", error.toString());
-                                    Log.d("########ERROR-L2", responseBodyString);
-                                }
-                                assert responseBodyJson != null;
-                                Log.d("########ERROR-JSON", responseBodyJson.toString());
-                            }
-                        });
-
-
-                    // Add the request to the RequestQueue.
-                    queue.add(jsonObjectRequest);
-
-
+                    sendLoginRest(username, password);
                 } else {
                     Toast.makeText(MainActivity.this, "Introduce usuario y contraseña", Toast.LENGTH_SHORT).show();
                 }
@@ -110,6 +64,77 @@ public class MainActivity extends AppCompatActivity {
         crypt.update(password.getBytes(StandardCharsets.UTF_8));
 
         return new BigInteger(1, crypt.digest()).toString(16);
+    }
+
+    private void sendLoginRest(String username, String password) {
+        String password_sha = null;
+        try {
+            password_sha = calculateSHA1(password);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        // Instantiate the RequestQueue.
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+        String url = "http://192.168.111.111:8000/user/" + username + "/session";
+
+        JSONObject requestBodyJson = new JSONObject();
+        try {
+            requestBodyJson.put("password_sha", password_sha);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, requestBodyJson,
+            new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    Log.d("########RESPONSE", response.toString());
+                    Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+                    startActivity(intent);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    String responseBodyString = new String(error.networkResponse.data, StandardCharsets.UTF_8);
+                    JSONObject errorResponseBodyJson = null;
+                    try {
+                        errorResponseBodyJson = new JSONObject(responseBodyString);
+                    } catch (JSONException e) {
+                        // e.printStackTrace();
+                        Log.d("########ERROR-L1", error.toString());
+                        Log.d("########ERROR-L2", responseBodyString);
+                    }
+                    assert errorResponseBodyJson != null;
+                    Log.d("########ERROR-JSON", errorResponseBodyJson.toString());
+                    parseErrorResponse(errorResponseBodyJson);
+                }
+            });
+
+        // Add the request to the RequestQueue.
+        queue.add(jsonObjectRequest);
+    }
+
+    private void parseErrorResponse(JSONObject errorResponseBodyJson) {
+        int errorCode = 0;
+
+        try {
+            errorCode = errorResponseBodyJson.getInt("error");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        switch (errorCode) {
+            case 4002:
+                Toast.makeText(this, "Contraseña incorrecta", Toast.LENGTH_SHORT).show();
+                break;
+            case 4004:
+                Toast.makeText(this, "El usuario no está registrado", Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                Toast.makeText(this, "Error al iniciar sesión", Toast.LENGTH_SHORT).show();
+                break;
+        }
     }
 
 }
