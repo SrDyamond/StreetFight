@@ -22,10 +22,6 @@ def obtener_banderas_clan(clan_obj):
 def parse_text(texto,user,api):
 	texto_separado=texto.split()
 	is_int=False
-	# print(Usuario.objects.all())
-
-	# lista = Usuario.objects.all().order_by('-banderas_capturadas')[:2]
-	# print (lista)
 
 	if existe_posicion(texto_separado,3):
 		try :
@@ -57,11 +53,16 @@ def parse_text(texto,user,api):
 		#ComandoTopUsuarios
 		elif (texto_separado[1] == "Top" and texto_separado[2] == "usuarios" and is_int==True):
 			lista = Usuario.objects.all().order_by('-banderas_capturadas')[:cantidad]
-			lista_usuarios=[]
+			lista_usuarios={}
+			str_salida = ""
 			for usuario in lista:
-				# print("Lista:-"+str(lista_usuarios))
-				lista_usuarios.append(usuario.nombre)
-			api.update_status("Hola @"+str(user)+" el top "+str(cantidad)+" usuarios  es: \n"+str(lista_usuarios))
+				lista_usuarios[usuario.nombre] = usuario.banderas_capturadas
+
+
+			for nombre_usuario in sorted(lista_usuarios, key=lista_usuarios.get, reverse=True)[:cantidad]:
+				str_salida += "- {} ({})\n".format(nombre_usuario, lista_usuarios[nombre_usuario])
+			print(str_salida)
+			api.update_status("Hola @"+str(user)+" el top "+str(cantidad)+" usuarios  es: \n"+str(str_salida))
 		else:
 		#ComandoNoValido
 			api.update_status("Comando no valido, escribe <Ayuda!> @"+str(user))
