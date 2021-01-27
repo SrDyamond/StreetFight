@@ -19,6 +19,7 @@ def obtener_banderas_clan(clan_obj):
 		suma += usuario.banderas_capturadas
 	return suma
 
+
 def parse_text(texto,user,api):
 	texto_separado=texto.split()
 	is_int=False
@@ -43,12 +44,11 @@ def parse_text(texto,user,api):
 			for clan in lista_clanes:
 				clan_puntuacion_dic[clan.nombre] = obtener_banderas_clan(clan)
 
-			# print(sorted(clan_puntuacion_dic, key=clan_puntuacion_dic.get, reverse=True))
 			str_salida = ""
 			for nombre_clan in sorted(clan_puntuacion_dic, key=clan_puntuacion_dic.get, reverse=True)[:cantidad]:
 				str_salida += "- {} ({})\n".format(nombre_clan, clan_puntuacion_dic[nombre_clan])
 
-			print(str_salida)
+			print("Top "+str(cantidad)+" clanes enviado a @"+str(user))
 			api.update_status("Hola @"+str(user)+" el top "+str(cantidad)+" clanes es: \n"+str_salida)
 		#ComandoTopUsuarios
 		elif (texto_separado[1] == "Top" and texto_separado[2] == "usuarios" and is_int==True):
@@ -58,11 +58,25 @@ def parse_text(texto,user,api):
 			for usuario in lista:
 				lista_usuarios[usuario.nombre] = usuario.banderas_capturadas
 
-
 			for nombre_usuario in sorted(lista_usuarios, key=lista_usuarios.get, reverse=True)[:cantidad]:
 				str_salida += "- {} ({})\n".format(nombre_usuario, lista_usuarios[nombre_usuario])
-			print(str_salida)
+
+			print("Top "+str(cantidad)+" usuarios enviado a @"+str(user))
 			api.update_status("Hola @"+str(user)+" el top "+str(cantidad)+" usuarios  es: \n"+str(str_salida))
+
+		if (texto_separado[1] == "Info" and texto_separado[2] == "clan"):
+			clan_str=texto.replace("@StreetFightSP Info clan " , "")
+			lista_clanes = Clan.objects.all()
+			print(clan_str)
+			print(lista_clanes)
+			try:
+				clan= Clan.objects.get(nombre__exact=clan_str)
+				print("Los clanes coinciden")
+				#################
+				#MANDAR TWEET
+				#################
+			except:
+				print("Usuario no encontrado")
 		else:
 		#ComandoNoValido
 			api.update_status("Comando no valido, escribe <Ayuda!> @"+str(user))
