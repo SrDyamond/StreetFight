@@ -406,13 +406,13 @@ def clan_top(request):
         return JsonResponse(custom_error_response.BAD_REQUEST, status=400)
 
     try:  # Recupero el clan de base de datos, y si no existe devuelvo 404
-        clan_list = Clan.objects.all 
+        all_clan_list = Clan.objects.all()
     except Clan.DoesNotExist:
         return JsonResponse(custom_error_response.NOT_FOUND, status=404)
 
     top_clan = []
 
-    for clan in clan_list:
+    for clan in all_clan_list:
         try:  # Recupero los user de base de datos, y si no existe devuelvo 404
             lista = Usuario.objects.filter(id_clan=clan)
         except Usuario.DoesNotExist:
@@ -421,6 +421,32 @@ def clan_top(request):
         points = 0
         for user in lista:  # Sumo los puntos
             points += user.banderas_capturadas
+        top_clan.append(points)
+
+    # Ordeno los clanes segun la puntiacion
+    top_clan, all_clan_list = (list(x) for x in zip(
+        *sorted(zip(top_clan, all_clan_list), key=lambda pair: pair[0], reverse=True)))
+
+    """for i in top_clan:
+        print(top_clan[:i])"""
+    response = []
+    for i in range(length):
+        try:  # Revisar que no pidas mas clanes de los que existen
+            clan = all_clan_list[i]
+        except IndexError:
+            return JsonResponse(custom_error_response.BAD_REQUEST, status=400)
+        try:
+            Clan_info = {
+                "id":  clan.id,
+                "name": clan.nombre,
+                "url_icon": clan.url_icon,
+                "acronym": clan.abreviatura,
+                "color": clan.color
+            }
+            response.append(Clan_info)
+        except IndexError:
+            break
+    return JsonResponse(response, safe=False, status=200)
 
 
 def clan_by_id(request, id_clan):
