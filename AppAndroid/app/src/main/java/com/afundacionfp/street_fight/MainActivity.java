@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(JSONObject response) {
                     Log.d("########RESPONSE", response.toString());
+                    // FALTA GUARDAR LA COOKIE EN LA PERSISTENCIA, ASÍ COMO EL ID DEL USUARIO Y LA FECHA DE EXPIRACIÓN DE LA SESIÓN
                     Intent intent = new Intent(getApplicationContext(), MapActivity.class);
                     startActivity(intent);
                 }
