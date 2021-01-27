@@ -381,7 +381,6 @@ def user_info(user):
     return response
 
 
-"""
 def clan(request):
     if request.method == 'GET':
         return search_clan(request)
@@ -390,7 +389,33 @@ def clan(request):
     else:
         return HttpResponseNotAllowed(['POST', 'GET'])
 
-"""
+
+def search_clan(request):
+    q = request.GET.get('q', None)
+    if q is None:
+        return JsonResponse(custom_error_response.BAD_REQUEST, status=400)
+
+    clan_list = Clan.objects.filter(nombre__icontains=q)
+
+    response = []
+
+    for clan in clan_list:
+        clan_info_dict = {
+            "id": clan.id,  # autogenerado por django
+            "name": clan.nombre,
+            "color": clan.color
+
+        }
+
+        if not clan.url_icon is None:
+            clan_info_dict["url_icon"] = clan.url_icon
+
+        if not clan.abreviatura is None:
+            clan_info_dict["acronym"] = clan.abreviatura
+
+        response.append(clan_info_dict)
+
+    return JsonResponse(response, safe=False, status=200)
 
 
 def clan_top(request):
