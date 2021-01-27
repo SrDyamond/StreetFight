@@ -49,8 +49,8 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
         //handle permissions first, before map is created. not depicted here
 
         //load/initialize the osmdroid configuration, this can be done
-        Context ctx = getApplicationContext();
-        Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
+        // Context ctx = getApplicationContext();
+        Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
         //setting this before the layout is inflated is a good idea
         //it 'should' ensure that the map has a writable location for the map cache, even without permissions
         //if no tiles are displayed, you can try overriding the cache path using Configuration.getInstance().setCachePath
@@ -65,8 +65,8 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
         locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(MapActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-
         }
+
         loc = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, this);
 
@@ -80,7 +80,10 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
         mLocationOverlay.enableMyLocation();
         map.getOverlays().add(mLocationOverlay);
         map.setMinZoomLevel(15.0);  // Max zoom out
+
+        assert loc != null; // HAY QUE INICIAR EL EMULADOR Y SETEAR LA LOCALIZACIÓN ANTES DE EJECUTAR LA APP
         locPoint = new GeoPoint(loc.getLatitude(), loc.getLongitude());
+
         mapController.setCenter(locPoint);
 
         //  Add coordinates
@@ -132,14 +135,9 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
     }
 
     //  Must stay to work
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-    }
-
-    public void onProviderEnabled(String provider) {
-    }
-
-    public void onProviderDisabled(String provider) {
-    }
+    public void onStatusChanged(String provider, int status, Bundle extras) {}
+    public void onProviderEnabled(String provider) {}
+    public void onProviderDisabled(String provider) {}
 
     @Override
     public void onResume() {
@@ -166,26 +164,27 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
         ArrayList<String> permissionsToRequest = new ArrayList<>(Arrays.asList(permissions).subList(0, grantResults.length));
         if (permissionsToRequest.size() > 0) {
             ActivityCompat.requestPermissions(
-                    this,
-                    permissionsToRequest.toArray(new String[0]),
-                    REQUEST_PERMISSIONS_REQUEST_CODE);
+                this,
+                permissionsToRequest.toArray(new String[0]),
+                REQUEST_PERMISSIONS_REQUEST_CODE
+            );
         }
     }
 
     private void requestPermissionsIfNecessary(String[] permissions) {
         ArrayList<String> permissionsToRequest = new ArrayList<>();
         for (String permission : permissions) {
-            if (ContextCompat.checkSelfPermission(this, permission)
-                    != PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
                 // Permission is not granted
                 permissionsToRequest.add(permission);
             }
         }
         if (permissionsToRequest.size() > 0) {
             ActivityCompat.requestPermissions(
-                    this,
-                    permissionsToRequest.toArray(new String[0]),
-                    REQUEST_PERMISSIONS_REQUEST_CODE);
+                this,
+                permissionsToRequest.toArray(new String[0]),
+                REQUEST_PERMISSIONS_REQUEST_CODE
+            );
         }
     }
 }
