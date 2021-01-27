@@ -65,7 +65,7 @@ def parse_text(texto,user,api):
 		else:
 		#ComandoNoValido
 			api.update_status("Comando no valido, escribe <Ayuda!> @"+str(user))
-			print("Enviadondo ayuda")
+			print("Enviando ayuda")
 
 	except tweepy.TweepError as error:
 		if error.api_code == 187:
