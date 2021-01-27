@@ -12,6 +12,13 @@ def existe_posicion(array, posicion):
 	except IndexError:
 		return False
 
+def obtener_banderas_clan(clan_obj):
+	lista_usuarios_clan = Usuario.objects.filter(id_clan=clan_obj)
+	suma = 0
+	for usuario in lista_usuarios_clan:
+		suma += usuario.banderas_capturadas
+	return suma
+
 def parse_text(texto,user,api):
 	texto_separado=texto.split()
 	is_int=False
@@ -34,16 +41,19 @@ def parse_text(texto,user,api):
 			print("Mensaje de ayuda enviado a"+str(user))
 		#ComandoTopClanes
 		if (texto_separado[1] == "Top" and texto_separado[2] == "clanes" and is_int==True):
-			lista = Usuario.objects.all().order_by('-banderas_capturadas')[:cantidad]
-			lista_clan=[]
-			for usuario in lista:
-				if (usuario.id_clan.nombre not in lista_clan):
-					lista_clan.append(usuario.id_clan.nombre)
-					lista_clan.append(usuario.banderas_capturadas)
-				else:
-					lista_clan.append(usuario.banderas_capturadas)
-			print(lista_clan)
-			# api.update_status("Hola @"+str(user)+" el top "+str(cantidad)+" clanes es  es: \n"+str(lista_clan))
+
+			lista_clanes = Clan.objects.all()
+			clan_puntuacion_dic = {}
+			for clan in lista_clanes:
+				clan_puntuacion_dic[clan.nombre] = obtener_banderas_clan(clan)
+
+			# print(sorted(clan_puntuacion_dic, key=clan_puntuacion_dic.get, reverse=True))
+			str_salida = ""
+			for nombre_clan in sorted(clan_puntuacion_dic, key=clan_puntuacion_dic.get, reverse=True)[:cantidad]:
+				str_salida += "- {} ({})\n".format(nombre_clan, clan_puntuacion_dic[nombre_clan])
+
+			print(str_salida)
+			api.update_status("Hola @"+str(user)+" el top "+str(cantidad)+" clanes es: \n"+str_salida)
 		#ComandoTopUsuarios
 		elif (texto_separado[1] == "Top" and texto_separado[2] == "usuarios" and is_int==True):
 			lista = Usuario.objects.all().order_by('-banderas_capturadas')[:cantidad]
