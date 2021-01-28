@@ -327,7 +327,7 @@ def user_top(request):
     if request.method != 'GET':
         return HttpResponseNotAllowed(['GET'])
 
-    length = request.GET.get('length', 5)
+    length = request.GET.get('length', 10)
 
     try:
         length = int(length)
@@ -379,3 +379,177 @@ def user_info(user):
         response["clan"]["acronym"] = user.id_clan.abreviatura
 
     return response
+
+
+@ csrf_exempt
+def clan(request):
+    if request.method == 'GET':
+        return search_clan(request)
+    elif request.method == 'POST':
+        return create_clan_only(request)
+    else:
+        return HttpResponseNotAllowed(['POST', 'GET'])
+
+
+def create_clan_only(request):
+    try:
+        request_body = json.loads(request.body)
+    except ValueError:
+        return JsonResponse(custom_error_response.BAD_REQUEST, status=400)
+
+    if Clan.objects.filter(nombre__exact=request_body.get('name')).exists():
+        return JsonResponse(custom_error_response.ALREADY_EXISTS, status=409)
+
+    session_cookie = request.headers.get('sessioncookie')
+
+    if not 'founder_id' in request_body:
+        return JsonResponse(custom_error_response.BAD_REQUEST, status=400)
+
+    try:
+        session_list = Sesion.objects.filter(valor_cookie=session_cookie)
+    except:
+        return JsonResponse(custom_error_response.BAD_COOKIE, status=401)
+
+    try:  # Si el usuario no existe
+        user = Usuario.objects.get(pk=request_body.get('founder_id'))
+    except:
+        return JsonResponse(custom_error_response.NOT_FOUND, status=404)
+
+    clan, error = create_clan(request_body)
+    if error is not None:
+        return error
+
+    user.id_clan = clan
+    user.fundador = True
+    user.save()
+
+    response = {
+        "id": clan.id,
+        "name": clan.nombre,
+        "url_icon": clan.url_icon,
+        "acronym": clan.abreviatura,
+        "color": clan.color
+    }
+
+    return JsonResponse(response, status=201)
+
+
+def search_clan(request):
+    q = request.GET.get('q', None)
+    if q is None:
+        return JsonResponse(custom_error_response.BAD_REQUEST, status=400)
+
+    clan_list = Clan.objects.filter(nombre__icontains=q)
+
+    response = []
+
+    for clan in clan_list:
+        clan_info_dict = {
+            "id": clan.id,  # autogenerado por django
+            "name": clan.nombre,
+            "color": clan.color
+
+        }
+
+        if not clan.url_icon is None:
+            clan_info_dict["url_icon"] = clan.url_icon
+
+        if not clan.abreviatura is None:
+            clan_info_dict["acronym"] = clan.abreviatura
+
+        response.append(clan_info_dict)
+
+    return JsonResponse(response, safe=False, status=200)
+
+
+def clan_top(request):
+    if request.method != 'GET':
+        return HttpResponseNotAllowed(['GET'])
+
+    length = request.GET.get('length', 10)
+    try:
+        length = int(length)
+        if length > 200 or length == 0:
+            raise ValueError
+    except ValueError:
+        return JsonResponse(custom_error_response.BAD_REQUEST, status=400)
+
+    try:  # Recupero el clan de base de datos, y si no existe devuelvo 404
+        all_clan_list = Clan.objects.all()
+    except Clan.DoesNotExist:
+        return JsonResponse(custom_error_response.NOT_FOUND, status=404)
+
+    top_clan = []
+
+    for clan in all_clan_list:
+        try:  # Recupero los user de base de datos, y si no existe devuelvo 404
+            lista = Usuario.objects.filter(id_clan=clan)
+        except Usuario.DoesNotExist:
+            return JsonResponse(custom_error_response.NOT_FOUND, status=404)
+
+        points = 0
+        for user in lista:  # Sumo los puntos
+            points += user.banderas_capturadas
+        top_clan.append(points)
+
+    # Ordeno los clanes segun la puntiacion
+    top_clan, all_clan_list = (list(x) for x in zip(
+        *sorted(zip(top_clan, all_clan_list), key=lambda pair: pair[0], reverse=True)))
+
+    """for i in top_clan:
+        print(top_clan[:i])"""
+    response = []
+    for i in range(length):
+        try:  # Revisar que no pidas mas clanes de los que existen
+            clan = all_clan_list[i]
+        except IndexError:
+            return JsonResponse(custom_error_response.BAD_REQUEST, status=400)
+        try:
+            Clan_info = {
+                "id":  clan.id,
+                "name": clan.nombre,
+                "url_icon": clan.url_icon,
+                "acronym": clan.abreviatura,
+                "color": clan.color
+            }
+            response.append(Clan_info)
+        except IndexError:
+            break
+    return JsonResponse(response, safe=False, status=200)
+
+
+def clan_by_id(request, id_clan):
+    if request.method != 'GET':
+        return HttpResponseNotAllowed(['GET'])
+
+    try:  # Recupero el clan de base de datos, y si no existe devuelvo 404
+        clan = Clan.objects.get(pk=id_clan)
+    except Clan.DoesNotExist:
+        return JsonResponse(custom_error_response.NOT_FOUND, status=404)
+
+    try:  # Recupero los user de base de datos, y si no existe devuelvo 404
+        lista = Usuario.objects.filter(id_clan=clan)
+    except Usuario.DoesNotExist:
+        return JsonResponse(custom_error_response.NOT_FOUND, status=404)
+
+    fundadores = []
+    cont = 0
+    points = 0
+    for user in lista:  # Sumo los puntos
+        points += user.banderas_capturadas
+        if user.fundador == True:  # Recojo el/los nombres de los fundadores
+            fundadores.append(user.nombre)
+            cont += 1
+
+    response = {
+        "id":  clan.id,
+        "name": clan.nombre,
+        "url_icon": clan.url_icon,
+        "acronym": clan.abreviatura,
+        "color": clan.color,
+        "members": cont,
+        "flags": points,
+        "founder_names": fundadores
+    }
+
+    return JsonResponse(response, status=200)
