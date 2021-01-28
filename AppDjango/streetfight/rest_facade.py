@@ -553,3 +553,15 @@ def clan_by_id(request, id_clan):
     }
 
     return JsonResponse(response, status=200)
+
+@ csrf_exempt
+def change_clan(request,username,id_clan):
+    if request.method != 'POST':
+        return HttpResponseNotAllowed(['GET'])
+    #si cookei es valida sino 401
+    #Si user existe sino 404
+    #si cln exisste sino 404
+    #si usuarios se cambia al mismo clan eror 409
+
+
+    return JsonResponse(response, status=200)

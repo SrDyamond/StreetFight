@@ -14,4 +14,5 @@ urlpatterns = [
     path('clan', rest_facade.clan, name='clan'),
     path('clan/top', rest_facade.clan_top, name='clan_top'),
     path('clan/<id_clan>', rest_facade.clan_by_id, name='clan_by_id'),
+    patch('user/<username>/clan/<id_clan>', rest_facade.change_clan, name='change_clan')
 ]
