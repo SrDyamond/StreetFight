@@ -85,31 +85,32 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, requestBodyJson,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d("########RESPONSE", response.toString());
-                        // FALTA GUARDAR LA COOKIE EN LA PERSISTENCIA, ASÍ COMO EL ID DEL USUARIO Y LA FECHA DE EXPIRACIÓN DE LA SESIÓN
-                        Intent intent = new Intent(getApplicationContext(), MapActivity.class);
-                        startActivity(intent);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                String responseBodyString = new String(error.networkResponse.data, StandardCharsets.UTF_8);
-                JSONObject errorResponseBodyJson = null;
-                try {
-                    errorResponseBodyJson = new JSONObject(responseBodyString);
-                } catch (JSONException e) {
-                    // e.printStackTrace();
-                    Log.d("########ERROR-L1", error.toString());
-                    Log.d("########ERROR-L2", responseBodyString);
+            new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    Log.d("########RESPONSE", response.toString());
+                    // FALTA GUARDAR LA COOKIE EN LA PERSISTENCIA, ASÍ COMO EL ID DEL USUARIO Y LA FECHA DE EXPIRACIÓN DE LA SESIÓN
+                    Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+                    startActivity(intent);
                 }
-                assert errorResponseBodyJson != null;
-                Log.d("########ERROR-JSON", errorResponseBodyJson.toString());
-                parseErrorResponse(errorResponseBodyJson);
-            }
-        });
+            },
+            new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    String responseBodyString = new String(error.networkResponse.data, StandardCharsets.UTF_8);
+                    JSONObject errorResponseBodyJson = null;
+                    try {
+                        errorResponseBodyJson = new JSONObject(responseBodyString);
+                    } catch (JSONException e) {
+                        // e.printStackTrace();
+                        Log.d("########ERROR-L1", error.toString());
+                        Log.d("########ERROR-L2", responseBodyString);
+                    }
+                    assert errorResponseBodyJson != null;
+                    Log.d("########ERROR-JSON", errorResponseBodyJson.toString());
+                    parseErrorResponse(errorResponseBodyJson);
+                }
+            });
 
         // Add the request to the RequestQueue.
         queue.add(jsonObjectRequest);
