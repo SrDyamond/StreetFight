@@ -1,123 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fondo_pantalla">
-
-    <EditText
-        android:id="@+id/register_repeatpass"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="64dp"
-        android:background="@drawable/fondo_boton"
-        android:ems="10"
-        android:fontFamily="@font/bungee"
-        android:hint="@string/repeat_pass"
-        android:inputType="textPassword"
-        android:textAlignment="center"
-        android:textColorHint="#000000"
-        app:layout_constraintBottom_toTopOf="@+id/create_clan"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:autofillHints="" />
+    android:background="@drawable/fondo_azul_1000">
 
     <ImageView
-        android:id="@+id/app_logo"
-        android:layout_width="146dp"
-        android:layout_height="163dp"
+        android:id="@+id/register_app_logo"
+        android:layout_width="220dp"
+        android:layout_height="220dp"
         android:layout_marginTop="32dp"
-        android:background="@drawable/logo_grande"
+        android:background="@drawable/flag_blue_500t"
+        android:contentDescription="@string/todo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:contentDescription="@string/todo" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/register_pass"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/input_register_username"
+        android:layout_width="220dp"
+        android:layout_height="69dp"
+        android:layout_marginTop="24dp"
+        android:autofillHints=""
+        android:background="@drawable/fondo_boton"
+        android:fontFamily="@font/bungee"
+        android:hint="@string/insert_username"
+        android:inputType="textPersonName"
+        android:textAlignment="center"
+        android:textColorHint="@color/texto_hint"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/register_app_logo" />
+
+    <EditText
+        android:id="@+id/input_register_password"
+        android:layout_width="220dp"
+        android:layout_height="69dp"
+        android:layout_marginTop="8dp"
+        android:autofillHints=""
         android:background="@drawable/fondo_boton"
         android:ems="10"
         android:fontFamily="@font/bungee"
         android:hint="@string/insert_pass"
         android:inputType="textPassword"
         android:textAlignment="center"
-        android:textColorHint="#000000"
-        app:layout_constraintBottom_toTopOf="@+id/register_repeatpass"
+        android:textColorHint="@color/texto_hint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:autofillHints="" />
+        app:layout_constraintTop_toBottomOf="@+id/input_register_username" />
 
     <EditText
-        android:id="@+id/register_username"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/input_register_repeat_password"
+        android:layout_width="220dp"
+        android:layout_height="69dp"
+        android:layout_marginTop="8dp"
+        android:autofillHints=""
         android:background="@drawable/fondo_boton"
         android:ems="10"
         android:fontFamily="@font/bungee"
-        android:hint="@string/insert_username"
-        android:inputType="textPersonName"
+        android:hint="@string/repeat_pass"
+        android:inputType="textPassword"
         android:textAlignment="center"
-        android:textColorHint="#070707"
-        app:layout_constraintBottom_toTopOf="@+id/register_pass"
+        android:textColorHint="@color/texto_hint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/app_logo"
-        app:layout_constraintVertical_bias="1.0"
-        android:autofillHints="" />
+        app:layout_constraintTop_toBottomOf="@+id/input_register_password" />
 
     <ImageButton
-        android:id="@+id/join_clan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="176dp"
+        android:id="@+id/button_register_join_clan"
+        android:layout_width="220dp"
+        android:layout_height="69dp"
+        android:layout_marginTop="24dp"
         android:background="@drawable/fondo_boton"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/create_clan"
-        android:contentDescription="@string/todo" />
-
-    <ImageButton
-        android:id="@+id/create_clan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="176dp"
-        android:background="@drawable/fondo_boton"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:contentDescription="@string/todo"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/fondo_boton"
-        android:contentDescription="@string/todo" />
+        app:layout_constraintTop_toBottomOf="@+id/input_register_repeat_password" />
 
     <TextView
-        android:id="@+id/create_clan_text"
-        android:layout_width="131dp"
-        android:layout_height="45dp"
-        android:fontFamily="@font/bungee"
-        android:hint="@string/create_clan"
-        android:textAlignment="center"
-        android:textColorHint="#000000"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/create_clan"
-        app:layout_constraintEnd_toStartOf="@+id/join_clan"
-        app:layout_constraintHorizontal_bias="0.478"
-        app:layout_constraintStart_toStartOf="@+id/create_clan"
-        app:layout_constraintTop_toTopOf="@+id/create_clan"
-        app:layout_constraintVertical_bias="0.461" />
-
-    <TextView
-        android:id="@+id/join_clan_text"
+        android:id="@+id/text_register_join_clan"
         android:layout_width="132dp"
         android:layout_height="46dp"
         android:fontFamily="@font/bungee"
         android:hint="@string/join_clan"
         android:textAlignment="center"
-        android:textColorHint="#010101"
+        android:textColorHint="@color/text_black"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/join_clan"
-        app:layout_constraintEnd_toEndOf="@+id/join_clan"
+        app:layout_constraintBottom_toBottomOf="@+id/button_register_join_clan"
+        app:layout_constraintEnd_toEndOf="@+id/button_register_join_clan"
         app:layout_constraintHorizontal_bias="0.528"
-        app:layout_constraintStart_toStartOf="@+id/join_clan"
-        app:layout_constraintTop_toTopOf="@+id/join_clan"
+        app:layout_constraintStart_toStartOf="@+id/button_register_join_clan"
+        app:layout_constraintTop_toTopOf="@+id/button_register_join_clan"
         app:layout_constraintVertical_bias="0.44" />
+
+    <ImageButton
+        android:id="@+id/button_register_create_clan"
+        android:layout_width="220dp"
+        android:layout_height="69dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/fondo_boton"
+        android:contentDescription="@string/todo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_register_join_clan" />
+
+    <TextView
+        android:id="@+id/text_register_create_clan"
+        android:layout_width="131dp"
+        android:layout_height="45dp"
+        android:fontFamily="@font/bungee"
+        android:hint="@string/create_clan"
+        android:textAlignment="center"
+        android:textColorHint="@color/text_black"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/button_register_create_clan"
+        app:layout_constraintEnd_toEndOf="@+id/button_register_create_clan"
+        app:layout_constraintStart_toStartOf="@+id/button_register_create_clan"
+        app:layout_constraintTop_toTopOf="@+id/button_register_create_clan" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
