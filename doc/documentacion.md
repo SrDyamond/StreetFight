@@ -236,7 +236,7 @@ El usuario no se econtro o no existe en la base de datos .
 Comando no reconocido.
 
 ```
-"Comando no valido, escribe \"Ayuda!\" @".
+Comando no valido, escribe "Ayuda!.
 ```
 
 Comando ayuda.
