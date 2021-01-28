@@ -410,22 +410,26 @@ def create_clan_only(request):
     except:
         return JsonResponse(custom_error_response.BAD_COOKIE, status=401)
 
-    clan, error = create_clan(request_body)
     try:  # Si el usuario no existe
-        user = Usuario.objects.get(id=request_body.get('founder_id'))
+        user = Usuario.objects.get(pk=request_body.get('founder_id'))
     except:
         return JsonResponse(custom_error_response.NOT_FOUND, status=404)
 
-    user.fundador = True
-
+    clan, error = create_clan(request_body)
     if error is not None:
-        response = {
-            "id": clan.id,
-            "name": clan.nombre,
-            "url_icon": clan.url_icon,
-            "acronym": clan.abreviatura,
-            "color": clan.color
-        }
+        return error
+
+    user.id_clan = clan
+    user.fundador = True
+    user.save()
+
+    response = {
+        "id": clan.id,
+        "name": clan.nombre,
+        "url_icon": clan.url_icon,
+        "acronym": clan.abreviatura,
+        "color": clan.color
+    }
 
     return JsonResponse(response, status=201)
 
