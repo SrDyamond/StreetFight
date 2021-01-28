@@ -68,7 +68,7 @@
         android:fontFamily="@font/bungee"
         android:text="@string/login"
         android:textAlignment="center"
-        android:textColor="#000000"
+        android:textColor="@color/text_black"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/button_login"
         app:layout_constraintEnd_toEndOf="@+id/button_login"
