@@ -24,24 +24,26 @@ def obtener_miembros_clan(clan_obj):
 	return len(lista_usuarios_clan)
 
 
-def parse_text(texto,user,api):
+def parse_text(texto,user,api,tweet_id):
+	print("Leyendo:", texto)
 	texto_separado=texto.split()
-	is_int=False
 
+	is_int=False
 	if existe_posicion(texto_separado,3):
 		try :
 			cantidad = int(texto_separado[3])
 			is_int=True
-		except ValueError  :
-			print("Este string no contiene un int")
+		except ValueError:
+			# print("No int")
+			pass
 
 	try:
 		#ComandoBotAyuda
 		if (texto_separado[1] == "Ayuda!"):
-			api.update_status("Ayuda\n- Top clanes <número>\n- Top usuarios <número>\n- Info del clan <nombre>\n- Info del usuario <nombre>\n @"+str(user))
-			print("Mensaje de ayuda enviado a"+str(user))
-		#ComandoTopClanes
-		if (texto_separado[1] == "Top" and texto_separado[2] == "clanes" and is_int==True):
+			mensaje = "Ayuda\n- Top clanes <número>\n- Top usuarios <número>\n- Info del clan <nombre>\n- Info del usuario <nombre>\n @"+str(user)
+			print(mensaje)
+			api.update_status(mensaje,tweet_id)
+		elif (texto_separado[1] == "Top" and texto_separado[2] == "clanes" and is_int==True):
 
 			lista_clanes = Clan.objects.all()
 			clan_puntuacion_dic = {}
@@ -52,8 +54,9 @@ def parse_text(texto,user,api):
 			for nombre_clan in sorted(clan_puntuacion_dic, key=clan_puntuacion_dic.get, reverse=True)[:cantidad]:
 				str_salida += "- {} ({})\n".format(nombre_clan, clan_puntuacion_dic[nombre_clan])
 
-			print("Top "+str(cantidad)+" clanes enviado a @"+str(user))
-			api.update_status("Hola @"+str(user)+" el top "+str(cantidad)+" clanes es: \n"+str_salida)
+			mensaje = "Hola @"+str(user)+" el top "+str(cantidad)+" clanes es: \n"+str_salida
+			print(mensaje)
+			api.update_status(mensaje,tweet_id)
 		#ComandoTopUsuarios
 		elif (texto_separado[1] == "Top" and texto_separado[2] == "usuarios" and is_int==True):
 			lista = Usuario.objects.all().order_by('-banderas_capturadas')[:cantidad]
@@ -65,25 +68,38 @@ def parse_text(texto,user,api):
 			for nombre_usuario in sorted(lista_usuarios, key=lista_usuarios.get, reverse=True)[:cantidad]:
 				str_salida += "- {} ({})\n".format(nombre_usuario, lista_usuarios[nombre_usuario])
 
-			print("Top "+str(cantidad)+" usuarios enviado a @"+str(user))
-			api.update_status("Hola @"+str(user)+" el top "+str(cantidad)+" usuarios  es: \n"+str(str_salida))
-
-		if (texto_separado[1] == "Info" and texto_separado[2] == "clan"):
+			mensaje = "Hola @"+str(user)+" el top "+str(cantidad)+" usuarios  es: \n"+str(str_salida)
+			print(mensaje)
+			api.update_status(mensaje,tweet_id)
+		elif (texto_separado[1] == "Info" and texto_separado[2] == "clan"):
 			clan_str=texto.replace("@StreetFightSP Info clan " , "")
-			lista_clanes = Clan.objects.all()
 			try:
 				clan= Clan.objects.get(nombre__exact=clan_str)
 				banderas=(obtener_banderas_clan(clan))
 				miembros=(obtener_miembros_clan(clan))
-				api.update_status("El clan "+str(clan)+" tiene "+str(banderas)+" banderas y "+str(miembros)+" miembros ")
-			except:
-				print("Usuario no encontrado,buscando en clanes")
-
+				mensaje = "Hola @"+str(user)+" el clan "+str(clan)+" tiene "+str(banderas)+" banderas y "+str(miembros)+" miembros"
+				print(mensaje)
+				api.update_status(mensaje,tweet_id)
+			except Clan.DoesNotExist:
+				mensaje = "El clan no se econtro o no existe en la base de datos @"+str(user)
+				print(mensaje)
+				api.update_status(mensaje,tweet_id)
+		elif (texto_separado[1] == "Info" and texto_separado[2] == "usuario"):
+			usuario_str=texto.replace("@StreetFightSP Info usuario " , "")
+			try:
+				usuario_bbdd= Usuario.objects.get(nombre__exact=usuario_str)
+				mensaje = "Hola @"+str(user)+" el usuario "+str(usuario_bbdd.nombre)+" tiene "+str(usuario_bbdd.banderas_capturadas)+" banderas y es del clan "+str(usuario_bbdd.id_clan.nombre)
+				print(mensaje)
+				api.update_status(mensaje,tweet_id)
+			except Usuario.DoesNotExist:
+				mensaje = "El usuario no se econtro o no existe en la base de datos @"+str(user)
+				print(mensaje)
+				api.update_status(mensaje,tweet_id)
 		else:
-		#ComandoNoValido
-			api.update_status("Comando no valido, escribe <Ayuda!> @"+str(user))
-			print("Enviando ayuda")
-
+			mensaje = "Comando no valido, escribe \"Ayuda!\" @"+str(user)
+			print(mensaje)
+			api.update_status(mensaje,tweet_id)
 	except tweepy.TweepError as error:
-		if error.api_code == 187:
-			 print('duplicate message')
+		# if error.api_code == 187:
+		# 	 print('duplicate message')
+		pass
