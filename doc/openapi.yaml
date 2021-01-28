@@ -864,19 +864,19 @@ paths:
                   description:
                     type: string
                     example: "not_found"
-          '409':
-            description: El nombre de clan ya existe.
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    error:
-                      type: integer
-                      example: 4005
-                    description:
-                      type: string
-                      example: "already_exists"
+        '409':
+          description: El nombre de clan ya existe.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: integer
+                    example: 4005
+                  description:
+                    type: string
+                    example: "already_exists"
   /user/{username}/catch/{id_flag}:
     post:
       summary: Un usuario inicia la captura de una bandera.
