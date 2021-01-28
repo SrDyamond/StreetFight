@@ -48,13 +48,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
         ImageButton buttonGotoRegister = findViewById(R.id.button_goto_register);
-//        buttonGotoRegister.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-//                startActivity(intent);
-//            }
-//        });
+        buttonGotoRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
 }
