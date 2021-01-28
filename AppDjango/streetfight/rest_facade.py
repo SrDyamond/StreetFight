@@ -594,3 +594,7 @@ def change_clan(request,username,id_clan):
     response = {} #temporal
 
     return JsonResponse(custom_error_response.CLAN_CHANGED, status=200)
+
+    def try_capture(request,username,id_flag):
+        response = {} #temporal
+        return JsonResponse(response, status=200)
