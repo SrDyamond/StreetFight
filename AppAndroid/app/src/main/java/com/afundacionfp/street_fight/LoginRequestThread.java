@@ -13,6 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+// ESTE MÉTODO REALIZA UNA PETICIÓN CONTRA EL API DE FORMA MUY MANUAL, SUBSTITUIDO POR VOLLEY
 public class LoginRequestThread extends Thread {
 
     private final String username;
