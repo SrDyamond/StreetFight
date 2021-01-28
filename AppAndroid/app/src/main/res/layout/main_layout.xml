@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/fondo_azul_1000">
+
+    <ImageView
+        android:id="@+id/app_logo"
+        android:layout_width="220dp"
+        android:layout_height="220dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/flag_blue_500t"
+        android:contentDescription="@string/todo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/button_goto_login"
+        android:layout_width="220dp"
+        android:layout_height="69dp"
+        android:layout_marginTop="64dp"
+        android:background="@drawable/fondo_boton"
+        android:contentDescription="@string/todo"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/app_logo" />
+
+    <TextView
+        android:id="@+id/text_goto_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/bungee"
+        android:text="@string/login"
+        android:textAlignment="center"
+        android:textColor="@color/text_black"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/button_goto_login"
+        app:layout_constraintEnd_toEndOf="@+id/button_goto_login"
+        app:layout_constraintStart_toStartOf="@+id/button_goto_login"
+        app:layout_constraintTop_toTopOf="@+id/button_goto_login" />
+
+    <ImageButton
+        android:id="@+id/button_goto_register"
+        android:layout_width="220dp"
+        android:layout_height="69dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/fondo_boton"
+        android:contentDescription="@string/todo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_goto_login" />
+
+    <TextView
+        android:id="@+id/text_goto_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/bungee"
+        android:text="@string/register"
+        android:textAlignment="center"
+        android:textColor="@color/text_black"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/button_goto_register"
+        app:layout_constraintEnd_toEndOf="@+id/button_goto_register"
+        app:layout_constraintStart_toStartOf="@+id/button_goto_register"
+        app:layout_constraintTop_toTopOf="@+id/button_goto_register" />
+
+<!--    <ImageButton-->
+<!--        android:id="@+id/button_google"-->
+<!--        android:layout_width="220dp"-->
+<!--        android:layout_height="69dp"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:background="@drawable/fondo_boton"-->
+<!--        android:contentDescription="@string/todo"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/button_register" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/test_google"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:fontFamily="@font/bungee"-->
+<!--        android:text="@string/login_with_google"-->
+<!--        android:textAlignment="center"-->
+<!--        android:textColor="@color/text_black"-->
+<!--        android:textSize="18sp"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/button_google"-->
+<!--        app:layout_constraintEnd_toEndOf="@+id/button_google"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/button_google"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/button_google" />-->
+
+</androidx.constraintlayout.widget.ConstraintLayout>
