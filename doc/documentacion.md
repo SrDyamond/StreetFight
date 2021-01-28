@@ -121,6 +121,7 @@ Destinada a consultar estadísticas, ver el mapa global y editar tu perfil y tu 
 Se encarga anunciar publicamene cambios grandes en el desarrollo del juego y permite consultar estadísticas resumidas.
 
 #### Difusión automatizada
+> No implementada la difusion automatica en esta version
 
 Mensaje de difusión cuando un clan captura una bandera (si esa bandera esta en blanco).
 
@@ -197,11 +198,7 @@ Consulta clan (nombre exacto)
 - Solicitudes
 
 ```
-Info del clan Los Pepes
-```
-
-```
-Información del clan Los Pepes
+Info clan Los Pepes
 ```
 
 - Respuestas
@@ -213,7 +210,7 @@ El clan Los Pepes (LP) tiene una puntuación de 675, ha capturado 40 banderas y 
 - Errores
 
 ```
-No existe ningún clan con el nombre 'Los Pepes'.
+El clan no se econtro o no existe en la base de datos.
 ```
 
 Consulta usuario  (nombre exacto)
@@ -221,11 +218,7 @@ Consulta usuario  (nombre exacto)
 - Solicitudes
 
 ```
-Info del usuario Pikachu78
-```
-
-```
-Información del usuario Pikachu78
+Info usuario Pikachu78
 ```
 
 - Respuestas
@@ -237,13 +230,13 @@ El usuario Pikachu78 tiene una puntuación de 50, ha capturado 10 banderas y per
 - Errores
 
 ```
-No existe ningún usuario con el nombre 'Pikachu78'.
+El usuario no se econtro o no existe en la base de datos .
 ```
 
 Comando no reconocido.
 
 ```
-Oh, algo ha salido mal. Escribe 'ayuda' para saber como usar esto.
+Comando no valido, escribe "Ayuda!.
 ```
 
 Comando ayuda.
@@ -251,16 +244,9 @@ Comando ayuda.
 - Solicitudes
 
 ```
-Ayuda
+Ayuda!
 ```
 
-```
-Help
-```
-
-```
-Ayúdame
-```
 
 - Respuestas
 
@@ -273,8 +259,8 @@ Ayúdame
 ```
 
 #### Funcionabilidades extra
-
 - Follow por follow automatico.
+>Non impemtada la siguiente funcionalidad en esta versión:
 - RT y FAV con palabras que se ajusten a nuestro criterio.
 
 ## Diagrama ER
