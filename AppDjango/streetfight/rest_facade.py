@@ -412,7 +412,7 @@ def create_clan_only(request):
 
     clan, error = create_clan(request_body)
     try:  # Si el usuario no existe
-        user = Usuario.objects.get(nombre_id=request_body.get('founder_id'))
+        user = Usuario.objects.get(id=request_body.get('founder_id'))
     except:
         return JsonResponse(custom_error_response.NOT_FOUND, status=404)
 
