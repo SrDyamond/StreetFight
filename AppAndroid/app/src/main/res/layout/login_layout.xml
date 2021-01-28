@@ -6,7 +6,7 @@
     android:background="@drawable/fondo_azul_1000">
 
     <ImageView
-        android:id="@+id/app_logo"
+        android:id="@+id/login_app_logo"
         android:layout_width="220dp"
         android:layout_height="220dp"
         android:layout_marginTop="32dp"
@@ -23,7 +23,6 @@
         android:layout_marginTop="32dp"
         android:autofillHints=""
         android:background="@drawable/fondo_boton_220"
-        android:ems="10"
         android:fontFamily="@font/bungee"
         android:hint="@string/username"
         android:inputType="textPersonName"
@@ -31,7 +30,7 @@
         android:textColorHint="@color/texto_hint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/app_logo" />
+        app:layout_constraintTop_toBottomOf="@+id/login_app_logo" />
 
     <EditText
         android:id="@+id/input_password"
@@ -40,7 +39,6 @@
         android:layout_marginTop="8dp"
         android:autofillHints=""
         android:background="@drawable/fondo_boton_220"
-        android:ems="10"
         android:fontFamily="@font/bungee"
         android:hint="@string/password"
         android:inputType="textPassword"
