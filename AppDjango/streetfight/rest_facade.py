@@ -564,7 +564,7 @@ def change_clan(request,username,id_clan):
 
     session_cookie = request.headers.get('sessioncookie')
 
-    try:  # Recupero el user de base de datos, y si no existe devuelvo 404
+    try:  #Si user existe sino 404
         user = Usuario.objects.get(nombre__exact=username)
     except Usuario.DoesNotExist:
         return JsonResponse(custom_error_response.NOT_FOUND, status=404)
@@ -575,17 +575,16 @@ def change_clan(request,username,id_clan):
     for session in session_list:
         if session.valor_cookie == session_cookie:
             valid_session = True
-            session.delete()
             break
 
-    if valid_session:
-        return JsonResponse(custom_error_response.LOGOUT_OK, status=200)
-    else:
+    if not valid_session:
         return JsonResponse(custom_error_response.BAD_COOKIE, status=401)
-
-    #Si user existe sino 404
     #si cln exisste sino 404
+    try:  # Recupero el clan de base de datos, y si no existe devuelvo 404
+        clan = Clan.objects.get(pk=id_clan)
+    except Clan.DoesNotExist:
+        return JsonResponse(custom_error_response.NOT_FOUND, status=404)
     #si usuarios se cambia al mismo clan eror 409
-
+    response = {} #temporal
 
     return JsonResponse(response, status=200)
