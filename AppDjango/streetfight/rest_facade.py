@@ -557,7 +557,7 @@ def clan_by_id(request, id_clan):
 @ csrf_exempt
 def change_clan(request,username,id_clan):
     if request.method != 'POST':
-        return HttpResponseNotAllowed(['GET'])
+        return HttpResponseNotAllowed(['POST'])
     #si cookei es valida sino 401
     if not 'sessioncookie' in request.headers:
         return JsonResponse(custom_error_response.BAD_REQUEST, status=400)
@@ -596,7 +596,41 @@ def change_clan(request,username,id_clan):
     return JsonResponse(custom_error_response.CLAN_CHANGED, status=200)
 
     def try_capture(request,username,id_flag):
-        #Intento capturabandera 2002
+        if request.method != 'POST':
+            return HttpResponseNotAllowed(['POST'])
+
+
+        #si cookei es valida sino 401
+        if not 'sessioncookie' in request.headers:
+            return JsonResponse(custom_error_response.BAD_REQUEST, status=400)
+
+        session_cookie = request.headers.get('sessioncookie')
+
+        try:  #Si user existe sino 404
+            user = Usuario.objects.get(nombre__exact=username)
+        except Usuario.DoesNotExist:
+            return JsonResponse(custom_error_response.NOT_FOUND, status=404)
+
+        session_list = Sesion.objects.filter(id_usuario__exact=user)
+
+        valid_session = False
+        for session in session_list:
+            if session.valor_cookie == session_cookie:
+                valid_session = True
+                break
+
+        if not valid_session:
+            return JsonResponse(custom_error_response.BAD_COOKIE, status=401)
+
+        #Intento capturabandera 202
+        try:
+            flag = Bandera.objects.get(pk=id_flag)
+        except Bandera.DoesNotExist:
+            return JsonResponse(custom_error_response.NOT_FOUND, status=404)
+
+        # CREAR INTENTO DE CAPTURA CON ESE USER Y ESA FLAG
+
         #Cookie invalida 401
+        #Id_flag invalido 404
         response = {} #temporal
         return JsonResponse(response, status=200)
