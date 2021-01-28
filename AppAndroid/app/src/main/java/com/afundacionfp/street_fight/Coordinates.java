@@ -11,7 +11,7 @@ import org.osmdroid.views.overlay.Marker;
 import java.util.ArrayList;
 import java.util.List;
 
-public class coordinates {
+public class Coordinates {
     public static Resources resources;
 
     public static void coors(MapView map) {

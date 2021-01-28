@@ -42,8 +42,8 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
         Objects.requireNonNull(getSupportActionBar()).hide();
 
         //  Use icon on another class
-        if (coordinates.resources == null) {
-            coordinates.resources = getResources();
+        if (Coordinates.resources == null) {
+            Coordinates.resources = getResources();
         }
 
         //handle permissions first, before map is created. not depicted here
@@ -87,7 +87,7 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
         mapController.setCenter(locPoint);
 
         //  Add coordinates
-        coordinates.coors(map);
+        Coordinates.coors(map);
 
         /*
         //  Prueva de icono en mapa
