@@ -10,7 +10,7 @@ logger = logging.getLogger()
 
 # Function to extract tweets
 def get_tweets(api):
-	mentions = api.mentions_timeline(count=1)
+	mentions = api.mentions_timeline(count=5)
 	logger.info("Revisando menciones")
 	for mention in mentions:
 		parse_text(mention.text,mention.user.screen_name,api,mention.id)
