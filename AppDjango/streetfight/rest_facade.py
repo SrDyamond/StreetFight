@@ -585,6 +585,12 @@ def change_clan(request,username,id_clan):
     except Clan.DoesNotExist:
         return JsonResponse(custom_error_response.NOT_FOUND, status=404)
     #si usuarios se cambia al mismo clan eror 409
+    if clan == user.id_clan:
+        return JsonResponse(custom_error_response.ALREADY_EXISTS, status=409)
+
+    user.id_clan=clan
+    user.save()
+
     response = {} #temporal
 
-    return JsonResponse(response, status=200)
+    return JsonResponse(custom_error_response.CLAN_CHANGED, status=200)
