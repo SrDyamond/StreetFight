@@ -596,5 +596,7 @@ def change_clan(request,username,id_clan):
     return JsonResponse(custom_error_response.CLAN_CHANGED, status=200)
 
     def try_capture(request,username,id_flag):
+        #Intento capturabandera 2002
+        #Cookie invalida 401
         response = {} #temporal
         return JsonResponse(response, status=200)
