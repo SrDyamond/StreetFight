@@ -240,8 +240,6 @@ def create_clan(new_clan_json):
         new_clan.abreviatura = new_clan_json.get('acronym')
     elif 'url_icon' in new_clan_json:
         new_clan.url_icon = new_clan_json.get('url_icon')
-    if 'founder_id' in new_clan_json:
-        new_clan.founder_id = new_clan_json.get('founder_id')
 
     new_clan.save()
 
@@ -394,19 +392,36 @@ def clan(request):
 
 
 def create_clan_only(request):
-    request_body = json.loads(request.body)
+    try:
+        request_body = json.loads(request.body)
+    except ValueError:
+        return JsonResponse(custom_error_response.BAD_REQUEST, status=400)
+
     if Clan.objects.filter(nombre__exact=request_body.get('name')).exists():
         return JsonResponse(custom_error_response.ALREADY_EXISTS, status=409)
+
     session_cookie = request.headers.get('sessioncookie')
+
+    if not 'founder_id' in request_body:
+        return JsonResponse(custom_error_response.BAD_REQUEST, status=400)
+
     try:
         session_list = Sesion.objects.filter(valor_cookie=session_cookie)
     except:
         return JsonResponse(custom_error_response.BAD_COOKIE, status=401)
+
     clan, error = create_clan(request_body)
+    try:  # Si el usuario no existe
+        user = Usuario.objects.get(nombre_id=request_body.get('founder_id'))
+    except:
+        return JsonResponse(custom_error_response.NOT_FOUND, status=404)
+
+    user.fundador = True
+
     if error is not None:
         response = {
             "id": clan.id,
-            "name": clan.name,
+            "name": clan.nombre,
             "url_icon": clan.url_icon,
             "acronym": clan.abreviatura,
             "color": clan.color
