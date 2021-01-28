@@ -19,6 +19,10 @@ def obtener_banderas_clan(clan_obj):
 		suma += usuario.banderas_capturadas
 	return suma
 
+def obtener_miembros_clan(clan_obj):
+	lista_usuarios_clan = Usuario.objects.filter(id_clan=clan_obj)
+	return len(lista_usuarios_clan)
+
 
 def parse_text(texto,user,api):
 	texto_separado=texto.split()
@@ -67,16 +71,14 @@ def parse_text(texto,user,api):
 		if (texto_separado[1] == "Info" and texto_separado[2] == "clan"):
 			clan_str=texto.replace("@StreetFightSP Info clan " , "")
 			lista_clanes = Clan.objects.all()
-			print(clan_str)
-			print(lista_clanes)
 			try:
 				clan= Clan.objects.get(nombre__exact=clan_str)
-				print("Los clanes coinciden")
-				#################
-				#MANDAR TWEET
-				#################
+				banderas=(obtener_banderas_clan(clan))
+				miembros=(obtener_miembros_clan(clan))
+				api.update_status("El clan "+str(clan)+" tiene "+str(banderas)+" banderas y "+str(miembros)+" miembros ")
 			except:
-				print("Usuario no encontrado")
+				print("Usuario no encontrado,buscando en clanes")
+
 		else:
 		#ComandoNoValido
 			api.update_status("Comando no valido, escribe <Ayuda!> @"+str(user))
