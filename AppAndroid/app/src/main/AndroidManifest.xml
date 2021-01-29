@@ -25,6 +25,8 @@
         <activity android:name=".MapActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".RegisterActivity" />
+        <activity android:name=".SearchClanActivity" />
+        <activity android:name=".CreateClanActivity" />
     </application>
 
 </manifest>
