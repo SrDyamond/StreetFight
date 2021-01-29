@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -39,28 +40,38 @@ public class RegisterActivity extends AppCompatActivity {
         button_register_join_clan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String username = getFormUsername();
-                String password = getFormPassword();
-                String repeat_password = getFormRepeatPassword();
-                if (isFormValid(username, password, repeat_password)) {
-                    String password_sha = null;
-                    try {
-                        password_sha = calculateSHA1(password);
-                    } catch (NoSuchAlgorithmException e) {
-                        e.printStackTrace();
-                    }
-                    assert password_sha != null;
-                    // intent
-                }
+                validFormAndGoto(0);
             }
         });
 
         button_register_create_clan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // intent
+                validFormAndGoto(1);
             }
         });
+    }
+
+    private void validFormAndGoto(int option) {
+        String username = getFormUsername();
+        String password = getFormPassword();
+        String repeat_password = getFormRepeatPassword();
+        if (isFormValid(username, password, repeat_password)) {
+            String password_sha = null;
+            try {
+                password_sha = calculateSHA1(password);
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
+            assert password_sha != null;
+            // intent
+            Intent intent = new Intent(getApplicationContext(), option == 0 ? SearchClanActivity.class : CreateClanActivity.class);
+            intent.putExtra("username", username);
+            intent.putExtra("password_sha", password_sha);
+            startActivity(intent);
+        } else {
+            Toast.makeText(RegisterActivity.this, "Rellene todos los campos", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private String getFormUsername() {
