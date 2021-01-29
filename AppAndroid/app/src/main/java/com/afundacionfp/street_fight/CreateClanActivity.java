@@ -11,6 +11,17 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 public class CreateClanActivity extends AppCompatActivity {
@@ -57,6 +68,77 @@ public class CreateClanActivity extends AppCompatActivity {
 
     private void sendRegisterRest(String username, String passwordSha, String clanName, String clanAcronym, String clanColor, String clanUrlIcon) {
         Log.d("# REGISTER REST", "'" + username + "', '" + passwordSha + "', '" + clanName + "', '" + clanAcronym + "', '" + clanColor + "', '" + clanUrlIcon + "'");
+        // Instantiate the RequestQueue.
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+        String url = "http://192.168.111.111:8000/user";
+
+        JSONObject requestBodyJson = new JSONObject();
+        JSONObject newClanJson = new JSONObject();
+        try {
+            newClanJson.put("name", clanName);
+            newClanJson.put("color", clanName);
+
+            if (!clanAcronym.equals("")) {
+                newClanJson.put("acronym", clanAcronym);
+            }
+
+            if (!clanUrlIcon.equals("")) {
+                newClanJson.put("url_icon", clanUrlIcon);
+            }
+
+            requestBodyJson.put("username", username);
+            requestBodyJson.put("password_sha", passwordSha);
+            requestBodyJson.put("create_clan", newClanJson);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, requestBodyJson,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("## RESPONSE", response.toString());
+                        // FALTA GUARDAR LA COOKIE EN LA PERSISTENCIA, ASÍ COMO EL ID DEL USUARIO Y LA FECHA DE EXPIRACIÓN DE LA SESIÓN
+                        Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+                        startActivity(intent);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        String responseBodyString = new String(error.networkResponse.data, StandardCharsets.UTF_8);
+                        JSONObject errorResponseBodyJson = null;
+                        try {
+                            errorResponseBodyJson = new JSONObject(responseBodyString);
+                        } catch (JSONException e) {
+                            // e.printStackTrace();
+                            Log.d("## ERROR-L1", error.toString());
+                            Log.d("## ERROR-L2", responseBodyString);
+                        }
+                        assert errorResponseBodyJson != null;
+                        Log.d("## ERROR-JSON", errorResponseBodyJson.toString());
+                        parseErrorResponse(errorResponseBodyJson);
+                    }
+                });
+
+        // Add the request to the RequestQueue.
+        queue.add(jsonObjectRequest);
+    }
+
+    private void parseErrorResponse(JSONObject errorResponseBodyJson) {
+        int errorCode = 0;
+
+        try {
+            errorCode = errorResponseBodyJson.getInt("error");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        if (errorCode == 4005) {
+            Toast.makeText(this, "Conflicto", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Error al crear el usuario", Toast.LENGTH_SHORT).show();
+        }
     }
 
 }
