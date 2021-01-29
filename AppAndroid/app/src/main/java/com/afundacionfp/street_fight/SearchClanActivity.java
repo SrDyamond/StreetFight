@@ -121,7 +121,7 @@ public class SearchClanActivity extends AppCompatActivity {
         }
 
         if (errorCode == 4005) {
-            Toast.makeText(this, "El nombre de usuario ya existe", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Conflicto", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "Error al crear el usuario", Toast.LENGTH_SHORT).show();
         }
