@@ -46,7 +46,7 @@ public class SearchClanActivity extends AppCompatActivity {
         buttonJoinClan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String idClanStr = inputJoinClanId.getText().toString();
+                final String idClanStr = inputJoinClanId.getText().toString();
                 Integer idClan = null;
 
                 try {
