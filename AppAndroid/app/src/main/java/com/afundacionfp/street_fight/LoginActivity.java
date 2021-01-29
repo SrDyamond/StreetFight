@@ -65,6 +65,7 @@ public class LoginActivity extends AppCompatActivity {
         return new BigInteger(1, crypt.digest()).toString(16);
     }
 
+    // COMANDO PYTHON: python manage.py runserver <LA_IP_DE_TU_PC>:8000
     private void sendLoginRest(String username, String password) {
         String passwordSha = null;
         try {

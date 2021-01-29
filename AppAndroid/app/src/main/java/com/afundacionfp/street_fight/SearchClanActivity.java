@@ -63,6 +63,7 @@ public class SearchClanActivity extends AppCompatActivity {
 
     }
 
+    // COMANDO PYTHON: python manage.py runserver <LA_IP_DE_TU_PC>:8000
     private void sendRegisterRest(String username, String passwordSha, int idClan) {
         Log.d("# REGISTER REST", username + ", " + passwordSha + ", " + idClan);
         // Instantiate the RequestQueue.
