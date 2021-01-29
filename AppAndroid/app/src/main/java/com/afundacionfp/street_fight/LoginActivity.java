@@ -66,9 +66,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void sendLoginRest(String username, String password) {
-        String password_sha = null;
+        String passwordSha = null;
         try {
-            password_sha = calculateSHA1(password);
+            passwordSha = calculateSHA1(password);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
@@ -79,7 +79,7 @@ public class LoginActivity extends AppCompatActivity {
 
         JSONObject requestBodyJson = new JSONObject();
         try {
-            requestBodyJson.put("password_sha", password_sha);
+            requestBodyJson.put("password_sha", passwordSha);
         } catch (JSONException e) {
             e.printStackTrace();
         }
