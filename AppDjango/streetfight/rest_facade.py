@@ -595,42 +595,40 @@ def change_clan(request,username,id_clan):
 
     return JsonResponse(custom_error_response.CLAN_CHANGED, status=200)
 
-    def try_capture(request,username,id_flag):
-        if request.method != 'POST':
-            return HttpResponseNotAllowed(['POST'])
+@ csrf_exempt
+def try_capture(request,username,id_flag):
+    if request.method != 'POST':
+        return HttpResponseNotAllowed(['POST']) #405
+
+    #sino manda la cookie 400
+    if not 'sessioncookie' in request.headers:
+        return JsonResponse(custom_error_response.BAD_REQUEST, status=400)
+
+    session_cookie = request.headers.get('sessioncookie')
+
+    try:  #Si user existe sino 404
+        user = Usuario.objects.get(nombre__exact=username)
+    except Usuario.DoesNotExist:
+        return JsonResponse(custom_error_response.NOT_FOUND, status=404)
+
+    session_list = Sesion.objects.filter(id_usuario__exact=user)
+
+    valid_session = False
+    for session in session_list:
+        if session.valor_cookie == session_cookie:
+            valid_session = True
+            break
+
+    if not valid_session:#si coookie no es valida 401
+        return JsonResponse(custom_error_response.BAD_COOKIE, status=401)
 
 
-        #si cookei es valida sino 401
-        if not 'sessioncookie' in request.headers:
-            return JsonResponse(custom_error_response.BAD_REQUEST, status=400)
+    try:#si bandera no existe 404
+        flag = Bandera.objects.get(pk=id_flag)
+    except Bandera.DoesNotExist:
+        return JsonResponse(custom_error_response.NOT_FOUND, status=404)
 
-        session_cookie = request.headers.get('sessioncookie')
-
-        try:  #Si user existe sino 404
-            user = Usuario.objects.get(nombre__exact=username)
-        except Usuario.DoesNotExist:
-            return JsonResponse(custom_error_response.NOT_FOUND, status=404)
-
-        session_list = Sesion.objects.filter(id_usuario__exact=user)
-
-        valid_session = False
-        for session in session_list:
-            if session.valor_cookie == session_cookie:
-                valid_session = True
-                break
-
-        if not valid_session:
-            return JsonResponse(custom_error_response.BAD_COOKIE, status=401)
-
-        #Intento capturabandera 202
-        try:
-            flag = Bandera.objects.get(pk=id_flag)
-        except Bandera.DoesNotExist:
-            return JsonResponse(custom_error_response.NOT_FOUND, status=404)
-
-        # CREAR INTENTO DE CAPTURA CON ESE USER Y ESA FLAG
-
-        #Cookie invalida 401
-        #Id_flag invalido 404
-        response = {} #temporal
-        return JsonResponse(response, status=200)
+    # CREAR INTENTO DE CAPTURA CON ESE USER Y ESA FLAG
+    new_intento=IntentoCaptura(id_usuario=user,id_bandera=flag)
+    new_intento.save()
+    return JsonResponse(custom_error_response.CAPTURE_STARTED, status=200)
