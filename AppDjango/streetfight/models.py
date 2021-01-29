@@ -11,7 +11,10 @@ class Clan(models.Model):
     fecha_fundacion = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.nombre
+        if self.abreviatura:
+            return self.nombre + " (" + self.abreviatura + ")"
+        else:
+            return self.nombre
 
 
 class Usuario(models.Model):
@@ -23,7 +26,10 @@ class Usuario(models.Model):
     fundador = models.BooleanField(default=False) # sugerencia de arreglo, cambiar en la documentación
 
     def __str__(self):
-        return self.nombre + " (" + self.id_clan.abreviatura + ")"
+        if self.id_clan.abreviatura:
+            return self.nombre + " (" + self.id_clan.abreviatura + ")"
+        else:
+            return self.nombre + " (" + self.id_clan.nombre + ")"
 
 
 class Sesion(models.Model):
