@@ -37,15 +37,15 @@ public class LoginActivity extends AppCompatActivity {
 
         setContentView(R.layout.login_layout);
 
-        EditText input_username = findViewById(R.id.input_username);
-        EditText input_password = findViewById(R.id.input_password);
+        EditText inputUsername = findViewById(R.id.input_username);
+        EditText inputPassword = findViewById(R.id.input_password);
 
-        ImageButton button_login = findViewById(R.id.button_login);
-        button_login.setOnClickListener(new View.OnClickListener() {
+        ImageButton buttonLogin = findViewById(R.id.button_login);
+        buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String username = input_username.getText().toString();
-                String password = input_password.getText().toString();
+                String username = inputUsername.getText().toString();
+                String password = inputPassword.getText().toString();
 
                 if (!username.equals("") && !password.equals("")) {
                     Log.d("############USER, PASSWORD", username + ", " + password);

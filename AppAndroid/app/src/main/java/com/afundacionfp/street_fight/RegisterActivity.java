@@ -18,9 +18,9 @@ import java.util.Objects;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    EditText input_register_username;
-    EditText input_register_password;
-    EditText input_register_repeat_password;
+    EditText inputRegisterUsername;
+    EditText inputRegisterPassword;
+    EditText inputRegisterRepeatPassword;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -30,9 +30,9 @@ public class RegisterActivity extends AppCompatActivity {
 
         setContentView(R.layout.register_layout);
 
-        input_register_username = findViewById(R.id.input_register_username);
-        input_register_password = findViewById(R.id.input_register_password);
-        input_register_repeat_password = findViewById(R.id.input_register_repeat_password);
+        inputRegisterUsername = findViewById(R.id.input_register_username);
+        inputRegisterPassword = findViewById(R.id.input_register_password);
+        inputRegisterRepeatPassword = findViewById(R.id.input_register_repeat_password);
 
         ImageButton button_register_join_clan = findViewById(R.id.button_register_join_clan);
         ImageButton button_register_create_clan = findViewById(R.id.button_register_create_clan);
@@ -57,17 +57,17 @@ public class RegisterActivity extends AppCompatActivity {
         String password = getFormPassword();
         String repeat_password = getFormRepeatPassword();
         if (isFormValid(username, password, repeat_password)) {
-            String password_sha = null;
+            String passwordSha = null;
             try {
-                password_sha = calculateSHA1(password);
+                passwordSha = calculateSHA1(password);
             } catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
             }
-            assert password_sha != null;
+            assert passwordSha != null;
             // intent
             Intent intent = new Intent(getApplicationContext(), option == 0 ? SearchClanActivity.class : CreateClanActivity.class);
             intent.putExtra("username", username);
-            intent.putExtra("password_sha", password_sha);
+            intent.putExtra("password_sha", passwordSha);
             startActivity(intent);
         } else {
             Toast.makeText(RegisterActivity.this, "Rellene todos los campos", Toast.LENGTH_SHORT).show();
@@ -75,15 +75,15 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private String getFormUsername() {
-        return input_register_username.getText().toString();
+        return inputRegisterUsername.getText().toString();
     }
 
     private String getFormPassword() {
-        return input_register_password.getText().toString();
+        return inputRegisterPassword.getText().toString();
     }
 
     private String getFormRepeatPassword() {
-        return input_register_repeat_password.getText().toString();
+        return inputRegisterRepeatPassword.getText().toString();
     }
 
     private boolean isFormValid(String username, String password, String repeat_password) {
