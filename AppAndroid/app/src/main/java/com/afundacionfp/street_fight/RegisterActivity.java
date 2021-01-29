@@ -70,7 +70,7 @@ public class RegisterActivity extends AppCompatActivity {
             intent.putExtra("password_sha", passwordSha);
             startActivity(intent);
         } else {
-            Toast.makeText(RegisterActivity.this, "Rellene todos los campos", Toast.LENGTH_SHORT).show();
+            Toast.makeText(RegisterActivity.this, "Rellene todos los campos correctamente", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -89,11 +89,11 @@ public class RegisterActivity extends AppCompatActivity {
     private boolean isFormValid(String username, String password, String repeat_password) {
         boolean isValid = true;
 
-        if (getFormUsername().equals("")) {
+        if (username.equals("")) {
             isValid = false;
         }
 
-        if (getFormPassword().equals("") || !getFormPassword().equals(getFormRepeatPassword())) {
+        if (password.equals("") || !password.equals(repeat_password)) {
             isValid = false;
         }
 
