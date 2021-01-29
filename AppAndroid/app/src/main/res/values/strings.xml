@@ -22,4 +22,6 @@
     <string name="flag_ok">OK</string>
     <string name="fight">Luchad!!!</string>
     <string name="capture_start">Captura     comenzada</string>
+    <string name="clan_id">CLAN ID</string>
+    <string name="join_and_create">JOIN AND CREATE</string>
 </resources>
