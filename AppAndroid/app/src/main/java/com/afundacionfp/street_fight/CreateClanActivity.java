@@ -59,7 +59,7 @@ public class CreateClanActivity extends AppCompatActivity {
                         Toast.makeText(CreateClanActivity.this, "El color debe ser en formato hexadecimal", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(CreateClanActivity.this, "Debe rellenar como mínimo el nombre y el color", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CreateClanActivity.this, "Los campos nombre y el color son requeridos", Toast.LENGTH_SHORT).show();
                 }
             }
         });
