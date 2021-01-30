@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/fondo_azul_1000">
+
+    <ImageView
+        android:id="@+id/login_app_logo"
+        android:layout_width="220dp"
+        android:layout_height="220dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/flag_blue_500t"
+        android:contentDescription="@string/todo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/input_create_clan_name"
+        android:layout_width="220dp"
+        android:layout_height="69dp"
+        android:layout_marginTop="32dp"
+        android:autofillHints=""
+        android:background="@drawable/fondo_boton"
+        android:ems="10"
+        android:fontFamily="@font/bungee"
+        android:hint="@string/clan_name"
+        android:inputType="text"
+        android:textAlignment="center"
+        android:textColorHint="@color/texto_hint"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/login_app_logo" />
+
+    <EditText
+        android:id="@+id/input_create_clan_acronym"
+        android:layout_width="220dp"
+        android:layout_height="69dp"
+        android:layout_marginTop="8dp"
+        android:autofillHints=""
+        android:background="@drawable/fondo_boton"
+        android:ems="10"
+        android:fontFamily="@font/bungee"
+        android:hint="@string/clan_acronym"
+        android:inputType="text"
+        android:textAlignment="center"
+        android:textColorHint="@color/texto_hint"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/input_create_clan_name" />
+
+    <EditText
+        android:id="@+id/input_create_clan_color"
+        android:layout_width="220dp"
+        android:layout_height="69dp"
+        android:layout_marginTop="8dp"
+        android:autofillHints=""
+        android:background="@drawable/fondo_boton"
+        android:ems="10"
+        android:fontFamily="@font/bungee"
+        android:hint="@string/clan_color"
+        android:inputType="text"
+        android:textAlignment="center"
+        android:textColorHint="@color/texto_hint"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/input_create_clan_acronym" />
+
+    <EditText
+        android:id="@+id/input_create_clan_url_icon"
+        android:layout_width="220dp"
+        android:layout_height="69dp"
+        android:layout_marginTop="8dp"
+        android:autofillHints=""
+        android:background="@drawable/fondo_boton"
+        android:ems="10"
+        android:fontFamily="@font/bungee"
+        android:hint="@string/clan_icon_url"
+        android:inputType="textUri"
+        android:textAlignment="center"
+        android:textColorHint="@color/texto_hint"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/input_create_clan_color" />
+
+    <ImageButton
+        android:id="@+id/button_create_clan_submit"
+        android:layout_width="220dp"
+        android:layout_height="69dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/fondo_boton"
+        android:contentDescription="@string/todo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/input_create_clan_url_icon" />
+
+    <TextView
+        android:id="@+id/text_create_clan_submit"
+        android:layout_width="151dp"
+        android:layout_height="46dp"
+        android:fontFamily="@font/bungee"
+        android:gravity="center"
+        android:text="@string/crear_clan"
+        android:textAlignment="center"
+        android:textColor="@color/text_black"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/button_create_clan_submit"
+        app:layout_constraintEnd_toEndOf="@+id/button_create_clan_submit"
+        app:layout_constraintStart_toStartOf="@+id/button_create_clan_submit"
+        app:layout_constraintTop_toTopOf="@+id/button_create_clan_submit" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

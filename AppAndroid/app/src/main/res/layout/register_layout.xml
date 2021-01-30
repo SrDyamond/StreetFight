@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/fondo_azul_1000">
+
+    <ImageView
+        android:id="@+id/register_app_logo"
+        android:layout_width="220dp"
+        android:layout_height="220dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/flag_blue_500t"
+        android:contentDescription="@string/todo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/input_register_username"
+        android:layout_width="220dp"
+        android:layout_height="69dp"
+        android:layout_marginTop="24dp"
+        android:autofillHints=""
+        android:background="@drawable/fondo_boton"
+        android:fontFamily="@font/bungee"
+        android:hint="@string/insert_username"
+        android:inputType="textPersonName"
+        android:textAlignment="center"
+        android:textColorHint="@color/texto_hint"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/register_app_logo" />
+
+    <EditText
+        android:id="@+id/input_register_password"
+        android:layout_width="220dp"
+        android:layout_height="69dp"
+        android:layout_marginTop="8dp"
+        android:autofillHints=""
+        android:background="@drawable/fondo_boton"
+        android:ems="10"
+        android:fontFamily="@font/bungee"
+        android:hint="@string/insert_pass"
+        android:inputType="textPassword"
+        android:textAlignment="center"
+        android:textColorHint="@color/texto_hint"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/input_register_username" />
+
+    <EditText
+        android:id="@+id/input_register_repeat_password"
+        android:layout_width="220dp"
+        android:layout_height="69dp"
+        android:layout_marginTop="8dp"
+        android:autofillHints=""
+        android:background="@drawable/fondo_boton"
+        android:ems="10"
+        android:fontFamily="@font/bungee"
+        android:hint="@string/repeat_pass"
+        android:inputType="textPassword"
+        android:textAlignment="center"
+        android:textColorHint="@color/texto_hint"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/input_register_password" />
+
+    <ImageButton
+        android:id="@+id/button_register_join_clan"
+        android:layout_width="220dp"
+        android:layout_height="69dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/fondo_boton"
+        android:contentDescription="@string/todo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/input_register_repeat_password" />
+
+    <TextView
+        android:id="@+id/text_register_join_clan"
+        android:layout_width="132dp"
+        android:layout_height="46dp"
+        android:fontFamily="@font/bungee"
+        android:hint="@string/join_clan"
+        android:textAlignment="center"
+        android:textColorHint="@color/text_black"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/button_register_join_clan"
+        app:layout_constraintEnd_toEndOf="@+id/button_register_join_clan"
+        app:layout_constraintHorizontal_bias="0.528"
+        app:layout_constraintStart_toStartOf="@+id/button_register_join_clan"
+        app:layout_constraintTop_toTopOf="@+id/button_register_join_clan"
+        app:layout_constraintVertical_bias="0.44" />
+
+    <ImageButton
+        android:id="@+id/button_register_create_clan"
+        android:layout_width="220dp"
+        android:layout_height="69dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/fondo_boton"
+        android:contentDescription="@string/todo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_register_join_clan" />
+
+    <TextView
+        android:id="@+id/text_register_create_clan"
+        android:layout_width="131dp"
+        android:layout_height="45dp"
+        android:fontFamily="@font/bungee"
+        android:hint="@string/create_clan"
+        android:textAlignment="center"
+        android:textColorHint="@color/text_black"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/button_register_create_clan"
+        app:layout_constraintEnd_toEndOf="@+id/button_register_create_clan"
+        app:layout_constraintStart_toStartOf="@+id/button_register_create_clan"
+        app:layout_constraintTop_toTopOf="@+id/button_register_create_clan" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
