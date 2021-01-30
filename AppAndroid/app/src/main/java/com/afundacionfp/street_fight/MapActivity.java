@@ -40,7 +40,6 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         Objects.requireNonNull(getSupportActionBar()).hide();
-
         //  Use icon on another class
         if (Coordinates.resources == null) {
             Coordinates.resources = getResources();
@@ -84,8 +83,8 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
         // HAY QUE INICIAR EL EMULADOR Y SETEAR LA LOCALIZACIÓN ANTES DE EJECUTAR LA APP
         if (loc != null) { // ESTO ES PARA QUE LA APP NO CASQUE
             locPoint = new GeoPoint(loc.getLatitude(), loc.getLongitude());
-
             mapController.setCenter(locPoint);
+            
 
             //  Add coordinates
             Coordinates.coors(map);

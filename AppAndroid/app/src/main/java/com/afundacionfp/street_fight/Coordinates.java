@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
@@ -19,7 +21,6 @@ public class Coordinates {
             List<Marker> startMarker = new ArrayList<>();
             //  Add coordinates
             startMarker.add(new Marker(map));
-
             startMarker.get(i).setPosition(coors_num(i));
             startMarker.get(i).setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
             startMarker.get(i).setIcon(coors_icons(i));
@@ -27,7 +28,8 @@ public class Coordinates {
             map.getOverlays().add(startMarker.get(i));
         }
     }
-
+    /*
+    String url = "http://"+MainActivity.DJANGOSERVERIP+"/user";
     public static GeoPoint coors_num(int i) {
         List<GeoPoint> coors_num = new ArrayList<>();
         //  Add coordinate number
@@ -52,6 +54,8 @@ public class Coordinates {
         return coors_desc.get(i);
     }
 
+
+     */
     @SuppressLint("UseCompatLoadingForDrawables")
     public static Drawable coors_icons(int i) {
         List<Drawable> coors_icons = new ArrayList<>();

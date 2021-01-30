@@ -70,7 +70,7 @@ public class CreateClanActivity extends AppCompatActivity {
         Log.d("# REGISTER REST", "'" + username + "', '" + passwordSha + "', '" + clanName + "', '" + clanAcronym + "', '" + clanColor + "', '" + clanUrlIcon + "'");
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-        String url = "http://192.168.111.111:8000/user";
+        String url = "http://"+MainActivity.DJANGOSERVERIP+"/user";
 
         JSONObject requestBodyJson = new JSONObject();
         JSONObject newClanJson = new JSONObject();

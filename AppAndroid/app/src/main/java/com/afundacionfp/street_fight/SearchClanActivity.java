@@ -68,7 +68,7 @@ public class SearchClanActivity extends AppCompatActivity {
         Log.d("# REGISTER REST", username + ", " + passwordSha + ", " + idClan);
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-        String url = "http://192.168.111.111:8000/user";
+        String url = "http://"+MainActivity.DJANGOSERVERIP+"/user";
 
         JSONObject requestBodyJson = new JSONObject();
         try {
