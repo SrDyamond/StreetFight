@@ -25,11 +25,11 @@ SECRET_KEY = 'poo4yf7t7x=4#$$m9f!+4$zhui^0%!wbpnn)ka3))im0k_&^b0'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '192.168.111.111']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '192.168.111.111','192.168.0.11']
 
 # https://github.com/adamchainz/django-cors-headers
 from corsheaders.defaults import default_headers
-CORS_ALLOW_ALL_ORIGINS = DEBUG 
+CORS_ALLOW_ALL_ORIGINS = DEBUG
 CORS_ALLOW_HEADERS = list(default_headers) + [
     'sessioncookie'
 ]
