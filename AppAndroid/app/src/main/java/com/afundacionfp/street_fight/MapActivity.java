@@ -15,6 +15,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
+
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -34,17 +37,17 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
     private LocationManager locManager;
     private GeoPoint locPoint;
     private IMapController mapController;
+    private Flags flags;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         Objects.requireNonNull(getSupportActionBar()).hide();
-
         //  Use icon on another class
-        if (Coordinates.resources == null) {
-            Coordinates.resources = getResources();
-        }
+        // if (Coordinates.resources == null) {
+        //     Coordinates.resources = getResources();
+        // }
 
         //handle permissions first, before map is created. not depicted here
 
@@ -84,12 +87,11 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
         // HAY QUE INICIAR EL EMULADOR Y SETEAR LA LOCALIZACIÓN ANTES DE EJECUTAR LA APP
         if (loc != null) { // ESTO ES PARA QUE LA APP NO CASQUE
             locPoint = new GeoPoint(loc.getLatitude(), loc.getLongitude());
-
             mapController.setCenter(locPoint);
-
+            // Coordinates.ubicacion(loc.getLatitude(), loc.getLongitude());
             //  Add coordinates
-            Coordinates.coors(map);
-
+            // Coordinates.coors(map);
+            flags =new Flags(this,getResources(),map,loc.getLatitude(), loc.getLongitude());
             /*
             //  Prueva de icono en mapa
             GeoPoint startPoint2 = new GeoPoint(43.36209, -8.41248);
@@ -134,6 +136,7 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
         loc = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         locPoint = new GeoPoint(loc.getLatitude(), loc.getLongitude());
         mapController.animateTo(locPoint);
+        flags.sendFlagRequest(loc.getLatitude(),loc.getLongitude());
     }
 
     //  Must stay to work

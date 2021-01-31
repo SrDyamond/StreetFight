@@ -76,7 +76,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-        String url = "http://192.168.111.111:8000/user/" + username + "/session";
+        String url = "http://"+MainActivity.DJANGOSERVERIP+"/user/" + username + "/session";
 
         JSONObject requestBodyJson = new JSONObject();
         try {
