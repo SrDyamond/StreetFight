@@ -29,7 +29,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
-    public static final String DJANGOSERVERIP ="192.168.0.165:8000";
+//    public static final String DJANGOSERVERIP ="192.168.0.165:8000";
+    public static final String DJANGOSERVERIP ="192.168.111.111:8000";
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
