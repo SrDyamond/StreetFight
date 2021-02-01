@@ -2,21 +2,21 @@ package com.afundacionfp.street_fight;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.View;
 import android.view.Window;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
@@ -62,7 +62,17 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
         //tile servers will get you banned based on this string
 
         //inflate and create the map
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.map_layout);
+
+        ImageButton buttonPlayerInfo = findViewById(R.id.button_player_info);
+        buttonPlayerInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), UserDetailActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
         //  Localization
         locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);

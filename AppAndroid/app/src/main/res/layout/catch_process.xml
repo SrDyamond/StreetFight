@@ -7,7 +7,7 @@
     android:layout_height="match_parent">
 
     <include
-        layout="@layout/activity_main"
+        layout="@layout/map_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
