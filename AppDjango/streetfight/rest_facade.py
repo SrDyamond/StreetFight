@@ -13,6 +13,12 @@ from django.views.decorators.csrf import csrf_exempt
 from . import custom_error_response
 
 
+def _to_milliseconds(datetime):
+    # https://stackoverflow.com/questions/6999726/how-can-i-convert-a-datetime-object-to-milliseconds-since-epoch-unix-time-in-p#comment43779166_23004143
+    # return int(datetime.replace(tzinfo=timezone.utc).timestamp() * 1000)
+    return int(datetime.timestamp() * 1000)
+
+
 @csrf_exempt
 def session(request, username):
     # Si recibimos una peticion que no es PUT, devolvemos un 405
@@ -48,7 +54,7 @@ def login(request, username):
         response = {
             "user_id": user.id,
             "session_cookie": session_cookie,
-            "expiration": expiartion_date.timestamp()  # considerar si es la mejor forma
+            "expiration": _to_milliseconds(expiartion_date)  # revisar funcionamiento
         }
         new_session = Sesion(
             id_usuario=user, fecha_caducidad=expiartion_date, valor_cookie=session_cookie)
@@ -293,7 +299,7 @@ def create_user(request):
     response = {
         "user_id": new_user.id,
         "session_cookie": session_cookie,
-        "expiration": expiartion_date.timestamp()
+        "expiration": _to_milliseconds(expiartion_date)  # revisar funcionamiento
     }
 
     new_session = Sesion(id_usuario=new_user, fecha_caducidad=expiartion_date, valor_cookie=session_cookie)
@@ -552,7 +558,7 @@ def clan_by_id(request, id_clan):
 
 
 @csrf_exempt
-def change_clan(request,username,id_clan):
+def change_clan(request, username, id_clan):
     if request.method != 'POST':
         return HttpResponseNotAllowed(['POST'])
     #si cookei es valida sino 401
@@ -594,7 +600,7 @@ def change_clan(request,username,id_clan):
 
 
 @csrf_exempt
-def try_capture(request,username,id_flag):
+def try_capture(request, username, id_flag):
     if request.method != 'POST':
         return HttpResponseNotAllowed(['POST']) # error 405
 
@@ -625,7 +631,28 @@ def try_capture(request,username,id_flag):
     except Bandera.DoesNotExist:
         return JsonResponse(custom_error_response.NOT_FOUND, status=404)
 
-    # CREAR INTENTO DE CAPTURA CON ESE USER Y ESA FLAG
-    new_intento=IntentoCaptura(id_usuario=user,id_bandera=flag)
-    new_intento.save()
+    # obtengo todos los intentos de captura sobre esa bandera
+    intento_captura_list = IntentoCaptura.objects.filter(id_bandera=flag)
+
+    # cuento cuantos usuarios de mi clan han realizado un intento de captura en los últimos 10 min
+    users_capturing = 0
+    for intento_captura in intento_captura_list:
+        antiguedad_intento_captura = timezone.now() - intento_captura.fecha
+        if intento_captura.id_usuario.id_clan == user.id_clan and antiguedad_intento_captura < datetime.timedelta(minutes=10):
+            users_capturing += 1
+
+    if users_capturing >= 1:
+        # si hay 1 o más usuarios de tu mismo clan la bandera se captura
+        flag.capturando = False
+        flag.id_clan = user.id_clan
+        # y borramos todos los intentos de captura asociados a esa bandera (creo que no lo voy a hacer)
+        # for intento_captura in intento_captura_list:
+        #     intento_captura.delete()
+    else:
+        # sino creamos un nuevo intento de captura
+        flag.capturando = True
+        new_intento = IntentoCaptura(id_usuario=user, id_bandera=flag)
+        new_intento.save()
+    flag.save()
+
     return JsonResponse(custom_error_response.CAPTURE_STARTED, status=200)
