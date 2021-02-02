@@ -21,6 +21,7 @@ public class CreateClanActivity extends AppCompatActivity {
     EditText inputCreateClanColor;
     EditText inputCreateClanUrlIcon;
     String username;
+    String passwordSha;
     String session_cookie;
     String from;
 
@@ -32,6 +33,7 @@ public class CreateClanActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         username = intent.getStringExtra("username");
+        passwordSha = intent.getStringExtra("password_sha");
         session_cookie = intent.getStringExtra("session_cookie");
         from = intent.getStringExtra("from");
 
@@ -41,7 +43,6 @@ public class CreateClanActivity extends AppCompatActivity {
         inputCreateClanAcronym = findViewById(R.id.input_create_clan_acronym);
         inputCreateClanColor = findViewById(R.id.input_create_clan_color);
         inputCreateClanUrlIcon = findViewById(R.id.input_create_clan_url_icon);
-
     }
 
     public void onButtonCreateClanClick(View v){
@@ -92,8 +93,6 @@ public class CreateClanActivity extends AppCompatActivity {
         }
     }
 
-
-
     private void parseErrorResponse(JSONObject errorResponseBodyJson) {
         int errorCode = 0;
 
@@ -112,10 +111,9 @@ public class CreateClanActivity extends AppCompatActivity {
                 Toast.makeText(this, "Conflicto", Toast.LENGTH_SHORT).show();
                 break;
             default:
-                Toast.makeText(this, "Error al crear el usuario", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Otro error", Toast.LENGTH_SHORT).show();
                 break;
         }
-
     }
 
 }

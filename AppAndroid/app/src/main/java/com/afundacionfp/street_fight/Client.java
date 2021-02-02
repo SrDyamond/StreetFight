@@ -1,9 +1,7 @@
 package com.afundacionfp.street_fight;
 
 import android.content.Context;
-import android.nfc.cardemulation.HostApduService;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -281,4 +279,38 @@ public class Client {
         requestQueue.add(jsonArrayRequest);
     }
 
+    public void sendChangeClanRest(String username, String sessionCookie, int idClan, ResponseHandlerObject handler) {
+        Log.d("# REGISTER REST", "'" + username + "', '" + sessionCookie );
+        // Instantiate the RequestQueue.
+        String url = "http://"+ DJANGOSERVERIP +"/user/"+username+"/clan/"+idClan;
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequestCustomHeader(Request.Method.POST, url, sessionCookie, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("## RESPONSE", response.toString());
+                        handler.onOkResponse(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        String responseBodyString = new String(error.networkResponse.data, StandardCharsets.UTF_8);
+                        JSONObject errorResponseBodyJson = null;
+                        try {
+                            errorResponseBodyJson = new JSONObject(responseBodyString);
+                        } catch (JSONException e) {
+                            // e.printStackTrace();
+                            Log.d("## ERROR-L1", error.toString());
+                            Log.d("## ERROR-L2", responseBodyString);
+                        }
+                        // assert errorResponseBodyJson != null;
+                        Log.d("## ERROR-JSON", errorResponseBodyJson.toString());
+                        handler.onErrorResponse(errorResponseBodyJson);
+                    }
+                });
+
+        // Add the request to the RequestQueue.
+        requestQueue.add(jsonObjectRequest);
+    }
 }

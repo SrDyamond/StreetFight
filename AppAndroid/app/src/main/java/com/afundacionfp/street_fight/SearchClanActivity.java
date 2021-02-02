@@ -19,6 +19,7 @@ public class SearchClanActivity extends AppCompatActivity {
     private EditText inputJoinClanId;
     private String username;
     private String passwordSha;
+    private String sessionCookie;
     String from;
 
     @Override
@@ -30,6 +31,7 @@ public class SearchClanActivity extends AppCompatActivity {
         Intent intent = getIntent();
         username = intent.getStringExtra("username");
         passwordSha = intent.getStringExtra("password_sha");
+        sessionCookie = intent.getStringExtra("session_cookie");
         from = intent.getStringExtra("from");
 
         setContentView(R.layout.search_clan_layout_tmp);
@@ -54,7 +56,6 @@ public class SearchClanActivity extends AppCompatActivity {
                         Intent intent = new Intent(getApplicationContext(), MapActivity.class);
                         startActivity(intent);
                     }
-
                     @Override
                     public void onErrorResponse(JSONObject errorResponseJson) {
                         //assert errorResponseJson != null;
@@ -63,6 +64,16 @@ public class SearchClanActivity extends AppCompatActivity {
                 });
             } else if (from.equals("detail")) {
                 // SOLO NOS UNIMOS AL CLAN /user/{username}/clan/{id_clan} (POST)
+                Client.getInstance(this).sendChangeClanRest(username, sessionCookie, idClan, new ResponseHandlerObject() {
+                    @Override
+                    public void onOkResponse(JSONObject okResponseJson) {
+                        finish();
+                    }
+                    @Override
+                    public void onErrorResponse(JSONObject errorResponseJson) {
+                        parseErrorResponse(errorResponseJson);
+                    }
+                });
             }
         } else {
             Toast.makeText(getApplicationContext(), "Introduce un id de clan válido", Toast.LENGTH_SHORT).show();
@@ -78,11 +89,23 @@ public class SearchClanActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        if (errorCode == 4005) {
-            Toast.makeText(this, "Conflicto", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "Error al crear el usuario", Toast.LENGTH_SHORT).show();
+        switch (errorCode) {
+            case 4003:
+                Toast.makeText(this, "Sesion invalida", Toast.LENGTH_SHORT).show();
+                //TODO:BORRA LA PERSISTENCIA DE LA COOKIE PORQUE ES INVALIDA
+                break;
+            case 4004:
+                Toast.makeText(this, "El usuario no existe", Toast.LENGTH_SHORT).show();
+                //TODO:BORRA LA PERSISTENCIA DE LA COOKIE PORQUE ES INVALIDA
+                break;
+            case 4005:
+                Toast.makeText(this, "Conflicto", Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                Toast.makeText(this, "Otro error", Toast.LENGTH_SHORT).show();
+                break;
         }
+
     }
 
 }
