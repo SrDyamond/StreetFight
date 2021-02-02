@@ -2,29 +2,28 @@ package com.afundacionfp.street_fight;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 public class CreateClanActivity extends AppCompatActivity {
+
+    EditText inputCreateClanName;
+    EditText inputCreateClanAcronym;
+    EditText inputCreateClanColor;
+    EditText inputCreateClanUrlIcon;
+    String username;
+    String passwordSha;
+    String session_cookie;
+    String from;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,96 +32,66 @@ public class CreateClanActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).hide();
 
         Intent intent = getIntent();
-        final String username = intent.getStringExtra("username");
-        final String passwordSha = intent.getStringExtra("password_sha");
+        username = intent.getStringExtra("username");
+        passwordSha = intent.getStringExtra("password_sha");
+        session_cookie = intent.getStringExtra("session_cookie");
+        from = intent.getStringExtra("from");
 
         setContentView(R.layout.create_clan_layout);
 
-        EditText inputCreateClanName = findViewById(R.id.input_create_clan_name);
-        EditText inputCreateClanAcronym = findViewById(R.id.input_create_clan_acronym);
-        EditText inputCreateClanColor = findViewById(R.id.input_create_clan_color);
-        EditText inputCreateClanUrlIcon = findViewById(R.id.input_create_clan_url_icon);
-
-        ImageButton buttonCreateClanSubmit = findViewById(R.id.button_create_clan_submit);
-        buttonCreateClanSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final String clanName = inputCreateClanName.getText().toString();
-                final String clanAcronym = inputCreateClanAcronym.getText().toString();
-                final String clanColor = inputCreateClanColor.getText().toString();
-                final String clanUrlIcon = inputCreateClanUrlIcon.getText().toString();
-
-                if (!clanName.equals("") && !clanColor.equals("")) {
-                    if (clanColor.charAt(0) == '#' && clanColor.length() == 7) {
-                        sendRegisterRest(username, passwordSha, clanName, clanAcronym, clanColor, clanUrlIcon);
-                    } else {
-                        Toast.makeText(CreateClanActivity.this, "El color debe ser en formato hexadecimal", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(CreateClanActivity.this, "Los campos nombre y el color son requeridos", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
+        inputCreateClanName = findViewById(R.id.input_create_clan_name);
+        inputCreateClanAcronym = findViewById(R.id.input_create_clan_acronym);
+        inputCreateClanColor = findViewById(R.id.input_create_clan_color);
+        inputCreateClanUrlIcon = findViewById(R.id.input_create_clan_url_icon);
     }
 
-    private void sendRegisterRest(String username, String passwordSha, String clanName, String clanAcronym, String clanColor, String clanUrlIcon) {
-        Log.d("# REGISTER REST", "'" + username + "', '" + passwordSha + "', '" + clanName + "', '" + clanAcronym + "', '" + clanColor + "', '" + clanUrlIcon + "'");
-        // Instantiate the RequestQueue.
-        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-        String url = "http://"+MainActivity.DJANGOSERVERIP+"/user";
+    public void onButtonCreateClanClick(View v){
+        final String clanName = inputCreateClanName.getText().toString();
+        final String clanAcronym = inputCreateClanAcronym.getText().toString();
+        final String clanColor = inputCreateClanColor.getText().toString();
+        final String clanUrlIcon = inputCreateClanUrlIcon.getText().toString();
 
-        JSONObject requestBodyJson = new JSONObject();
-        JSONObject newClanJson = new JSONObject();
-        try {
-            newClanJson.put("name", clanName);
-            newClanJson.put("color", clanName);
-
-            if (!clanAcronym.equals("")) {
-                newClanJson.put("acronym", clanAcronym);
-            }
-
-            if (!clanUrlIcon.equals("")) {
-                newClanJson.put("url_icon", clanUrlIcon);
-            }
-
-            requestBodyJson.put("username", username);
-            requestBodyJson.put("password_sha", passwordSha);
-            requestBodyJson.put("create_clan", newClanJson);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, requestBodyJson,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d("## RESPONSE", response.toString());
-                        // FALTA GUARDAR LA COOKIE EN LA PERSISTENCIA, ASÍ COMO EL ID DEL USUARIO Y LA FECHA DE EXPIRACIÓN DE LA SESIÓN
-                        Intent intent = new Intent(getApplicationContext(), MapActivity.class);
-                        startActivity(intent);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        String responseBodyString = new String(error.networkResponse.data, StandardCharsets.UTF_8);
-                        JSONObject errorResponseBodyJson = null;
-                        try {
-                            errorResponseBodyJson = new JSONObject(responseBodyString);
-                        } catch (JSONException e) {
-                            // e.printStackTrace();
-                            Log.d("## ERROR-L1", error.toString());
-                            Log.d("## ERROR-L2", responseBodyString);
+        if (!clanName.equals("") && !clanColor.equals("")) {
+            if (clanColor.charAt(0) == '#' && clanColor.length() == 7) {
+                if (from.equals("register")) {
+                    Client.getInstance(this).sendRegisterCreateClanRest(username, passwordSha, clanName, clanAcronym, clanColor, clanUrlIcon, new ResponseHandlerObject() {
+                        @Override
+                        public void onOkResponse(JSONObject okResponseJson) {
+                            // FALTA GUARDAR LA COOKIE EN LA PERSISTENCIA, ASÍ COMO EL ID DEL USUARIO Y LA FECHA DE EXPIRACIÓN DE LA SESIÓN
+                            Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+                            startActivity(intent);
                         }
-                        assert errorResponseBodyJson != null;
-                        Log.d("## ERROR-JSON", errorResponseBodyJson.toString());
-                        parseErrorResponse(errorResponseBodyJson);
-                    }
-                });
 
-        // Add the request to the RequestQueue.
-        queue.add(jsonObjectRequest);
+                        @Override
+                        public void onErrorResponse(JSONObject errorResponseJson) {
+                            parseErrorResponse(errorResponseJson);
+                        }
+                    });
+                } else if (from.equals("detail")) {
+                    // SOLO CREAMOS EL CLAN /clan (POST)
+                    Integer idUser = null;
+                    if (MainActivity.user != null) {
+                        idUser = MainActivity.user.getUserId();
+                    }
+                    
+                    assert idUser != null;
+                    Client.getInstance(this).sendCreateClanRest(idUser, username, session_cookie, clanName, clanAcronym, clanColor, clanUrlIcon, new ResponseHandlerObject() {
+                        @Override
+                        public void onOkResponse(JSONObject okResponseJson) {
+                            finish();
+                        }
+                        @Override
+                        public void onErrorResponse(JSONObject errorResponseJson) {
+                            parseErrorResponse(errorResponseJson);
+                        }
+                    });
+                }
+            } else {
+                Toast.makeText(CreateClanActivity.this, "El color debe ser en formato hexadecimal", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(CreateClanActivity.this, "Los campos nombre y el color son requeridos", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void parseErrorResponse(JSONObject errorResponseBodyJson) {
@@ -134,10 +103,17 @@ public class CreateClanActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        if (errorCode == 4005) {
-            Toast.makeText(this, "Conflicto", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "Error al crear el usuario", Toast.LENGTH_SHORT).show();
+        switch (errorCode) {
+            case 4003:
+                Toast.makeText(this, "Sesion invalida", Toast.LENGTH_SHORT).show();
+                //TODO:BORRA LA PERSISTENCIA DE LA COOKIE PORQUE ES INVALIDA
+                break;
+            case 4005:
+                Toast.makeText(this, "Conflicto", Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                Toast.makeText(this, "Otro error", Toast.LENGTH_SHORT).show();
+                break;
         }
     }
 

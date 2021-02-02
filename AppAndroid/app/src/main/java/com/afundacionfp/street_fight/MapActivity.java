@@ -62,6 +62,8 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
         //tile servers will get you banned based on this string
 
         //inflate and create the map
+
+
         setContentView(R.layout.map_layout);
 
         ImageButton buttonPlayerInfo = findViewById(R.id.button_player_info);

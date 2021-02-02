@@ -2,31 +2,25 @@ package com.afundacionfp.street_fight;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 public class SearchClanActivity extends AppCompatActivity {
 
     private EditText inputJoinClanId;
+    private String username;
+    private String passwordSha;
+    private String sessionCookie;
+    String from;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,80 +29,55 @@ public class SearchClanActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).hide();
 
         Intent intent = getIntent();
-        final String username = intent.getStringExtra("username");
-        final String passwordSha = intent.getStringExtra("password_sha");
+        username = intent.getStringExtra("username");
+        passwordSha = intent.getStringExtra("password_sha");
+        sessionCookie = intent.getStringExtra("session_cookie");
+        from = intent.getStringExtra("from");
 
         setContentView(R.layout.search_clan_layout_tmp);
 
         this.inputJoinClanId = findViewById(R.id.input_join_clan_id);
-
-        ImageButton buttonJoinClan = findViewById(R.id.button_join_clan);
-        buttonJoinClan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final String idClanStr = inputJoinClanId.getText().toString();
-                Integer idClan = null;
-
-                try {
-                    idClan = Integer.parseInt(idClanStr);
-                } catch (NumberFormatException ignored) {}
-
-                if (idClan != null) {
-                    sendRegisterRest(username, passwordSha, idClan);
-                } else {
-                    Toast.makeText(getApplicationContext(), "Introduce un id de clan válido", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
     }
 
-    // COMANDO PYTHON: python manage.py runserver <LA_IP_DE_TU_PC>:8000
-    private void sendRegisterRest(String username, String passwordSha, int idClan) {
-        Log.d("# REGISTER REST", username + ", " + passwordSha + ", " + idClan);
-        // Instantiate the RequestQueue.
-        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-        String url = "http://"+MainActivity.DJANGOSERVERIP+"/user";
+    public void onButtonJoinClanClick(View v) {
+        final String idClanStr = inputJoinClanId.getText().toString();
+        Integer idClan = null;
 
-        JSONObject requestBodyJson = new JSONObject();
         try {
-            requestBodyJson.put("username", username);
-            requestBodyJson.put("password_sha", passwordSha);
-            requestBodyJson.put("join_clan_id", idClan);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+            idClan = Integer.parseInt(idClanStr);
+        } catch (NumberFormatException ignored) {}
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, requestBodyJson,
-                new Response.Listener<JSONObject>() {
+        if (idClan != null) {
+            if (from.equals("register")) {
+                Client.getInstance(this).sendRegisterJoinClanRest(username, passwordSha, idClan, new ResponseHandlerObject() {
                     @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d("## RESPONSE", response.toString());
+                    public void onOkResponse(JSONObject okResponseJson) {
                         // FALTA GUARDAR LA COOKIE EN LA PERSISTENCIA, ASÍ COMO EL ID DEL USUARIO Y LA FECHA DE EXPIRACIÓN DE LA SESIÓN
                         Intent intent = new Intent(getApplicationContext(), MapActivity.class);
                         startActivity(intent);
                     }
-                },
-                new Response.ErrorListener() {
                     @Override
-                    public void onErrorResponse(VolleyError error) {
-                        String responseBodyString = new String(error.networkResponse.data, StandardCharsets.UTF_8);
-                        JSONObject errorResponseBodyJson = null;
-                        try {
-                            errorResponseBodyJson = new JSONObject(responseBodyString);
-                        } catch (JSONException e) {
-                            // e.printStackTrace();
-                            Log.d("## ERROR-L1", error.toString());
-                            Log.d("## ERROR-L2", responseBodyString);
-                        }
-                        assert errorResponseBodyJson != null;
-                        Log.d("## ERROR-JSON", errorResponseBodyJson.toString());
-                        parseErrorResponse(errorResponseBodyJson);
+                    public void onErrorResponse(JSONObject errorResponseJson) {
+                        //assert errorResponseJson != null;
+                        parseErrorResponse(errorResponseJson);
                     }
                 });
-
-        // Add the request to the RequestQueue.
-        queue.add(jsonObjectRequest);
+            } else if (from.equals("detail")) {
+                // SOLO NOS UNIMOS AL CLAN /user/{username}/clan/{id_clan} (POST)
+                Client.getInstance(this).sendChangeClanRest(username, sessionCookie, idClan, new ResponseHandlerObject() {
+                    @Override
+                    public void onOkResponse(JSONObject okResponseJson) {
+                        finish();
+                    }
+                    @Override
+                    public void onErrorResponse(JSONObject errorResponseJson) {
+                        parseErrorResponse(errorResponseJson);
+                    }
+                });
+            }
+        } else {
+            Toast.makeText(getApplicationContext(), "Introduce un id de clan válido", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void parseErrorResponse(JSONObject errorResponseBodyJson) {
@@ -120,11 +89,23 @@ public class SearchClanActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        if (errorCode == 4005) {
-            Toast.makeText(this, "Conflicto", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "Error al crear el usuario", Toast.LENGTH_SHORT).show();
+        switch (errorCode) {
+            case 4003:
+                Toast.makeText(this, "Sesion invalida", Toast.LENGTH_SHORT).show();
+                //TODO:BORRA LA PERSISTENCIA DE LA COOKIE PORQUE ES INVALIDA
+                break;
+            case 4004:
+                Toast.makeText(this, "El usuario no existe", Toast.LENGTH_SHORT).show();
+                //TODO:BORRA LA PERSISTENCIA DE LA COOKIE PORQUE ES INVALIDA
+                break;
+            case 4005:
+                Toast.makeText(this, "Conflicto", Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                Toast.makeText(this, "Otro error", Toast.LENGTH_SHORT).show();
+                break;
         }
+
     }
 
 }
