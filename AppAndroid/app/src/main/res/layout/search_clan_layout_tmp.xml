@@ -29,6 +29,7 @@
         android:layout_marginTop="16dp"
         android:background="@drawable/fondo_boton_220"
         android:contentDescription="@string/todo"
+        android:onClick="onButtonJoinClanClick"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/input_join_clan_id" />
