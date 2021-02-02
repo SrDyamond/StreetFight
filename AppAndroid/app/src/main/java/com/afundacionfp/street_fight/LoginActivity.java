@@ -38,7 +38,7 @@ public class LoginActivity extends AppCompatActivity {
         if (!username.equals("") && !password.equals("")) {
             //sendLoginRest(username, password);
             Client.getInstance(this).sendLoginRest(
-                    username, password, new ResponseHandler() {
+                    username, password, new ResponseHandlerObject() {
                         @Override
                         public void onOkResponse(JSONObject okResponseJson) {
                             // FALTA GUARDAR LA COOKIE EN LA PERSISTENCIA, ASÍ COMO EL ID DEL USUARIO Y LA FECHA DE EXPIRACIÓN DE LA SESIÓN

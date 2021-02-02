@@ -1,20 +1,11 @@
 package com.afundacionfp.street_fight;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.core.content.res.ResourcesCompat;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,10 +13,6 @@ import org.json.JSONObject;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
-
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.ResourceBundle;
 
 public class Flags {
 
@@ -46,41 +33,18 @@ public class Flags {
         sendFlagRequest(latitude, longitude);
     }
 
-    public void sendFlagRequest(double latitude,double longitude){
-        // Instantiate the RequestQueue.
-        RequestQueue queue = Volley.newRequestQueue(context);
-        String url ="http://"+MainActivity.DJANGOSERVERIP+"/flag?latitude="+String.format("%1$,.7f", latitude)+"&longitude="+String.format("%1$,.7f", longitude)+"&radius="+String.format("%1$,.7f", radius);
+    public void sendFlagRequest(double latitude, double longitude){
+        Client.getInstance(context).sendFlagRequest(latitude, longitude, radius, new ResponseHandlerArray() {
+            @Override
+            public void onOkResponse(JSONArray okResponseJson) {
+                parseResponse(okResponseJson);
+            }
 
-
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        Log.d("########RESPONSE", response.toString());
-                        parseResponse(response);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                        String responseBodyString = new String(error.networkResponse.data, StandardCharsets.UTF_8);
-                        JSONObject errorResponseBodyJson = null;
-                        try {
-                            errorResponseBodyJson = new JSONObject(responseBodyString);
-                        } catch (JSONException e) {
-                            // e.printStackTrace();
-                            Log.d("########ERROR-L1", error.toString());
-                            Log.d("########ERROR-L2", responseBodyString);
-                        }
-                        assert errorResponseBodyJson != null;
-                        Log.d("########ERROR-JSON", errorResponseBodyJson.toString());
-                        Toast.makeText(context, "Error al obtener las banderas", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-        // Add the request to the RequestQueue.
-        queue.add(jsonArrayRequest);
+            @Override
+            public void onErrorResponse(JSONObject errorResponseJson) {
+                Toast.makeText(context, "Error al obtener las banderas", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void parseResponse(JSONArray jsonArrayFlags){

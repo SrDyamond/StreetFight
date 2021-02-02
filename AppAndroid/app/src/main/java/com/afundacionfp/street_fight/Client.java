@@ -1,16 +1,19 @@
 package com.afundacionfp.street_fight;
 
 import android.content.Context;
-import android.content.Intent;
+import android.nfc.cardemulation.HostApduService;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -44,7 +47,7 @@ public class Client {
         return new BigInteger(1, crypt.digest()).toString(16);
     }
 
-    public void sendLoginRest(String username, String password, ResponseHandler handler) {
+    public void sendLoginRest(String username, String password, ResponseHandlerObject handler) {
         String passwordSha = null;
         try {
             passwordSha = calculateSHA1(password);
@@ -90,7 +93,7 @@ public class Client {
         this.requestQueue.add(jsonObjectRequest);
     }
 
-    public void sendRegisterJoinClanRest(String username, String passwordSha, int idClan, ResponseHandler handler) {
+    public void sendRegisterJoinClanRest(String username, String passwordSha, int idClan, ResponseHandlerObject handler) {
         Log.d("# REGISTER REST", username + ", " + passwordSha + ", " + idClan);
 
         String url = "http://" + DJANGOSERVERIP + "/user";
@@ -133,7 +136,7 @@ public class Client {
         requestQueue.add(jsonObjectRequest);
     }
 
-    public void sendRegisterCreateClanRest(String username, String passwordSha, String clanName, String clanAcronym, String clanColor, String clanUrlIcon,ResponseHandler handler) {
+    public void sendRegisterCreateClanRest(String username, String passwordSha, String clanName, String clanAcronym, String clanColor, String clanUrlIcon, ResponseHandlerObject handler) {
         Log.d("# REGISTER REST", "'" + username + "', '" + passwordSha + "', '" + clanName + "', '" + clanAcronym + "', '" + clanColor + "', '" + clanUrlIcon + "'");
         // Instantiate the RequestQueue.
         String url = "http://"+ DJANGOSERVERIP +"/user";
@@ -187,6 +190,42 @@ public class Client {
 
         // Add the request to the RequestQueue.
         requestQueue.add(jsonObjectRequest);
+    }
+
+    public void sendFlagRequest(double latitude, double longitude, double radius, ResponseHandlerArray handler){
+        // Instantiate the RequestQueue.
+        String url ="http://"+ DJANGOSERVERIP+"/flag?latitude="+String.format("%1$,.7f", latitude)+"&longitude="+String.format("%1$,.7f", longitude)+"&radius="+String.format("%1$,.7f", radius);
+
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.d("########RESPONSE", response.toString());
+                        handler.onOkResponse(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        String responseBodyString = new String(error.networkResponse.data, StandardCharsets.UTF_8);
+                        JSONObject errorResponseBodyJson = null;
+                        try {
+                            errorResponseBodyJson = new JSONObject(responseBodyString);
+                        } catch (JSONException e) {
+                            // e.printStackTrace();
+                            Log.d("########ERROR-L1", error.toString());
+                            Log.d("########ERROR-L2", responseBodyString);
+                        }
+                        //assert errorResponseBodyJson != null;
+                        Log.d("########ERROR-JSON", errorResponseBodyJson.toString());
+                        handler.onErrorResponse(errorResponseBodyJson);
+                    }
+                });
+
+        // Add the request to the RequestQueue.
+        requestQueue.add(jsonArrayRequest);
     }
 
 }

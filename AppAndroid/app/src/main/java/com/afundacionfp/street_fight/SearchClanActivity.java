@@ -44,7 +44,7 @@ public class SearchClanActivity extends AppCompatActivity {
         } catch (NumberFormatException ignored) {}
 
         if (idClan != null) {
-            Client.getInstance(this).sendRegisterJoinClanRest(username, passwordSha, idClan, new ResponseHandler() {
+            Client.getInstance(this).sendRegisterJoinClanRest(username, passwordSha, idClan, new ResponseHandlerObject() {
                 @Override
                 public void onOkResponse(JSONObject okResponseJson) {
                     // FALTA GUARDAR LA COOKIE EN LA PERSISTENCIA, ASÍ COMO EL ID DEL USUARIO Y LA FECHA DE EXPIRACIÓN DE LA SESIÓN
