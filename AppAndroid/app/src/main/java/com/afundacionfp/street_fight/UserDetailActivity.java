@@ -5,12 +5,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Objects;
 
 public class UserDetailActivity extends AppCompatActivity {
+    private TextView username;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,6 +20,9 @@ public class UserDetailActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).hide();
 
         setContentView(R.layout.user_detail_layout);
+        username =findViewById(R.id.userdetails_username);
+        username.setText(MainActivity.user.getUsername());
+
 
         ImageButton buttonGotoChangeClan = findViewById(R.id.userdetails_changeclan_button);
         buttonGotoChangeClan.setOnClickListener(new View.OnClickListener() {
@@ -44,5 +49,4 @@ public class UserDetailActivity extends AppCompatActivity {
             }
         });
     }
-
 }

@@ -54,7 +54,7 @@ public class CreateClanActivity extends AppCompatActivity {
         if (!clanName.equals("") && !clanColor.equals("")) {
             if (clanColor.charAt(0) == '#' && clanColor.length() == 7) {
                 if (from.equals("register")) {
-                    Client.getInstance(this).sendRegisterCreateClanRest(username, session_cookie, clanName, clanAcronym, clanColor, clanUrlIcon, new ResponseHandlerObject() {
+                    Client.getInstance(this).sendRegisterCreateClanRest(username, passwordSha, clanName, clanAcronym, clanColor, clanUrlIcon, new ResponseHandlerObject() {
                         @Override
                         public void onOkResponse(JSONObject okResponseJson) {
                             // FALTA GUARDAR LA COOKIE EN LA PERSISTENCIA, ASÍ COMO EL ID DEL USUARIO Y LA FECHA DE EXPIRACIÓN DE LA SESIÓN
