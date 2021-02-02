@@ -37,10 +37,8 @@ def login(request, username):
     except Usuario.DoesNotExist:
         return JsonResponse(custom_error_response.NOT_FOUND, status=404)
 
-    clave_sha_concatenada_request_no_hash = request_body.get(
-        'password_sha') + user.salt
-    clave_sha_concatenada_request = hashlib.sha1(
-        str.encode(clave_sha_concatenada_request_no_hash)).hexdigest()
+    clave_sha_concatenada_request_no_hash = request_body.get('password_sha') + user.salt
+    clave_sha_concatenada_request = hashlib.sha1(str.encode(clave_sha_concatenada_request_no_hash)).hexdigest()
     clave_sha_concatenada_db = user.clave_sha_concatenada
 
     if clave_sha_concatenada_db == clave_sha_concatenada_request:
@@ -116,8 +114,7 @@ def flag(request):
     flags_in_area_list = []
 
     for flag in all_flags_list:
-        distance_to_location = math.sqrt(
-            (flag.latitud - user_latitude) ** 2 + (flag.longitud - user_longitude) ** 2)
+        distance_to_location = math.sqrt((flag.latitud - user_latitude) ** 2 + (flag.longitud - user_longitude) ** 2)
         # print(distance_to_location, "<=", search_radius, distance_to_location <= search_radius)
         # if distance_to_location < search_radius:
         if distance_to_location <= search_radius:
@@ -299,14 +296,13 @@ def create_user(request):
         "expiration": expiartion_date.timestamp()
     }
 
-    new_session = Sesion(
-        id_usuario=new_user, fecha_caducidad=expiartion_date, valor_cookie=session_cookie)
+    new_session = Sesion(id_usuario=new_user, fecha_caducidad=expiartion_date, valor_cookie=session_cookie)
     new_session.save()  # guardamos la nueva sesion en la DB
 
     return JsonResponse(response, status=200)
 
 
-@ csrf_exempt
+@csrf_exempt
 def user_by_username(request, username):
     if request.method != 'GET':
         return HttpResponseNotAllowed(['GET'])
@@ -321,7 +317,7 @@ def user_by_username(request, username):
     return JsonResponse(response, status=200)
 
 
-@ csrf_exempt
+@csrf_exempt
 def user_top(request):
 
     if request.method != 'GET':
@@ -381,7 +377,7 @@ def user_info(user):
     return response
 
 
-@ csrf_exempt
+@csrf_exempt
 def clan(request):
     if request.method == 'GET':
         return search_clan(request)
@@ -554,7 +550,8 @@ def clan_by_id(request, id_clan):
 
     return JsonResponse(response, status=200)
 
-@ csrf_exempt
+
+@csrf_exempt
 def change_clan(request,username,id_clan):
     if request.method != 'POST':
         return HttpResponseNotAllowed(['POST'])
@@ -595,12 +592,13 @@ def change_clan(request,username,id_clan):
 
     return JsonResponse(custom_error_response.CLAN_CHANGED, status=200)
 
-@ csrf_exempt
+
+@csrf_exempt
 def try_capture(request,username,id_flag):
     if request.method != 'POST':
-        return HttpResponseNotAllowed(['POST']) #405
+        return HttpResponseNotAllowed(['POST']) # error 405
 
-    #sino manda la cookie 400
+    #sino manda la cookie, error 400
     if not 'sessioncookie' in request.headers:
         return JsonResponse(custom_error_response.BAD_REQUEST, status=400)
 
@@ -622,8 +620,7 @@ def try_capture(request,username,id_flag):
     if not valid_session:#si coookie no es valida 401
         return JsonResponse(custom_error_response.BAD_COOKIE, status=401)
 
-
-    try:#si bandera no existe 404
+    try: # si bandera no existe, error 404
         flag = Bandera.objects.get(pk=id_flag)
     except Bandera.DoesNotExist:
         return JsonResponse(custom_error_response.NOT_FOUND, status=404)
