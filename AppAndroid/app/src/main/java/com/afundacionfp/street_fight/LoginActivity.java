@@ -43,9 +43,8 @@ public class LoginActivity extends AppCompatActivity {
                         public void onOkResponse(JSONObject okResponseJson) {
                             // FALTA GUARDAR LA COOKIE EN LA PERSISTENCIA, ASÍ COMO EL ID DEL USUARIO Y LA FECHA DE EXPIRACIÓN DE LA SESIÓN
                             Intent intent = new Intent(getApplicationContext(), MapActivity.class);
-                            intent.putExtra("username", username);
                             try {
-                                intent.putExtra("session_cookie", (String) okResponseJson.get("session_cookie"));
+                                MainActivity.user = new User(okResponseJson.getInt("user_id"),username, okResponseJson.getString("session_cookie"));
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }

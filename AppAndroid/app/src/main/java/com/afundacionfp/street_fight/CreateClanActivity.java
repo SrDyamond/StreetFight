@@ -68,6 +68,21 @@ public class CreateClanActivity extends AppCompatActivity {
                     });
                 } else if (from.equals("detail")) {
                     // SOLO CREAMOS EL CLAN /clan (POST)
+                    Integer idUser = null;
+                    if (MainActivity.user != null) {
+                        idUser = MainActivity.user.getUserId();
+                    }
+                    assert idUser != null;
+                    Client.getInstance(this).sendCreateClanRest(idUser, username, session_cookie, clanName, clanAcronym, clanColor, clanUrlIcon, new ResponseHandlerObject() {
+                        @Override
+                        public void onOkResponse(JSONObject okResponseJson) {
+                            finish();
+                        }
+                        @Override
+                        public void onErrorResponse(JSONObject errorResponseJson) {
+                            parseErrorResponse(errorResponseJson);
+                        }
+                    });
                 }
             } else {
                 Toast.makeText(CreateClanActivity.this, "El color debe ser en formato hexadecimal", Toast.LENGTH_SHORT).show();
@@ -88,11 +103,19 @@ public class CreateClanActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        if (errorCode == 4005) {
-            Toast.makeText(this, "Conflicto", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "Error al crear el usuario", Toast.LENGTH_SHORT).show();
+        switch (errorCode) {
+            case 4003:
+                Toast.makeText(this, "Sesion invalida", Toast.LENGTH_SHORT).show();
+                //TODO:BORRA LA PERSISTENCIA DE LA COOKIE PORQUE ES INVALIDA
+                break;
+            case 4005:
+                Toast.makeText(this, "Conflicto", Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                Toast.makeText(this, "Error al crear el usuario", Toast.LENGTH_SHORT).show();
+                break;
         }
+
     }
 
 }

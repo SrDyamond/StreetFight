@@ -11,16 +11,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.Objects;
 
 public class UserDetailActivity extends AppCompatActivity {
-    private String username,session_cookie;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         Objects.requireNonNull(getSupportActionBar()).hide();
-
-        Intent intent = getIntent();
-        username = intent.getStringExtra("username");
-        session_cookie = intent.getStringExtra("session_cookie");
 
         setContentView(R.layout.user_detail_layout);
 
@@ -29,8 +24,9 @@ public class UserDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), SearchClanActivity.class);
-                intent.putExtra("username", username);
-                intent.putExtra("session_cookie", session_cookie);
+                assert MainActivity.user != null;
+                intent.putExtra("username", MainActivity.user.getUsername());
+                intent.putExtra("session_cookie", MainActivity.user.getSessionCookie());
                 intent.putExtra("from", "detail");
                 startActivity(intent);
             }
@@ -41,8 +37,8 @@ public class UserDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), CreateClanActivity.class);
-                intent.putExtra("username", username);
-                intent.putExtra("session_cookie", session_cookie);
+                intent.putExtra("username", MainActivity.user.getUsername());
+                intent.putExtra("session_cookie", MainActivity.user.getSessionCookie());
                 intent.putExtra("from", "detail");
                 startActivity(intent);
             }

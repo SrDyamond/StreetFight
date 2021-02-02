@@ -145,7 +145,7 @@ public class Client {
         JSONObject newClanJson = new JSONObject();
         try {
             newClanJson.put("name", clanName);
-            newClanJson.put("color", clanName);
+            newClanJson.put("color", clanColor);
 
             if (!clanAcronym.equals("")) {
                 newClanJson.put("acronym", clanAcronym);
@@ -183,6 +183,59 @@ public class Client {
                             Log.d("## ERROR-L2", responseBodyString);
                         }
                        // assert errorResponseBodyJson != null;
+                        Log.d("## ERROR-JSON", errorResponseBodyJson.toString());
+                        handler.onErrorResponse(errorResponseBodyJson);
+                    }
+                });
+
+        // Add the request to the RequestQueue.
+        requestQueue.add(jsonObjectRequest);
+    }
+    public void sendCreateClanRest(int idUser, String username, String sessionCookie, String clanName, String clanAcronym,
+                                   String clanColor, String clanUrlIcon, ResponseHandlerObject handler) {
+        Log.d("# REGISTER REST", "'" + username + "', '" + sessionCookie + "', '" + clanName + "'," +
+                " '" + clanAcronym + "', '" + clanColor + "', '" + clanUrlIcon + "'");
+        // Instantiate the RequestQueue.
+        String url = "http://"+ DJANGOSERVERIP +"/clan";
+
+        JSONObject newClanJson = new JSONObject();
+        try {
+            newClanJson.put("name", clanName);
+            newClanJson.put("color", clanColor);
+            newClanJson.put("founder_id", idUser);
+
+            if (!clanAcronym.equals("")) {
+                newClanJson.put("acronym", clanAcronym);
+            }
+
+            if (!clanUrlIcon.equals("")) {
+                newClanJson.put("url_icon", clanUrlIcon);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequestCustomHeader(Request.Method.POST, url, sessionCookie, newClanJson,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("## RESPONSE", response.toString());
+                        handler.onOkResponse(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        String responseBodyString = new String(error.networkResponse.data, StandardCharsets.UTF_8);
+                        JSONObject errorResponseBodyJson = null;
+                        try {
+                            errorResponseBodyJson = new JSONObject(responseBodyString);
+                        } catch (JSONException e) {
+                            // e.printStackTrace();
+                            Log.d("## ERROR-L1", error.toString());
+                            Log.d("## ERROR-L2", responseBodyString);
+                        }
+                        // assert errorResponseBodyJson != null;
                         Log.d("## ERROR-JSON", errorResponseBodyJson.toString());
                         handler.onErrorResponse(errorResponseBodyJson);
                     }
