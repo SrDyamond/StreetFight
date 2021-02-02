@@ -38,6 +38,7 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
     private GeoPoint locPoint;
     private IMapController mapController;
     private Flags flags;
+    private String username,session_cookie;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,6 +63,11 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
         //tile servers will get you banned based on this string
 
         //inflate and create the map
+
+        Intent intent = getIntent();
+        username = intent.getStringExtra("username");
+        session_cookie = intent.getStringExtra("session_cookie");
+
         setContentView(R.layout.map_layout);
 
         ImageButton buttonPlayerInfo = findViewById(R.id.button_player_info);
@@ -69,6 +75,8 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), UserDetailActivity.class);
+                intent.putExtra("username", username);
+                intent.putExtra("username", session_cookie);
                 startActivity(intent);
             }
         });
