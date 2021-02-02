@@ -22,7 +22,7 @@ public class Client {
 
     private static Client client = null;
     public static final String DJANGOSERVERIP ="192.168.0.105:8000";
-    private RequestQueue requestQueue;
+    private final RequestQueue requestQueue;
 
     private Client(Context context){
         this.requestQueue = Volley.newRequestQueue(context);
@@ -87,6 +87,49 @@ public class Client {
 
         // Add the request to the RequestQueue.
         this.requestQueue.add(jsonObjectRequest);
+    }
+
+    public void sendRegisterJoinClanRest(String username, String passwordSha, int idClan, ResponseHandler handler) {
+        Log.d("# REGISTER REST", username + ", " + passwordSha + ", " + idClan);
+
+        String url = "http://" + DJANGOSERVERIP + "/user";
+
+        JSONObject requestBodyJson = new JSONObject();
+        try {
+            requestBodyJson.put("username", username);
+            requestBodyJson.put("password_sha", passwordSha);
+            requestBodyJson.put("join_clan_id", idClan);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, requestBodyJson,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject okResponseJson) {
+                        Log.d("# RESPONSE", okResponseJson.toString());
+                        handler.onOkResponse(okResponseJson);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        String responseBodyString = new String(error.networkResponse.data, StandardCharsets.UTF_8);
+                        JSONObject errorResponseJson = null;
+                        try {
+                            errorResponseJson = new JSONObject(responseBodyString);
+                        } catch (JSONException e) {
+                            // e.printStackTrace();
+                            Log.d("## ERROR-L1", error.toString());
+                            Log.d("## ERROR-L2", responseBodyString);
+                        }
+                        Log.d("# ERROR-JSON", errorResponseJson.toString());
+                        handler.onErrorResponse(errorResponseJson);
+                    }
+                });
+
+        // Add the request to the RequestQueue.
+        requestQueue.add(jsonObjectRequest);
     }
 
 }
