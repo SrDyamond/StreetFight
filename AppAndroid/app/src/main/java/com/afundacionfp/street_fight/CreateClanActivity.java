@@ -22,6 +22,7 @@ public class CreateClanActivity extends AppCompatActivity {
     EditText inputCreateClanUrlIcon;
     String username;
     String passwordSha;
+    String from;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,6 +33,7 @@ public class CreateClanActivity extends AppCompatActivity {
         Intent intent = getIntent();
         username = intent.getStringExtra("username");
         passwordSha = intent.getStringExtra("password_sha");
+        from = intent.getStringExtra("from");
 
         setContentView(R.layout.create_clan_layout);
 
@@ -41,6 +43,7 @@ public class CreateClanActivity extends AppCompatActivity {
         inputCreateClanUrlIcon = findViewById(R.id.input_create_clan_url_icon);
 
     }
+
     public void onButtonCreateClanClick(View v){
         final String clanName = inputCreateClanName.getText().toString();
         final String clanAcronym = inputCreateClanAcronym.getText().toString();
@@ -49,19 +52,23 @@ public class CreateClanActivity extends AppCompatActivity {
 
         if (!clanName.equals("") && !clanColor.equals("")) {
             if (clanColor.charAt(0) == '#' && clanColor.length() == 7) {
-                Client.getInstance(this).sendRegisterCreateClanRest(username, passwordSha, clanName, clanAcronym, clanColor, clanUrlIcon, new ResponseHandlerObject() {
-                    @Override
-                    public void onOkResponse(JSONObject okResponseJson) {
-                        // FALTA GUARDAR LA COOKIE EN LA PERSISTENCIA, ASÍ COMO EL ID DEL USUARIO Y LA FECHA DE EXPIRACIÓN DE LA SESIÓN
-                        Intent intent = new Intent(getApplicationContext(), MapActivity.class);
-                        startActivity(intent);
-                    }
+                if (from.equals("register")) {
+                    Client.getInstance(this).sendRegisterCreateClanRest(username, passwordSha, clanName, clanAcronym, clanColor, clanUrlIcon, new ResponseHandlerObject() {
+                        @Override
+                        public void onOkResponse(JSONObject okResponseJson) {
+                            // FALTA GUARDAR LA COOKIE EN LA PERSISTENCIA, ASÍ COMO EL ID DEL USUARIO Y LA FECHA DE EXPIRACIÓN DE LA SESIÓN
+                            Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+                            startActivity(intent);
+                        }
 
-                    @Override
-                    public void onErrorResponse(JSONObject errorResponseJson) {
-                        parseErrorResponse(errorResponseJson);
-                    }
-                });
+                        @Override
+                        public void onErrorResponse(JSONObject errorResponseJson) {
+                            parseErrorResponse(errorResponseJson);
+                        }
+                    });
+                } else if (from.equals("detail")) {
+                    // SOLO CREAMOS EL CLAN /clan (POST)
+                }
             } else {
                 Toast.makeText(CreateClanActivity.this, "El color debe ser en formato hexadecimal", Toast.LENGTH_SHORT).show();
             }

@@ -24,6 +24,9 @@ public class UserDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), SearchClanActivity.class);
+                //intent.putExtra("username", username);
+                //intent.putExtra("password_sha", passwordSha);
+                intent.putExtra("from", "detail");
                 startActivity(intent);
             }
         });
@@ -33,6 +36,9 @@ public class UserDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), CreateClanActivity.class);
+                //intent.putExtra("username", username);
+                //intent.putExtra("password_sha", passwordSha);
+                intent.putExtra("from", "detail");
                 startActivity(intent);
             }
         });

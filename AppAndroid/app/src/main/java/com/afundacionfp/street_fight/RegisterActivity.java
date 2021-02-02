@@ -68,6 +68,7 @@ public class RegisterActivity extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), option == 0 ? SearchClanActivity.class : CreateClanActivity.class);
             intent.putExtra("username", username);
             intent.putExtra("password_sha", passwordSha);
+            intent.putExtra("from", "register");
             startActivity(intent);
         } else {
             Toast.makeText(RegisterActivity.this, "Rellene todos los campos correctamente", Toast.LENGTH_SHORT).show();
