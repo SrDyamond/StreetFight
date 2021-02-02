@@ -73,6 +73,7 @@ public class CreateClanActivity extends AppCompatActivity {
                     if (MainActivity.user != null) {
                         idUser = MainActivity.user.getUserId();
                     }
+                    
                     assert idUser != null;
                     Client.getInstance(this).sendCreateClanRest(idUser, username, session_cookie, clanName, clanAcronym, clanColor, clanUrlIcon, new ResponseHandlerObject() {
                         @Override
