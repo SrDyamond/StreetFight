@@ -592,6 +592,7 @@ def change_clan(request, username, id_clan):
         return JsonResponse(custom_error_response.ALREADY_EXISTS, status=409)
 
     user.id_clan=clan
+    user.fundador=False
     user.save()
 
     response = {} #temporal
