@@ -1,6 +1,7 @@
 package com.afundacionfp.street_fight;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -125,6 +126,62 @@ public class Client {
                         }
                         Log.d("# ERROR-JSON", errorResponseJson.toString());
                         handler.onErrorResponse(errorResponseJson);
+                    }
+                });
+
+        // Add the request to the RequestQueue.
+        requestQueue.add(jsonObjectRequest);
+    }
+
+    public void sendRegisterCreateClanRest(String username, String passwordSha, String clanName, String clanAcronym, String clanColor, String clanUrlIcon,ResponseHandler handler) {
+        Log.d("# REGISTER REST", "'" + username + "', '" + passwordSha + "', '" + clanName + "', '" + clanAcronym + "', '" + clanColor + "', '" + clanUrlIcon + "'");
+        // Instantiate the RequestQueue.
+        String url = "http://"+ DJANGOSERVERIP +"/user";
+
+        JSONObject requestBodyJson = new JSONObject();
+        JSONObject newClanJson = new JSONObject();
+        try {
+            newClanJson.put("name", clanName);
+            newClanJson.put("color", clanName);
+
+            if (!clanAcronym.equals("")) {
+                newClanJson.put("acronym", clanAcronym);
+            }
+
+            if (!clanUrlIcon.equals("")) {
+                newClanJson.put("url_icon", clanUrlIcon);
+            }
+
+            requestBodyJson.put("username", username);
+            requestBodyJson.put("password_sha", passwordSha);
+            requestBodyJson.put("create_clan", newClanJson);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, requestBodyJson,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("## RESPONSE", response.toString());
+                      handler.onOkResponse(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        String responseBodyString = new String(error.networkResponse.data, StandardCharsets.UTF_8);
+                        JSONObject errorResponseBodyJson = null;
+                        try {
+                            errorResponseBodyJson = new JSONObject(responseBodyString);
+                        } catch (JSONException e) {
+                            // e.printStackTrace();
+                            Log.d("## ERROR-L1", error.toString());
+                            Log.d("## ERROR-L2", responseBodyString);
+                        }
+                       // assert errorResponseBodyJson != null;
+                        Log.d("## ERROR-JSON", errorResponseBodyJson.toString());
+                        handler.onErrorResponse(errorResponseBodyJson);
                     }
                 });
 
