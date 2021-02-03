@@ -28,7 +28,7 @@
         android:hint="@string/clan_name"
         android:inputType="text"
         android:textAlignment="center"
-        android:textColorHint="@color/texto_hint"
+        android:textColorHint="@color/text_hint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_app_logo" />
@@ -45,7 +45,7 @@
         android:hint="@string/clan_acronym"
         android:inputType="text"
         android:textAlignment="center"
-        android:textColorHint="@color/texto_hint"
+        android:textColorHint="@color/text_hint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/input_create_clan_name" />
@@ -62,7 +62,7 @@
         android:hint="@string/clan_color"
         android:inputType="text"
         android:textAlignment="center"
-        android:textColorHint="@color/texto_hint"
+        android:textColorHint="@color/text_hint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/input_create_clan_acronym" />
@@ -79,7 +79,7 @@
         android:hint="@string/clan_icon_url"
         android:inputType="textUri"
         android:textAlignment="center"
-        android:textColorHint="@color/texto_hint"
+        android:textColorHint="@color/text_hint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/input_create_clan_color" />

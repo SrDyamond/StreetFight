@@ -19,11 +19,12 @@ import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Locale;
 
 public class Client {
 
     private static Client client = null;
-    public static final String DJANGOSERVERIP ="192.168.0.105:8000";
+    public static final String DJANGOSERVERIP ="192.168.0.110:8000";
     private final RequestQueue requestQueue;
 
     private Client(Context context){
@@ -245,8 +246,7 @@ public class Client {
 
     public void sendFlagRequest(double latitude, double longitude, double radius, ResponseHandlerArray handler){
         // Instantiate the RequestQueue.
-        String url ="http://"+ DJANGOSERVERIP+"/flag?latitude="+String.format("%1$,.7f", latitude)+"&longitude="+String.format("%1$,.7f", longitude)+"&radius="+String.format("%1$,.7f", radius);
-
+        String url ="http://"+ DJANGOSERVERIP+"/flag?latitude="+String.format(Locale.US, "%1$,.7f", latitude)+"&longitude="+String.format(Locale.US, "%1$,.7f", longitude)+"&radius="+String.format(Locale.US, "%1$,.7f", radius);
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONArray>() {
