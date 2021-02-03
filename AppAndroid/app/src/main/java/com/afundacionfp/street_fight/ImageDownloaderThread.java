@@ -14,14 +14,18 @@ import java.io.InputStream;
 import java.net.URL;
 
 public class ImageDownloaderThread extends Thread {
-    private final URL url;
+
+    private URL url;
     private final ImageView imageView;
     private final Context context;
 
-    public ImageDownloaderThread(URL url, ImageView imageView, Context context) {
-        this.url = url;
+    public ImageDownloaderThread(ImageView imageView, Context context) {
         this.imageView = imageView;
         this.context = context;
+    }
+
+    public void setUrl(URL url) {
+        this.url = url;
     }
 
     @Override

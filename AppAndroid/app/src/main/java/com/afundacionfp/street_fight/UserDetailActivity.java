@@ -39,6 +39,8 @@ public class UserDetailActivity extends AppCompatActivity {
         textViewClanName = findViewById(R.id.userdetails_text_clan_name);
         imageViewCalnIcon = findViewById(R.id.userdetails_clan_icon);
 
+        ImageDownloaderThread imageDownloaderThread = new ImageDownloaderThread(imageViewCalnIcon, this);
+
         Client.getInstance(this).sendGetUserInfo(MainActivity.user.getUsername(), new ResponseHandlerObject() {
             @Override
             public void onOkResponse(JSONObject okResponseJson) {
@@ -47,7 +49,7 @@ public class UserDetailActivity extends AppCompatActivity {
                     textViewUsername.setText(username_text);
                     textViewClanName.setText(okResponseJson.getJSONObject("clan").getString("name"));
                     urlIcon = new URL(okResponseJson.getJSONObject("clan").getString("url_icon"));
-                    ImageDownloaderThread imageDownloaderThread = new ImageDownloaderThread(urlIcon, imageViewCalnIcon, getApplicationContext());
+                    imageDownloaderThread.setUrl(urlIcon);
                     imageDownloaderThread.start();
                 } catch (JSONException | MalformedURLException e) {
                     e.printStackTrace();
