@@ -23,6 +23,8 @@ public class UserDetailActivity extends AppCompatActivity {
     private TextView textViewClanName;
     private ImageView imageViewCalnIcon;
 
+    private URL urlIcon = null;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,11 +38,7 @@ public class UserDetailActivity extends AppCompatActivity {
 
         textViewClanName = findViewById(R.id.userdetails_text_clan_name);
         imageViewCalnIcon = findViewById(R.id.userdetails_clan_icon);
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
         Client.getInstance(this).sendGetUserInfo(MainActivity.user.getUsername(), new ResponseHandlerObject() {
             @Override
             public void onOkResponse(JSONObject okResponseJson) {
@@ -48,8 +46,8 @@ public class UserDetailActivity extends AppCompatActivity {
                     String username_text = okResponseJson.getString("name") + " (" + okResponseJson.getInt("captured_flags") + ")";
                     textViewUsername.setText(username_text);
                     textViewClanName.setText(okResponseJson.getJSONObject("clan").getString("name"));
-                    URL url_icon = new URL(okResponseJson.getJSONObject("clan").getString("url_icon"));
-                    ImageDownloaderThread imageDownloaderThread = new ImageDownloaderThread(url_icon, imageViewCalnIcon, getApplicationContext());
+                    urlIcon = new URL(okResponseJson.getJSONObject("clan").getString("url_icon"));
+                    ImageDownloaderThread imageDownloaderThread = new ImageDownloaderThread(urlIcon, imageViewCalnIcon, getApplicationContext());
                     imageDownloaderThread.start();
                 } catch (JSONException | MalformedURLException e) {
                     e.printStackTrace();
