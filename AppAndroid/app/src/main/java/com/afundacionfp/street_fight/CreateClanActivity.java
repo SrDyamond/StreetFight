@@ -70,8 +70,8 @@ public class CreateClanActivity extends AppCompatActivity {
                 } else if (from.equals("detail")) {
                     // SOLO CREAMOS EL CLAN /clan (POST)
                     Integer idUser = null;
-                    if (MainActivity.user != null) {
-                        idUser = MainActivity.user.getUserId();
+                    if (MainActivity.userPreferences != null) {
+                        idUser = MainActivity.userPreferences.getUserId();
                     }
                     
                     assert idUser != null;

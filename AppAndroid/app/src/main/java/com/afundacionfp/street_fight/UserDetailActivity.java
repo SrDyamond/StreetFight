@@ -34,14 +34,14 @@ public class UserDetailActivity extends AppCompatActivity {
         setContentView(R.layout.user_detail_layout);
 
         textViewUsername = findViewById(R.id.userdetails_text_username);
-        textViewUsername.setText(MainActivity.user.getUsername());
+        textViewUsername.setText(MainActivity.userPreferences.getUsername());
 
         textViewClanName = findViewById(R.id.userdetails_text_clan_name);
         imageViewCalnIcon = findViewById(R.id.userdetails_clan_icon);
 
         ImageDownloaderThread imageDownloaderThread = new ImageDownloaderThread(imageViewCalnIcon, this);
 
-        Client.getInstance(this).sendGetUserInfo(MainActivity.user.getUsername(), new ResponseHandlerObject() {
+        Client.getInstance(this).sendGetUserInfo(MainActivity.userPreferences.getUsername(), new ResponseHandlerObject() {
             @Override
             public void onOkResponse(JSONObject okResponseJson) {
                 try {
@@ -64,17 +64,17 @@ public class UserDetailActivity extends AppCompatActivity {
 
     public void onChangeClanClick(View v) {
         Intent intent = new Intent(getApplicationContext(), SearchClanActivity.class);
-        assert MainActivity.user != null;
-        intent.putExtra("username", MainActivity.user.getUsername());
-        intent.putExtra("session_cookie", MainActivity.user.getSessionCookie());
+        assert MainActivity.userPreferences != null;
+        intent.putExtra("username", MainActivity.userPreferences.getUsername());
+        intent.putExtra("session_cookie", MainActivity.userPreferences.getSessionCookie());
         intent.putExtra("from", "detail");
         startActivity(intent);
     }
 
     public void onCreateClanClick(View v) {
         Intent intent = new Intent(getApplicationContext(), CreateClanActivity.class);
-        intent.putExtra("username", MainActivity.user.getUsername());
-        intent.putExtra("session_cookie", MainActivity.user.getSessionCookie());
+        intent.putExtra("username", MainActivity.userPreferences.getUsername());
+        intent.putExtra("session_cookie", MainActivity.userPreferences.getSessionCookie());
         intent.putExtra("from", "detail");
         startActivity(intent);
     }
