@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
-    public static UserPreferences userPreferences =null;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -11,7 +11,6 @@ public class UserPreferences {
     private static UserPreferences userpreferences = null;
 
 //    public UserPreferences(int userId, String username, String sessionCookie, long expiration) {
-//        // TODO: ARREGLAR QUE PYTHON MANDA EL TIMESTAMP CON ESTE FORMATO 1.612871674002662E9
 //        this.userId = userId;
 //        this.username = username;
 //        this.sessionCookie = sessionCookie;
@@ -70,7 +69,7 @@ public class UserPreferences {
     public String getUsername(Context context) {
         if (username == null) {
             SharedPreferences sharedPreferences = context.getSharedPreferences("Street_Fight_preferences", Context.MODE_PRIVATE);
-            username = sharedPreferences.getString("username", 0);
+            username = sharedPreferences.getString("username", null);
         }
         return username;
     }
@@ -78,7 +77,7 @@ public class UserPreferences {
     public String getSessionCookie(Context context) {
         if (sessionCookie == null) {
             SharedPreferences sharedPreferences = context.getSharedPreferences("Street_Fight_preferences", Context.MODE_PRIVATE);
-            sessionCookie = sharedPreferences.getString("session_cookie", 0);
+            sessionCookie = sharedPreferences.getString("session_cookie", null);
         }
         return sessionCookie;
     }

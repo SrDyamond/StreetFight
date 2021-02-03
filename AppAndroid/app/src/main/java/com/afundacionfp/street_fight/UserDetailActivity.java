@@ -34,14 +34,14 @@ public class UserDetailActivity extends AppCompatActivity {
         setContentView(R.layout.user_detail_layout);
 
         textViewUsername = findViewById(R.id.userdetails_text_username);
-        textViewUsername.setText(MainActivity.userPreferences.getUsername());
+        textViewUsername.setText(UserPreferences.getInstance().getUsername(getApplicationContext()));
 
         textViewClanName = findViewById(R.id.userdetails_text_clan_name);
         imageViewCalnIcon = findViewById(R.id.userdetails_clan_icon);
 
         ImageDownloaderThread imageDownloaderThread = new ImageDownloaderThread(imageViewCalnIcon, this);
 
-        Client.getInstance(this).sendGetUserInfo(MainActivity.userPreferences.getUsername(), new ResponseHandlerObject() {
+        Client.getInstance(this).sendGetUserInfo(UserPreferences.getInstance().getUsername(getApplicationContext()), new ResponseHandlerObject() {
             @Override
             public void onOkResponse(JSONObject okResponseJson) {
                 try {
@@ -55,6 +55,7 @@ public class UserDetailActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onErrorResponse(JSONObject errorResponseJson) {
                 parseErrorResponse(errorResponseJson);
@@ -64,17 +65,16 @@ public class UserDetailActivity extends AppCompatActivity {
 
     public void onChangeClanClick(View v) {
         Intent intent = new Intent(getApplicationContext(), SearchClanActivity.class);
-        assert MainActivity.userPreferences != null;
-        intent.putExtra("username", MainActivity.userPreferences.getUsername());
-        intent.putExtra("session_cookie", MainActivity.userPreferences.getSessionCookie());
+        intent.putExtra("username", UserPreferences.getInstance().getUsername(getApplicationContext()));
+        intent.putExtra("session_cookie", UserPreferences.getInstance().getSessionCookie(getApplicationContext()));
         intent.putExtra("from", "detail");
         startActivity(intent);
     }
 
     public void onCreateClanClick(View v) {
         Intent intent = new Intent(getApplicationContext(), CreateClanActivity.class);
-        intent.putExtra("username", MainActivity.userPreferences.getUsername());
-        intent.putExtra("session_cookie", MainActivity.userPreferences.getSessionCookie());
+        intent.putExtra("username", UserPreferences.getInstance().getUsername(getApplicationContext()));
+        intent.putExtra("session_cookie", UserPreferences.getInstance().getSessionCookie(getApplicationContext()));
         intent.putExtra("from", "detail");
         startActivity(intent);
     }

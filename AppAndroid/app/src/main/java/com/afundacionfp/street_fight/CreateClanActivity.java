@@ -45,7 +45,7 @@ public class CreateClanActivity extends AppCompatActivity {
         inputCreateClanUrlIcon = findViewById(R.id.input_create_clan_url_icon);
     }
 
-    public void onButtonCreateClanClick(View v){
+    public void onButtonCreateClanClick(View v) {
         final String clanName = inputCreateClanName.getText().toString();
         final String clanAcronym = inputCreateClanAcronym.getText().toString();
         final String clanColor = inputCreateClanColor.getText().toString();
@@ -69,17 +69,15 @@ public class CreateClanActivity extends AppCompatActivity {
                     });
                 } else if (from.equals("detail")) {
                     // SOLO CREAMOS EL CLAN /clan (POST)
-                    Integer idUser = null;
-                    if (MainActivity.userPreferences != null) {
-                        idUser = MainActivity.userPreferences.getUserId();
-                    }
-                    
-                    assert idUser != null;
+
+                    int idUser = UserPreferences.getInstance().getUserId(getApplicationContext());
+
                     Client.getInstance(this).sendCreateClanRest(idUser, username, session_cookie, clanName, clanAcronym, clanColor, clanUrlIcon, new ResponseHandlerObject() {
                         @Override
                         public void onOkResponse(JSONObject okResponseJson) {
                             finish();
                         }
+
                         @Override
                         public void onErrorResponse(JSONObject errorResponseJson) {
                             parseErrorResponse(errorResponseJson);
