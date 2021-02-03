@@ -16,6 +16,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         Objects.requireNonNull(getSupportActionBar()).hide();
+        if (UserPreferences.getInstance().getSessionCookie(getApplicationContext()) != null) {
+            Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+            startActivity(intent);
+            finish();
+        }
 
         setContentView(R.layout.main_layout);
 
