@@ -1,5 +1,6 @@
 package com.afundacionfp.street_fight;
 
+// SUBSTITUIR POR UN SINGLETON SHARED PREFERENCES
 public class User {
     private int userId;
     private String username,sessionCookie;

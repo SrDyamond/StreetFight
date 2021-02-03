@@ -52,9 +52,9 @@ public class Flags {
             Double flagLatitude=null;
             Double flagLongitude=null;
             try {
-                Log.d("#Flag", ((JSONObject)jsonArrayFlags.get(i)).toString());
-                flagLatitude=(double)((JSONObject)jsonArrayFlags.get(i)).get("latitude");
-                flagLongitude=(double)((JSONObject)jsonArrayFlags.get(i)).get("longitude");
+//                Log.d("#Flag", jsonArrayFlags.getJSONObject(i).toString());
+                flagLatitude = jsonArrayFlags.getJSONObject(i).getDouble("latitude");
+                flagLongitude = jsonArrayFlags.getJSONObject(i).getDouble("longitude");
             } catch (JSONException e) {
                 e.printStackTrace();
             }

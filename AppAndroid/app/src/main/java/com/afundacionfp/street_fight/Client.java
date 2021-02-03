@@ -252,7 +252,7 @@ public class Client {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        Log.d("########RESPONSE", response.toString());
+//                        Log.d("########RESPONSE", response.toString());
                         handler.onOkResponse(response);
                     }
                 },
@@ -266,11 +266,11 @@ public class Client {
                             errorResponseBodyJson = new JSONObject(responseBodyString);
                         } catch (JSONException e) {
                             // e.printStackTrace();
-                            Log.d("########ERROR-L1", error.toString());
-                            Log.d("########ERROR-L2", responseBodyString);
+//                            Log.d("########ERROR-L1", error.toString());
+//                            Log.d("########ERROR-L2", responseBodyString);
                         }
                         //assert errorResponseBodyJson != null;
-                        Log.d("########ERROR-JSON", errorResponseBodyJson.toString());
+                        Log.d("# ERROR-JSON", errorResponseBodyJson.toString());
                         handler.onErrorResponse(errorResponseBodyJson);
                     }
                 });
@@ -312,5 +312,37 @@ public class Client {
 
         // Add the request to the RequestQueue.
         requestQueue.add(jsonObjectRequest);
+    }
+
+    public void sendGetUserInfo(String username, ResponseHandlerObject handler) {
+        String url = "http://" + DJANGOSERVERIP + "/user/" + username;
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject okResponseJson) {
+                        Log.d("# RESPONSE", okResponseJson.toString());
+                        handler.onOkResponse(okResponseJson);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        String responseBodyString = new String(error.networkResponse.data, StandardCharsets.UTF_8);
+                        JSONObject errorResponseJson = null;
+                        try {
+                            errorResponseJson = new JSONObject(responseBodyString);
+                        } catch (JSONException e) {
+                            // e.printStackTrace();
+                            Log.d("## ERROR-L1", error.toString());
+                            Log.d("## ERROR-L2", responseBodyString);
+                        }
+                        Log.d("# ERROR-JSON", errorResponseJson.toString());
+                        handler.onErrorResponse(errorResponseJson);
+                    }
+                });
+
+        // Add the request to the RequestQueue.
+        this.requestQueue.add(jsonObjectRequest);
     }
 }

@@ -5,19 +5,10 @@
     android:layout_height="match_parent"
     android:background="@drawable/fondo_azul_1000">
 
-    <ImageView
-        android:id="@+id/login_app_logo"
-        android:layout_width="220dp"
-        android:layout_height="220dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/flag_blue_500t"
-        android:contentDescription="@string/todo"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userdetails_clanname" />
+
 
     <TextView
-        android:id="@+id/userdetails_username"
+        android:id="@+id/userdetails_text_username"
         android:layout_width="220dp"
         android:layout_height="69dp"
         android:layout_marginTop="16dp"
@@ -34,7 +25,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/userdetails_clanname"
+        android:id="@+id/userdetails_text_clan_name"
         android:layout_width="220dp"
         android:layout_height="69dp"
         android:layout_marginTop="8dp"
@@ -47,7 +38,30 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userdetails_username" />
+        app:layout_constraintTop_toBottomOf="@+id/userdetails_text_username" />
+
+    <ImageView
+        android:id="@+id/userdetails_clan_icon"
+        android:layout_width="220dp"
+        android:layout_height="220dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/flag_blue_500t"
+        android:contentDescription="@string/todo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userdetails_text_clan_name" />
+
+    <ImageButton
+        android:id="@+id/userdetails_changeclan_button"
+        android:layout_width="220dp"
+        android:layout_height="69dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/fondo_boton"
+        android:contentDescription="@string/todo"
+        android:onClick="onChangeClanClick"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userdetails_clan_icon" />
 
     <ImageButton
         android:id="@+id/userdetails_createclan_button"
@@ -56,6 +70,7 @@
         android:layout_marginTop="8dp"
         android:background="@drawable/fondo_boton"
         android:contentDescription="@string/todo"
+        android:onClick="onCreateClanClick"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userdetails_changeclan_button" />
@@ -71,17 +86,6 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userdetails_createclan_button" />
-
-    <ImageButton
-        android:id="@+id/userdetails_changeclan_button"
-        android:layout_width="220dp"
-        android:layout_height="69dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/fondo_boton"
-        android:contentDescription="@string/todo"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_app_logo" />
 
     <TextView
         android:id="@+id/userdetails_changeclan_text"
