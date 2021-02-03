@@ -4,15 +4,27 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Objects;
 
 public class UserDetailActivity extends AppCompatActivity {
-    private TextView username;
+
+    private TextView textViewUsername;
+    private TextView textViewClanName;
+    private ImageView imageViewCalnIcon;
+
+    private URL urlIcon = null;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,33 +32,66 @@ public class UserDetailActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).hide();
 
         setContentView(R.layout.user_detail_layout);
-        username =findViewById(R.id.userdetails_username);
-        username.setText(MainActivity.user.getUsername());
 
+        textViewUsername = findViewById(R.id.userdetails_text_username);
+        textViewUsername.setText(MainActivity.user.getUsername());
 
-        ImageButton buttonGotoChangeClan = findViewById(R.id.userdetails_changeclan_button);
-        buttonGotoChangeClan.setOnClickListener(new View.OnClickListener() {
+        textViewClanName = findViewById(R.id.userdetails_text_clan_name);
+        imageViewCalnIcon = findViewById(R.id.userdetails_clan_icon);
+
+        ImageDownloaderThread imageDownloaderThread = new ImageDownloaderThread(imageViewCalnIcon, this);
+
+        Client.getInstance(this).sendGetUserInfo(MainActivity.user.getUsername(), new ResponseHandlerObject() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), SearchClanActivity.class);
-                assert MainActivity.user != null;
-                intent.putExtra("username", MainActivity.user.getUsername());
-                intent.putExtra("session_cookie", MainActivity.user.getSessionCookie());
-                intent.putExtra("from", "detail");
-                startActivity(intent);
+            public void onOkResponse(JSONObject okResponseJson) {
+                try {
+                    String username_text = okResponseJson.getString("name") + " (" + okResponseJson.getInt("captured_flags") + ")";
+                    textViewUsername.setText(username_text);
+                    textViewClanName.setText(okResponseJson.getJSONObject("clan").getString("name"));
+                    urlIcon = new URL(okResponseJson.getJSONObject("clan").getString("url_icon"));
+                    imageDownloaderThread.setUrl(urlIcon);
+                    imageDownloaderThread.start();
+                } catch (JSONException | MalformedURLException e) {
+                    e.printStackTrace();
+                }
+            }
+            @Override
+            public void onErrorResponse(JSONObject errorResponseJson) {
+                parseErrorResponse(errorResponseJson);
             }
         });
+    }
 
-        ImageButton buttonGotoCreateClan = findViewById(R.id.userdetails_createclan_button);
-        buttonGotoCreateClan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), CreateClanActivity.class);
-                intent.putExtra("username", MainActivity.user.getUsername());
-                intent.putExtra("session_cookie", MainActivity.user.getSessionCookie());
-                intent.putExtra("from", "detail");
-                startActivity(intent);
-            }
-        });
+    public void onChangeClanClick(View v) {
+        Intent intent = new Intent(getApplicationContext(), SearchClanActivity.class);
+        assert MainActivity.user != null;
+        intent.putExtra("username", MainActivity.user.getUsername());
+        intent.putExtra("session_cookie", MainActivity.user.getSessionCookie());
+        intent.putExtra("from", "detail");
+        startActivity(intent);
+    }
+
+    public void onCreateClanClick(View v) {
+        Intent intent = new Intent(getApplicationContext(), CreateClanActivity.class);
+        intent.putExtra("username", MainActivity.user.getUsername());
+        intent.putExtra("session_cookie", MainActivity.user.getSessionCookie());
+        intent.putExtra("from", "detail");
+        startActivity(intent);
+    }
+
+    private void parseErrorResponse(JSONObject errorResponseBodyJson) {
+        int errorCode = 0;
+
+        try {
+            errorCode = errorResponseBodyJson.getInt("error");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        if (errorCode == 4004) {
+            Toast.makeText(this, "El usuario no está registrado", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Error al iniciar sesión", Toast.LENGTH_SHORT).show();
+        }
     }
 }

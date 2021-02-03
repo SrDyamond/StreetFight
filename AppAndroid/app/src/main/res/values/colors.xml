@@ -11,5 +11,5 @@
     <color name="text_white">#FFFFFFFF</color>
     <color name="azul_oscuro">#37474f</color>
     <color name="azul_claro">#37474f</color>
-    <color name="texto_hint">#273136</color>
+    <color name="text_hint">#273136</color>
 </resources>
