@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/bungee"
         android:gravity="center"
-        android:text="(Info juga)"
+        android:text="@string/text_player"
         android:textAlignment="center"
         android:textColor="#000000"
         android:textSize="18sp"

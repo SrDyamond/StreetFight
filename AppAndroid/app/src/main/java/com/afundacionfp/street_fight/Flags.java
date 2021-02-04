@@ -58,7 +58,9 @@ public class Flags {
                 flagLatitude = jsonArrayFlags.getJSONObject(i).getDouble("latitude");
                 flagLongitude = jsonArrayFlags.getJSONObject(i).getDouble("longitude");
                 capturing = jsonArrayFlags.getJSONObject(i).getBoolean("capturing");
-                clan = jsonArrayFlags.getJSONObject(i).getJSONObject("clan");
+                if (jsonArrayFlags.getJSONObject(i).has("clan")) {
+                    clan = jsonArrayFlags.getJSONObject(i).getJSONObject("clan");
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
