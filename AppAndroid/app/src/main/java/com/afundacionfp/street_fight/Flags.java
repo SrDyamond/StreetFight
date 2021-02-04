@@ -51,21 +51,39 @@ public class Flags {
         for (int i=0;i<jsonArrayFlags.length();i++){
             Double flagLatitude=null;
             Double flagLongitude=null;
+            Boolean capturing = null;
+            JSONObject clan = null;
             try {
 //                Log.d("#Flag", jsonArrayFlags.getJSONObject(i).toString());
                 flagLatitude = jsonArrayFlags.getJSONObject(i).getDouble("latitude");
                 flagLongitude = jsonArrayFlags.getJSONObject(i).getDouble("longitude");
+                capturing = jsonArrayFlags.getJSONObject(i).getBoolean("capturing");
+                clan = jsonArrayFlags.getJSONObject(i).getJSONObject("clan");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
             assert flagLatitude != null;
             assert flagLongitude != null;
+            assert capturing != null;
             try {
                 Marker flag = new Marker(mapView);
                 flag.setPosition(new GeoPoint(flagLatitude, flagLongitude));
                 flag.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-                flag.setIcon(ResourcesCompat.getDrawable(resources, R.drawable.ic_torchlight_help_icon, null));
-                flag.setTitle("Casa de las ciencias");
+                if (clan==null && !capturing){
+                    flag.setIcon(ResourcesCompat.getDrawable(resources, R.drawable.flag_blank, null));
+                    flag.setTitle("Bandera libre");
+                }else if (clan!=null && !capturing){
+                    flag.setIcon(ResourcesCompat.getDrawable(resources, R.drawable.flag_captured, null));
+                    try {
+                        flag.setTitle("Bandera de " + clan.getString("acronym"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }else {
+                    flag.setIcon(ResourcesCompat.getDrawable(resources, R.drawable.flag_capturing, null));
+                    flag.setTitle("Batalla en curso por la zona");
+                }
+                //TODO:Añadir descripcion a doc y restfacade
                 mapView.getOverlays().add(flag);
             } catch (NullPointerException e) {
                 e.printStackTrace();
