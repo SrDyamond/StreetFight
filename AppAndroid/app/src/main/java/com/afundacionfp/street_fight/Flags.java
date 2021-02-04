@@ -33,7 +33,7 @@ public class Flags {
 //        sendFlagRequest(latitude, longitude);
     }
 
-    public void sendFlagRequest(double latitude, double longitude){
+    public void sendFlagRequest(double latitude, double longitude) {
         Client.getInstance(context).sendFlagRequest(latitude, longitude, radius, new ResponseHandlerArray() {
             @Override
             public void onOkResponse(JSONArray okResponseJson) {
