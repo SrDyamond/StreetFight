@@ -34,10 +34,9 @@ import java.util.Objects;
 public class MapActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback, LocationListener {
 
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
-    private MapView map = null;
-    private LocationManager locManager;
-    private GeoPoint locPoint;
-    private IMapController mapController;
+    private MapView mapView = null;
+    private LocationManager locationManager;
+    private IMapController iMapController;
 
     private Flags flags;
     private boolean paused = false;
@@ -47,11 +46,6 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         Objects.requireNonNull(getSupportActionBar()).hide();
-
-        //  Use icon on another class
-        // if (Coordinates.resources == null) {
-        //     Coordinates.resources = getResources();
-        // }
 
         //handle permissions first, before map is created. not depicted here
 
@@ -66,7 +60,6 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
         //tile servers will get you banned based on this string
 
         //inflate and create the map
-
         setContentView(R.layout.map_layout);
 
         TextView textPlayerInfo = findViewById(R.id.activity_main_text);
@@ -82,31 +75,32 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
         });
 
         //  Localization
-        locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(MapActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
         }
 
-        locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, this);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1500, 0, this);
 
         //  Creacion de mapa ,controlador y overlay
-        map = findViewById(R.id.map);
-        map.setTileSource(TileSourceFactory.MAPNIK);
-        map.setMultiTouchControls(true);
-        map.setMinZoomLevel(15.0); // Min zoom level
+        mapView = findViewById(R.id.map);
+        mapView.setTileSource(TileSourceFactory.MAPNIK);
+        mapView.setMultiTouchControls(true);
+        mapView.setMinZoomLevel(15.0); // Min zoom level
 
-        mapController = map.getController();
-        mapController.setZoom(20.0); // Initial zoom
+        iMapController = mapView.getController();
+        iMapController.setZoom(20.0); // Initial zoom
 
-        MyLocationNewOverlay mLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(this), map);
+        MyLocationNewOverlay mLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(this), mapView);
         mLocationOverlay.enableMyLocation();
-        map.getOverlays().add(mLocationOverlay);
+        mapView.getOverlays().add(mLocationOverlay);
 
-        flags =new Flags(this,getResources(),map);
+        flags =new Flags(this,getResources(), mapView);
 
         requestPermissionsIfNecessary(new String[]{
                 // if you need to show the current location, uncomment the line below
                 Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
                 // WRITE_EXTERNAL_STORAGE is required in order to show the map
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
         });
@@ -125,10 +119,10 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
                 //return;
             }
 
-            Location loc = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            flags.sendFlagRequest(loc.getLatitude(), loc.getLongitude());
-            locPoint = new GeoPoint(loc.getLatitude(), loc.getLongitude());
-            mapController.animateTo(locPoint);
+//            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            flags.sendFlagRequest(location.getLatitude(), location.getLongitude());
+            GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
+            iMapController.animateTo(geoPoint);
         }
     }
 
@@ -144,7 +138,7 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
         //if you make changes to the configuration, use
         //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         //Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
-        map.onResume(); //needed for compass, my location overlays, v6.0.0 and up
+        mapView.onResume(); //needed for compass, my location overlays, v6.0.0 and up
     }
 
     @Override
@@ -154,7 +148,7 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
         //if you make changes to the configuration, use
         //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         //Configuration.getInstance().save(this, prefs);
-        map.onPause();  //needed for compass, my location overlays, v6.0.0 and up
+        mapView.onPause();  //needed for compass, my location overlays, v6.0.0 and up
         paused = true;
     }
 
