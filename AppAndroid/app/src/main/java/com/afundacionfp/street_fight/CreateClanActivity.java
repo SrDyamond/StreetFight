@@ -86,6 +86,9 @@ public class CreateClanActivity extends AppCompatActivity {
                     Client.getInstance(this).sendCreateClanRest(idUser, username, session_cookie, clanName, clanAcronym, clanColor, clanUrlIcon, new ResponseHandlerObject() {
                         @Override
                         public void onOkResponse(JSONObject okResponseJson) {
+                            Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
                             finish();
                         }
 
@@ -115,7 +118,11 @@ public class CreateClanActivity extends AppCompatActivity {
         switch (errorCode) {
             case 4003:
                 Toast.makeText(this, "Sesion invalida", Toast.LENGTH_SHORT).show();
-                //TODO:BORRA LA PERSISTENCIA DE LA COOKIE PORQUE ES INVALIDA
+                logout();
+                break;
+            case 4004:
+                Toast.makeText(this, "El usuario no existe", Toast.LENGTH_SHORT).show();
+                logout();
                 break;
             case 4005:
                 Toast.makeText(this, "Conflicto", Toast.LENGTH_SHORT).show();
@@ -126,4 +133,10 @@ public class CreateClanActivity extends AppCompatActivity {
         }
     }
 
+    public void logout(){
+        UserPreferences.getInstance().deleteAll(getApplicationContext());
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
 }
