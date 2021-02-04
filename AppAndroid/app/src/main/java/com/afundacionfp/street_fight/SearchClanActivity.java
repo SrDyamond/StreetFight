@@ -78,6 +78,9 @@ public class SearchClanActivity extends AppCompatActivity {
                 Client.getInstance(this).sendChangeClanRest(username, sessionCookie, idClan, new ResponseHandlerObject() {
                     @Override
                     public void onOkResponse(JSONObject okResponseJson) {
+                        Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
                         finish();
                     }
                     @Override
