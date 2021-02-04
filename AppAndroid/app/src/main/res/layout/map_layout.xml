@@ -18,6 +18,7 @@
         android:layout_marginTop="16dp"
         android:background="@drawable/main_fondo_boton"
         android:contentDescription="@string/todo"
+        android:onClick="onUserButtonClick"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

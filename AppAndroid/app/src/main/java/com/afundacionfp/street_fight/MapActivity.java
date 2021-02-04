@@ -65,15 +65,6 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
         TextView textPlayerInfo = findViewById(R.id.activity_main_text);
         textPlayerInfo.setText(UserPreferences.getInstance().getUsername(this));
 
-        ImageButton buttonPlayerInfo = findViewById(R.id.button_player_info);
-        buttonPlayerInfo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), UserDetailActivity.class);
-                startActivity(intent);
-            }
-        });
-
         //  Localization
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
@@ -112,6 +103,11 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
                 // WRITE_EXTERNAL_STORAGE is required in order to show the map
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
         });
+    }
+
+    public void onUserButtonClick(View v) {
+        Intent intent = new Intent(getApplicationContext(), UserDetailActivity.class);
+        startActivity(intent);
     }
 
     //  Runs wen the location changes
