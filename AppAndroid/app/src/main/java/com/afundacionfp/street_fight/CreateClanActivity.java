@@ -57,9 +57,20 @@ public class CreateClanActivity extends AppCompatActivity {
                     Client.getInstance(this).sendRegisterCreateClanRest(username, passwordSha, clanName, clanAcronym, clanColor, clanUrlIcon, new ResponseHandlerObject() {
                         @Override
                         public void onOkResponse(JSONObject okResponseJson) {
-                            // FALTA GUARDAR LA COOKIE EN LA PERSISTENCIA, ASÍ COMO EL ID DEL USUARIO Y LA FECHA DE EXPIRACIÓN DE LA SESIÓN
+                            try {
+                                //UserPreferences.getInstance().setExpiration(okResponseJson.getString("expiration"),getApplicationContext());
+                                UserPreferences.getInstance().savePreferences(
+                                        getApplicationContext(),
+                                        okResponseJson.getInt("user_id"),
+                                        username,
+                                        okResponseJson.getString("session_cookie"));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                             Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(intent);
+                            finish();
                         }
 
                         @Override

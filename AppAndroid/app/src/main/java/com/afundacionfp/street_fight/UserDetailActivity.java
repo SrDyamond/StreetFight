@@ -48,12 +48,17 @@ public class UserDetailActivity extends AppCompatActivity {
                     String username_text = okResponseJson.getString("name") + " (" + okResponseJson.getInt("captured_flags") + ")";
                     textViewUsername.setText(username_text);
                     textViewClanName.setText(okResponseJson.getJSONObject("clan").getString("name"));
-                    urlIcon = new URL(okResponseJson.getJSONObject("clan").getString("url_icon"));
-                    imageDownloaderThread.setUrl(urlIcon);
-                    imageDownloaderThread.start();
-                } catch (JSONException | MalformedURLException e) {
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
+                try {
+                    urlIcon = new URL(okResponseJson.getJSONObject("clan").getString("url_icon"));
+                } catch (MalformedURLException | JSONException e) {
+                    e.printStackTrace();
+                }
+                imageDownloaderThread.setUrl(urlIcon);
+                imageDownloaderThread.start();
             }
 
             @Override
@@ -61,6 +66,23 @@ public class UserDetailActivity extends AppCompatActivity {
                 parseErrorResponse(errorResponseJson);
             }
         });
+    }
+
+    public void onLogoutClick(View v){
+        Client.getInstance(this).sendDeleteSession(UserPreferences.getInstance().getUsername(this),
+                UserPreferences.getInstance().getSessionCookie(this), new ResponseHandlerObject() {
+                    @Override
+                    public void onOkResponse(JSONObject okResponseJson) {
+                        logout();
+                    }
+
+                    @Override
+                    public void onErrorResponse(JSONObject errorResponseJson) {
+                        parseErrorResponse(errorResponseJson);
+                    }
+                });
+
+
     }
 
     public void onChangeClanClick(View v) {
@@ -88,10 +110,27 @@ public class UserDetailActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        if (errorCode == 4004) {
-            Toast.makeText(this, "El usuario no está registrado", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "Error al iniciar sesión", Toast.LENGTH_SHORT).show();
+        switch (errorCode) {
+            case 4001:
+                Toast.makeText(this, "Bad request", Toast.LENGTH_SHORT).show();
+                break;
+            case 4003:
+                Toast.makeText(this, "Sesion no valida", Toast.LENGTH_SHORT).show();
+                logout();
+                break;
+            case 4004:
+                Toast.makeText(this, "El usuario no está registrado", Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                Toast.makeText(this, "Error al iniciar sesión", Toast.LENGTH_SHORT).show();
+                break;
         }
+    }
+
+    public void logout(){
+        UserPreferences.getInstance().deleteAll(getApplicationContext());
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 }

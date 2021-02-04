@@ -24,7 +24,7 @@ import java.util.Locale;
 public class Client {
 
     private static Client client = null;
-    public static final String DJANGOSERVERIP ="192.168.0.20:8000";
+    public static final String DJANGOSERVERIP ="192.168.0.17:8000";
     private final RequestQueue requestQueue;
 
     private Client(Context context){
@@ -318,6 +318,37 @@ public class Client {
         String url = "http://" + DJANGOSERVERIP + "/user/" + username;
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject okResponseJson) {
+                        Log.d("# RESPONSE", okResponseJson.toString());
+                        handler.onOkResponse(okResponseJson);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        String responseBodyString = new String(error.networkResponse.data, StandardCharsets.UTF_8);
+                        JSONObject errorResponseJson = null;
+                        try {
+                            errorResponseJson = new JSONObject(responseBodyString);
+                        } catch (JSONException e) {
+                            // e.printStackTrace();
+                            Log.d("## ERROR-L1", error.toString());
+                            Log.d("## ERROR-L2", responseBodyString);
+                        }
+                        Log.d("# ERROR-JSON", errorResponseJson.toString());
+                        handler.onErrorResponse(errorResponseJson);
+                    }
+                });
+
+        // Add the request to the RequestQueue.
+        this.requestQueue.add(jsonObjectRequest);
+    }
+    public void sendDeleteSession(String username,String sessionCookie, ResponseHandlerObject handler) {
+        String url = "http://" + DJANGOSERVERIP + "/user/" + username+"/session";
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequestCustomHeader(Request.Method.DELETE, url, sessionCookie, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject okResponseJson) {
