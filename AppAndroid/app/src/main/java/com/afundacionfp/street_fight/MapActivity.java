@@ -12,6 +12,7 @@ import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -66,6 +67,9 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
 
 
         setContentView(R.layout.map_layout);
+
+        TextView textPlayerInfo = findViewById(R.id.activity_main_text);
+        textPlayerInfo.setText(UserPreferences.getInstance().getUsername(this));
 
         ImageButton buttonPlayerInfo = findViewById(R.id.button_player_info);
         buttonPlayerInfo.setOnClickListener(new View.OnClickListener() {
