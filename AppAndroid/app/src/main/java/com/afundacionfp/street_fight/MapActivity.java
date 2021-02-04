@@ -48,6 +48,7 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         Objects.requireNonNull(getSupportActionBar()).hide();
+
         //  Use icon on another class
         // if (Coordinates.resources == null) {
         //     Coordinates.resources = getResources();
@@ -95,13 +96,14 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
         map = findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK);
         map.setMultiTouchControls(true);
+        map.setMinZoomLevel(15.0); // Min zoom level
+
         mapController = map.getController();
-        mapController.setZoom(20.0);    // Initial zoom
+        mapController.setZoom(20.0); // Initial zoom
 
         MyLocationNewOverlay mLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(this), map);
         mLocationOverlay.enableMyLocation();
         map.getOverlays().add(mLocationOverlay);
-        map.setMinZoomLevel(15.0);  // Max zoom out
 
         flags =new Flags(this,getResources(),map);
 
