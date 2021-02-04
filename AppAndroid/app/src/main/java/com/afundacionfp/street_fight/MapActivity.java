@@ -32,12 +32,14 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public class MapActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback, LocationListener {
+
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
     private MapView map = null;
     private Location loc;
     private LocationManager locManager;
     private GeoPoint locPoint;
     private IMapController mapController;
+
     private Flags flags;
     private boolean paused = false;
 
@@ -64,7 +66,6 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
         //tile servers will get you banned based on this string
 
         //inflate and create the map
-
 
         setContentView(R.layout.map_layout);
 
@@ -96,10 +97,13 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
         map.setMultiTouchControls(true);
         mapController = map.getController();
         mapController.setZoom(20.0);    // Initial zoom
+
         MyLocationNewOverlay mLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(this), map);
         mLocationOverlay.enableMyLocation();
         map.getOverlays().add(mLocationOverlay);
         map.setMinZoomLevel(15.0);  // Max zoom out
+
+        flags =new Flags(this,getResources(),map);
 
         // HAY QUE INICIAR EL EMULADOR Y SETEAR LA LOCALIZACIÓN ANTES DE EJECUTAR LA APP
         if (loc != null) { // ESTO ES PARA QUE LA APP NO CASQUE
@@ -108,7 +112,9 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
             // Coordinates.ubicacion(loc.getLatitude(), loc.getLongitude());
             //  Add coordinates
             // Coordinates.coors(map);
-            flags =new Flags(this,getResources(),map,loc.getLatitude(), loc.getLongitude());
+
+//            flags =new Flags(this,getResources(),map,loc.getLatitude(), loc.getLongitude());
+
             /*
             //  Prueva de icono en mapa
             GeoPoint startPoint2 = new GeoPoint(43.36209, -8.41248);
@@ -147,9 +153,12 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
     //  Runs wen the location changes
     public void onLocationChanged(Location location) {
         if (!paused) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            int fineLocationPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+            int coarseLocationPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
+//            if (fineLocationPermission != PackageManager.PERMISSION_GRANTED && coarseLocationPermission != PackageManager.PERMISSION_GRANTED) {
+            if (fineLocationPermission != PackageManager.PERMISSION_GRANTED || coarseLocationPermission != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(MapActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-                return;
+                //return;
             }
             loc = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             locPoint = new GeoPoint(loc.getLatitude(), loc.getLongitude());

@@ -19,18 +19,18 @@ public class Flags {
     private Context context;
     private Resources resources;
     private MapView mapView;
-    private double latitude, longitude;
+//    private double latitude, longitude;
     private double radius=0.0051113;
    // private double radius=0.1;
     //private List<Marker> markerList;
 
-    public Flags(Context context,Resources resources, MapView mapView, double latitude, double longitude) {
+    public Flags(Context context,Resources resources, MapView mapView) {
         this.context= context;
         this.resources = resources;
         this.mapView = mapView;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        sendFlagRequest(latitude, longitude);
+//        this.latitude = latitude;
+//        this.longitude = longitude;
+//        sendFlagRequest(latitude, longitude);
     }
 
     public void sendFlagRequest(double latitude, double longitude){
