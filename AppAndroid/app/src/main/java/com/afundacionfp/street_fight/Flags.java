@@ -60,12 +60,16 @@ public class Flags {
             }
             assert flagLatitude != null;
             assert flagLongitude != null;
-            Marker flag=new Marker(mapView);
-            flag.setPosition(new GeoPoint(flagLatitude,flagLongitude));
-            flag.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-            flag.setIcon(ResourcesCompat.getDrawable(resources,R.drawable.ic_torchlight_help_icon,null));
-            flag.setTitle("Casa de las ciencias");
-            mapView.getOverlays().add(flag);
+            try {
+                Marker flag = new Marker(mapView);
+                flag.setPosition(new GeoPoint(flagLatitude, flagLongitude));
+                flag.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+                flag.setIcon(ResourcesCompat.getDrawable(resources, R.drawable.ic_torchlight_help_icon, null));
+                flag.setTitle("Casa de las ciencias");
+                mapView.getOverlays().add(flag);
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
         }
 
     }

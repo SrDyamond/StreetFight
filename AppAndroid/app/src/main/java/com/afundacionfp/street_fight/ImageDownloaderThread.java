@@ -31,22 +31,22 @@ public class ImageDownloaderThread extends Thread {
     @Override
     public void run() {
         super.run();
-        Log.d("imageView", imageView.toString());
+        //Log.d("imageView", imageView.toString());
         try {
-            Log.d("URL", "'"+url.toString()+"'");
+            //Log.d("URL", "'"+url.toString()+"'");
             InputStream inputStream = url.openConnection().getInputStream();
-            Log.d("#######", "PASA");
+            //Log.d("#######", "PASA");
             Bitmap imageBitmap = BitmapFactory.decodeStream(inputStream);
-            Log.d("imageBitmap", imageBitmap.toString());
+            //Log.d("imageBitmap", imageBitmap.toString());
             ((Activity) context).runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     imageView.setImageBitmap(imageBitmap);
                 }
             });
-        } catch (IOException e) {
+        } catch (IOException | NullPointerException e) {
             e.printStackTrace();
-            Log.d("ERROR", "Hay un error");
+            //Log.d("ERROR", "Hay un error");
             //Se tiene que ejecutar en un UIThread para poner tocar los views del hilo principal
             ((Activity) context).runOnUiThread(new Runnable() {
                 @Override

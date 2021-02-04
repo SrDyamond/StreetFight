@@ -117,4 +117,28 @@ public class UserPreferences {
         editor.apply();
         expiration = null;
     }
+
+    public void deleteAll(Context context){
+        SharedPreferences.Editor editor = context.getSharedPreferences("Street_Fight_preferences", Context.MODE_PRIVATE).edit();
+        editor.remove("user_id");
+        editor.remove("username");
+        editor.remove("session_cookie");
+        editor.remove("expiration");
+        editor.apply();
+        userId = null;
+        username = null;
+        sessionCookie = null;
+        expiration = null;
+    }
+
+    public void savePreferences(Context context, int userId, String username, String sessionCookie){
+        SharedPreferences.Editor editor = context.getSharedPreferences("Street_Fight_preferences", Context.MODE_PRIVATE).edit();
+        editor.putInt("user_id", userId);
+        editor.putString("username", username);
+        editor.putString("session_cookie", sessionCookie);
+        editor.apply();
+        this.userId = userId;
+        this.username = username;
+        this.sessionCookie = sessionCookie;
+    }
 }

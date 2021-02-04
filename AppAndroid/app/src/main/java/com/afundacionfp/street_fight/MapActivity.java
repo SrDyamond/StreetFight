@@ -38,6 +38,7 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
     private GeoPoint locPoint;
     private IMapController mapController;
     private Flags flags;
+    private boolean paused = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -141,14 +142,16 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
 
     //  Runs wen the location changes
     public void onLocationChanged(Location location) {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(MapActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-            return;
+        if (!paused) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(MapActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                return;
+            }
+            loc = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            locPoint = new GeoPoint(loc.getLatitude(), loc.getLongitude());
+            mapController.animateTo(locPoint);
+            flags.sendFlagRequest(loc.getLatitude(), loc.getLongitude());
         }
-        loc = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        locPoint = new GeoPoint(loc.getLatitude(), loc.getLongitude());
-        mapController.animateTo(locPoint);
-        flags.sendFlagRequest(loc.getLatitude(),loc.getLongitude());
     }
 
     //  Must stay to work
@@ -174,6 +177,7 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
         //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         //Configuration.getInstance().save(this, prefs);
         map.onPause();  //needed for compass, my location overlays, v6.0.0 and up
+        paused = true;
     }
 
     @Override
