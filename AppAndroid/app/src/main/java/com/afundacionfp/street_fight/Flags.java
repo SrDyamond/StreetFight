@@ -71,19 +71,19 @@ public class Flags {
                 flag.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
                 if (clan==null && !capturing){
                     flag.setIcon(ResourcesCompat.getDrawable(resources, R.drawable.flag_blank, null));
+                    flag.setTitle("Bandera libre");
                 }else if (clan!=null && !capturing){
                     flag.setIcon(ResourcesCompat.getDrawable(resources, R.drawable.flag_captured, null));
+                    try {
+                        flag.setTitle("Bandera de " + clan.getString("acronym"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }else {
                     flag.setIcon(ResourcesCompat.getDrawable(resources, R.drawable.flag_capturing, null));
+                    flag.setTitle("Batalla en curso por la zona");
                 }
                 //TODO:Añadir descripcion a doc y restfacade
-                try {
-                    if (clan != null) {
-                        flag.setTitle("Bandera de " + clan.getString("acronym"));
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
                 mapView.getOverlays().add(flag);
             } catch (NullPointerException e) {
                 e.printStackTrace();
