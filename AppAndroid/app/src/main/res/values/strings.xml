@@ -28,4 +28,5 @@
     <string name="naniiiiii78">Naniiiiii78</string>
     <string name="text_player">User</string>
     <string name="text_catch">CATCH FLAG</string>
+    <string name="wrong_location_text">wrong_location</string>
 </resources>

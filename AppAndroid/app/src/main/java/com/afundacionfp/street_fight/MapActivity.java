@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -41,6 +42,7 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
 
     private Flags flags;
     private boolean paused = false;
+    private WrongLocationThread wrongLocationThread;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,6 +68,9 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
 
         TextView textPlayerInfo = findViewById(R.id.activity_main_text);
         textPlayerInfo.setText(UserPreferences.getInstance().getUsername(this));
+        ImageView wrongLocationIcon = findViewById(R.id.wrong_location_icon);
+        wrongLocationThread = new WrongLocationThread(this, wrongLocationIcon);
+        wrongLocationThread.start();
 
         //  Localization
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -134,6 +139,7 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
             GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
             iMapController.animateTo(geoPoint);
             flags.sendFlagRequest(location.getLatitude(), location.getLongitude());
+            wrongLocationThread.correctLocationRecived();
         }
     }
 
