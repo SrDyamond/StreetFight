@@ -12,8 +12,9 @@
 
     <ImageButton
         android:id="@+id/button_player_info"
-        android:layout_width="405dp"
-        android:layout_height="120dp"
+        android:layout_width="220dp"
+        android:layout_height="69dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/main_fondo_boton"
         android:contentDescription="@string/todo"
         app:layout_constraintEnd_toEndOf="parent"
