@@ -107,49 +107,12 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
 
         flags =new Flags(this,getResources(),map);
 
-        // HAY QUE INICIAR EL EMULADOR Y SETEAR LA LOCALIZACIÓN ANTES DE EJECUTAR LA APP
-        if (loc != null) { // ESTO ES PARA QUE LA APP NO CASQUE
-            locPoint = new GeoPoint(loc.getLatitude(), loc.getLongitude());
-            mapController.setCenter(locPoint);
-            // Coordinates.ubicacion(loc.getLatitude(), loc.getLongitude());
-            //  Add coordinates
-            // Coordinates.coors(map);
-
-//            flags =new Flags(this,getResources(),map,loc.getLatitude(), loc.getLongitude());
-
-            /*
-            //  Prueva de icono en mapa
-            GeoPoint startPoint2 = new GeoPoint(43.36209, -8.41248);
-            Marker startMarker2 = new Marker(map);
-            startMarker2.setPosition(startPoint2);
-            startMarker2.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-            startMarker2.setIcon(getResources().getDrawable(R.drawable.ic_torchlight_help_icon, null));
-            startMarker2.setTitle("Start point");
-            map.getOverlays().add(startMarker2);
-            //  Prueba de poligono rojo
-            List<GeoPoint> geoPoints = new ArrayList<>();
-            geoPoints.add(new GeoPoint(43.36367, -8.404));
-            geoPoints.add(new GeoPoint(43.35967, -8.40209));
-            geoPoints.add(new GeoPoint(43.35984, -8.39767));
-            geoPoints.add(new GeoPoint(43.36316, -8.39668));
-            geoPoints.add(new GeoPoint(43.36393, -8.39876));
-            //add your points here
-            Polygon polygon = new Polygon();    //see note below
-            polygon.getFillPaint().setColor(Color.RED); //set fill color
-            geoPoints.add(geoPoints.get(0));    //forces the loop to close(connect last point to first point)
-            polygon.setPoints(geoPoints);
-            polygon.setTitle("A sample polygon");
-
-            map.getOverlayManager().add(polygon);
-            */
-
-            requestPermissionsIfNecessary(new String[]{
-                    // if you need to show the current location, uncomment the line below
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    // WRITE_EXTERNAL_STORAGE is required in order to show the map
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-            });
-        }
+        requestPermissionsIfNecessary(new String[]{
+                // if you need to show the current location, uncomment the line below
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                // WRITE_EXTERNAL_STORAGE is required in order to show the map
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+        });
     }
 
     //  Runs wen the location changes
