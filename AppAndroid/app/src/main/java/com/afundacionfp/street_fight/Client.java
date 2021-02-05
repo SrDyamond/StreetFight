@@ -24,14 +24,14 @@ import java.util.Locale;
 public class Client {
 
     private static Client client = null;
-    public static final String DJANGOSERVERIP ="192.168.111.111:8000";
+    public static final String DJANGOSERVERIP = "192.168.0.20:8000";
     private final RequestQueue requestQueue;
 
-    private Client(Context context){
+    private Client(Context context) {
         this.requestQueue = Volley.newRequestQueue(context);
     }
 
-    public static Client getInstance(Context context){
+    public static Client getInstance(Context context) {
         if (client == null) {
             client = new Client(context);
         }
@@ -138,7 +138,7 @@ public class Client {
     public void sendRegisterCreateClanRest(String username, String passwordSha, String clanName, String clanAcronym, String clanColor, String clanUrlIcon, ResponseHandlerObject handler) {
         Log.d("# REGISTER REST", "'" + username + "', '" + passwordSha + "', '" + clanName + "', '" + clanAcronym + "', '" + clanColor + "', '" + clanUrlIcon + "'");
         // Instantiate the RequestQueue.
-        String url = "http://"+ DJANGOSERVERIP +"/user";
+        String url = "http://" + DJANGOSERVERIP + "/user";
 
         JSONObject requestBodyJson = new JSONObject();
         JSONObject newClanJson = new JSONObject();
@@ -166,7 +166,7 @@ public class Client {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("## RESPONSE", response.toString());
-                      handler.onOkResponse(response);
+                        handler.onOkResponse(response);
                     }
                 },
                 new Response.ErrorListener() {
@@ -181,7 +181,7 @@ public class Client {
                             Log.d("## ERROR-L1", error.toString());
                             Log.d("## ERROR-L2", responseBodyString);
                         }
-                       // assert errorResponseBodyJson != null;
+                        // assert errorResponseBodyJson != null;
                         Log.d("## ERROR-JSON", errorResponseBodyJson.toString());
                         handler.onErrorResponse(errorResponseBodyJson);
                     }
@@ -190,12 +190,13 @@ public class Client {
         // Add the request to the RequestQueue.
         requestQueue.add(jsonObjectRequest);
     }
+
     public void sendCreateClanRest(int idUser, String username, String sessionCookie, String clanName, String clanAcronym,
                                    String clanColor, String clanUrlIcon, ResponseHandlerObject handler) {
         Log.d("# REGISTER REST", "'" + username + "', '" + sessionCookie + "', '" + clanName + "'," +
                 " '" + clanAcronym + "', '" + clanColor + "', '" + clanUrlIcon + "'");
         // Instantiate the RequestQueue.
-        String url = "http://"+ DJANGOSERVERIP +"/clan";
+        String url = "http://" + DJANGOSERVERIP + "/clan";
 
         JSONObject newClanJson = new JSONObject();
         try {
@@ -244,9 +245,9 @@ public class Client {
         requestQueue.add(jsonObjectRequest);
     }
 
-    public void sendFlagRequest(double latitude, double longitude, double radius, ResponseHandlerArray handler){
+    public void sendFlagRequest(double latitude, double longitude, double radius, ResponseHandlerArray handler) {
         // Instantiate the RequestQueue.
-        String url ="http://"+ DJANGOSERVERIP+"/flag?latitude="+String.format(Locale.US, "%1$,.7f", latitude)+"&longitude="+String.format(Locale.US, "%1$,.7f", longitude)+"&radius="+String.format(Locale.US, "%1$,.7f", radius);
+        String url = "http://" + DJANGOSERVERIP + "/flag?latitude=" + String.format(Locale.US, "%1$,.7f", latitude) + "&longitude=" + String.format(Locale.US, "%1$,.7f", longitude) + "&radius=" + String.format(Locale.US, "%1$,.7f", radius);
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONArray>() {
@@ -280,9 +281,9 @@ public class Client {
     }
 
     public void sendChangeClanRest(String username, String sessionCookie, int idClan, ResponseHandlerObject handler) {
-        Log.d("# REGISTER REST", "'" + username + "', '" + sessionCookie );
+        Log.d("# REGISTER REST", "'" + username + "', '" + sessionCookie);
         // Instantiate the RequestQueue.
-        String url = "http://"+ DJANGOSERVERIP +"/user/"+username+"/clan/"+idClan;
+        String url = "http://" + DJANGOSERVERIP + "/user/" + username + "/clan/" + idClan;
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequestCustomHeader(Request.Method.POST, url, sessionCookie, null,
                 new Response.Listener<JSONObject>() {
@@ -345,8 +346,9 @@ public class Client {
         // Add the request to the RequestQueue.
         this.requestQueue.add(jsonObjectRequest);
     }
-    public void sendDeleteSession(String username,String sessionCookie, ResponseHandlerObject handler) {
-        String url = "http://" + DJANGOSERVERIP + "/user/" + username+"/session";
+
+    public void sendCatchFlag(String username,Integer id_flag, String sessionCookie, ResponseHandlerObject handler) {
+        String url = "http://" + DJANGOSERVERIP + "/user/" + username + "/catch/" + id_flag;
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequestCustomHeader(Request.Method.DELETE, url, sessionCookie, null,
                 new Response.Listener<JSONObject>() {
@@ -376,4 +378,5 @@ public class Client {
         // Add the request to the RequestQueue.
         this.requestQueue.add(jsonObjectRequest);
     }
+
 }
