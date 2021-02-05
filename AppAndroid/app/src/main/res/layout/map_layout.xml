@@ -47,6 +47,7 @@
         android:background="@drawable/fondo_boton_220"
         android:contentDescription="@string/todo"
         android:visibility="gone"
+        android:onClick="onCaptureClick"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

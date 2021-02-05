@@ -12,6 +12,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -30,6 +31,7 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class MapActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback, LocationListener {
@@ -42,6 +44,11 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
     private FlagManagement flagManagement;
     private boolean paused = false;
     private WrongLocationThread wrongLocationThread;
+
+    private ImageButton mapCatchButton;
+    private TextView mapCatchButtonText;
+
+    private List<FlagDTO> flagsToCapture = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,6 +77,9 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
         ImageView wrongLocationIcon = findViewById(R.id.wrong_location_icon);
         wrongLocationThread = new WrongLocationThread(this, wrongLocationIcon);
         wrongLocationThread.start();
+
+        mapCatchButton = findViewById(R.id.map_catch_button);
+        mapCatchButtonText = findViewById(R.id.map_catch_button_text);
 
         //  Localization
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -126,7 +136,7 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
     @Override
     public void onLocationChanged(Location location) {
         if (!paused) {
-//            Log.d("UPDATE", "Se actualiza la localización:" + location);
+            Log.d("UPDATE", "Se actualiza la localización:" + location);
 
 //            int fineLocationPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
 //            int coarseLocationPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
@@ -140,7 +150,19 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
             iMapController.animateTo(geoPoint);
             flagManagement.sendFlagRequest(location.getLatitude(), location.getLongitude());
             wrongLocationThread.correctLocationRecived();
-            Log.d("TO CAPTURE", flagManagement.getFlagsToCapture().toString());
+
+
+            if (flagManagement.getFlagsToCapture().size() > 0) {
+                flagsToCapture = flagManagement.getFlagsToCapture();
+                mapCatchButton.setVisibility(View.VISIBLE);
+                mapCatchButtonText.setVisibility(View.VISIBLE);
+            } else {
+                flagsToCapture.clear();
+                mapCatchButton.setVisibility(View.GONE);
+                mapCatchButtonText.setVisibility(View.GONE);
+            }
+
+//            Log.d("TO CAPTURE", flagsToCapture.toString());
         }
     }
 
@@ -191,6 +213,12 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
 
         if (permissionsToRequest.size() > 0) {
             ActivityCompat.requestPermissions(this, permissionsToRequest.toArray(new String[0]), REQUEST_PERMISSIONS_REQUEST_CODE);
+        }
+    }
+
+    public void onCaptureClick(View v) {
+        for (FlagDTO flagDTO : flagsToCapture) {
+            Log.d("CAPTURANDO", flagDTO.toString());
         }
     }
 }

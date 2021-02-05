@@ -19,14 +19,13 @@ import java.util.List;
 public class FlagManagement {
 
     public static double showRadius = 0.0051113;
-//  public static double captureRadius = 0.0000001;
-    public static double captureRadius = 0.000000025;
+    public static double captureRadius = 0.000000025; // considerar si es muy cerca
 
     private final Context context;
     private final Resources resources;
     private final MapView mapView;
 
-    private List<FlagDTO> flagsToCapture = new ArrayList<>();
+    private final List<FlagDTO> flagsToCapture = new ArrayList<>();
 
     public FlagManagement(Context context, Resources resources, MapView mapView) {
         this.context= context;
