@@ -16,14 +16,14 @@ import org.osmdroid.views.overlay.Marker;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Flags {
+public class FlagManagement {
 
     private final Context context;
     private final Resources resources;
     private final MapView mapView;
     private List<FlagDTO> nearFlags;
 
-    public Flags(Context context,Resources resources, MapView mapView) {
+    public FlagManagement(Context context, Resources resources, MapView mapView) {
         this.context= context;
         this.resources = resources;
         this.mapView = mapView;
@@ -45,39 +45,48 @@ public class Flags {
     }
 
     private void parseResponse(JSONArray jsonArrayFlags){
-        for (int i=0;i<jsonArrayFlags.length();i++){
-            Double flagLatitude=null;
-            Double flagLongitude=null;
-            Boolean capturing = null;
-            JSONObject clan = null;
+        for (int i = 0; i < jsonArrayFlags.length(); i++){
+
+            Integer flagId = null;
+            Double flagLatitude = null;
+            Double flagLongitude = null;
+            Boolean flagCapturing = null;
+            ClanDTO clanDTO = null;
+
             try {
 //                Log.d("#Flag", jsonArrayFlags.getJSONObject(i).toString());
+                flagId = jsonArrayFlags.getJSONObject(i).getInt("id");
                 flagLatitude = jsonArrayFlags.getJSONObject(i).getDouble("latitude");
                 flagLongitude = jsonArrayFlags.getJSONObject(i).getDouble("longitude");
-                capturing = jsonArrayFlags.getJSONObject(i).getBoolean("capturing");
+                flagCapturing = jsonArrayFlags.getJSONObject(i).getBoolean("capturing");
                 if (jsonArrayFlags.getJSONObject(i).has("clan")) {
-                    clan = jsonArrayFlags.getJSONObject(i).getJSONObject("clan");
+                    JSONObject flagClanJSON = jsonArrayFlags.getJSONObject(i).getJSONObject("clan");
+                    String clanUrlIcon = flagClanJSON.getString("url_icon");
+                    String clanAcronym = flagClanJSON.getString("acronym");
+                    String clanColor = flagClanJSON.getString("color");
+                    clanDTO = new ClanDTO(clanUrlIcon, clanAcronym, clanColor);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+
+            assert flagId != null;
             assert flagLatitude != null;
             assert flagLongitude != null;
-            assert capturing != null;
+            assert flagCapturing != null;
+
+            FlagDTO flagDTO = new FlagDTO(flagId, flagLatitude, flagLongitude, flagCapturing, clanDTO);
+
             try {
                 Marker flag = new Marker(mapView);
-                flag.setPosition(new GeoPoint(flagLatitude, flagLongitude));
+                flag.setPosition(new GeoPoint(flagDTO.getLatitude(), flagDTO.getLongitude()));
                 flag.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-                if (clan==null && !capturing){
+                if (flagDTO.getClan() == null && !flagDTO.isCapturing()){
                     flag.setIcon(ResourcesCompat.getDrawable(resources, R.drawable.flag_blank, null));
                     flag.setTitle("Bandera libre");
-                }else if (clan!=null && !capturing){
+                }else if (flagDTO.getClan() != null && !flagDTO.isCapturing()){
                     flag.setIcon(ResourcesCompat.getDrawable(resources, R.drawable.flag_captured, null));
-                    try {
-                        flag.setTitle("Bandera de " + clan.getString("acronym"));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    flag.setTitle("Bandera de " + flagDTO.getClan().getAcronym());
                 }else {
                     flag.setIcon(ResourcesCompat.getDrawable(resources, R.drawable.flag_capturing, null));
                     flag.setTitle("Batalla en curso por la zona");

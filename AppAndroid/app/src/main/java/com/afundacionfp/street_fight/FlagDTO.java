@@ -1,5 +1,7 @@
 package com.afundacionfp.street_fight;
 
+import androidx.annotation.Nullable;
+
 public class FlagDTO {
 
     private int id;
@@ -18,7 +20,7 @@ public class FlagDTO {
         this.clan = clan;
     }
 
-    public FlagDTO(int id, double latitude, double longitude, boolean capturing, ClanDTO clan) {
+    public FlagDTO(int id, double latitude, double longitude, boolean capturing, @Nullable ClanDTO clan) {
         this.id = id;
         this.latitude = latitude;
         this.longitude = longitude;

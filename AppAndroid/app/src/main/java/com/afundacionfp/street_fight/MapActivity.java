@@ -12,7 +12,6 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -40,7 +39,7 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
     private LocationManager locationManager;
     private IMapController iMapController;
 
-    private Flags flags;
+    private FlagManagement flagManagement;
     private boolean paused = false;
     private WrongLocationThread wrongLocationThread;
 
@@ -100,7 +99,7 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
         mLocationOverlay.enableMyLocation();
         mapView.getOverlays().add(mLocationOverlay);
 
-        flags = new Flags(this, getResources(), mapView);
+        flagManagement = new FlagManagement(this, getResources(), mapView);
 
         requestPermissionsIfNecessary(new String[]{
                 // if you need to show the current location, uncomment the line below
@@ -138,7 +137,7 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
 
             GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
             iMapController.animateTo(geoPoint);
-            flags.sendFlagRequest(location.getLatitude(), location.getLongitude());
+            flagManagement.sendFlagRequest(location.getLatitude(), location.getLongitude());
             wrongLocationThread.correctLocationRecived();
         }
     }
