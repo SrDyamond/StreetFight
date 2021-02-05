@@ -2,7 +2,6 @@ package com.afundacionfp.street_fight;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.core.content.res.ResourcesCompat;
@@ -14,32 +13,30 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Flags {
 
-    private Context context;
-    private Resources resources;
-    private MapView mapView;
-//    private double latitude, longitude;
-    private double radius=0.0051113;
-   // private double radius=0.1;
-    //private List<Marker> markerList;
+    private final Context context;
+    private final Resources resources;
+    private final MapView mapView;
+    private List<FlagDTO> nearFlags;
 
     public Flags(Context context,Resources resources, MapView mapView) {
         this.context= context;
         this.resources = resources;
         this.mapView = mapView;
-//        this.latitude = latitude;
-//        this.longitude = longitude;
-//        sendFlagRequest(latitude, longitude);
+        this.nearFlags = new ArrayList<>();
     }
 
     public void sendFlagRequest(double latitude, double longitude) {
+        double radius = 0.0051113;
         Client.getInstance(context).sendFlagRequest(latitude, longitude, radius, new ResponseHandlerArray() {
             @Override
             public void onOkResponse(JSONArray okResponseJson) {
                 parseResponse(okResponseJson);
             }
-
             @Override
             public void onErrorResponse(JSONObject errorResponseJson) {
                 Toast.makeText(context, "Error al obtener las banderas", Toast.LENGTH_SHORT).show();
