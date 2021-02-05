@@ -18,24 +18,27 @@ import java.util.List;
 
 public class FlagManagement {
 
+    public static double showRadius = 0.0051113;
+    public static double captureRadius = 0.0001113;
+
     private final Context context;
     private final Resources resources;
     private final MapView mapView;
-    private List<FlagDTO> nearFlags;
+
+    private List<FlagDTO> flagsToCapture;
 
     public FlagManagement(Context context, Resources resources, MapView mapView) {
         this.context= context;
         this.resources = resources;
         this.mapView = mapView;
-        this.nearFlags = new ArrayList<>();
     }
 
-    public void sendFlagRequest(double latitude, double longitude) {
-        double radius = 0.0051113;
-        Client.getInstance(context).sendFlagRequest(latitude, longitude, radius, new ResponseHandlerArray() {
+    public void sendFlagRequest(double userLatitude, double userLongitude) {
+
+        Client.getInstance(context).sendFlagRequest(userLatitude, userLongitude, showRadius, new ResponseHandlerArray() {
             @Override
             public void onOkResponse(JSONArray okResponseJson) {
-                parseResponse(okResponseJson);
+                parseResponse(okResponseJson, userLatitude, userLongitude);
             }
             @Override
             public void onErrorResponse(JSONObject errorResponseJson) {
@@ -44,7 +47,7 @@ public class FlagManagement {
         });
     }
 
-    private void parseResponse(JSONArray jsonArrayFlags){
+    private void parseResponse(JSONArray jsonArrayFlags, double userLatitude, double userLongitude) {
         for (int i = 0; i < jsonArrayFlags.length(); i++){
 
             Integer flagId = null;
@@ -77,27 +80,37 @@ public class FlagManagement {
 
             FlagDTO flagDTO = new FlagDTO(flagId, flagLatitude, flagLongitude, flagCapturing, clanDTO);
 
-            try {
-                Marker flag = new Marker(mapView);
-                flag.setPosition(new GeoPoint(flagDTO.getLatitude(), flagDTO.getLongitude()));
-                flag.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-                if (flagDTO.getClan() == null && !flagDTO.isCapturing()){
-                    flag.setIcon(ResourcesCompat.getDrawable(resources, R.drawable.flag_blank, null));
-                    flag.setTitle("Bandera libre");
-                }else if (flagDTO.getClan() != null && !flagDTO.isCapturing()){
-                    flag.setIcon(ResourcesCompat.getDrawable(resources, R.drawable.flag_captured, null));
-                    flag.setTitle("Bandera de " + flagDTO.getClan().getAcronym());
-                }else {
-                    flag.setIcon(ResourcesCompat.getDrawable(resources, R.drawable.flag_capturing, null));
-                    flag.setTitle("Batalla en curso por la zona");
-                }
-                //TODO:Añadir descripcion a doc y restfacade
-                mapView.getOverlays().add(flag);
-            } catch (NullPointerException e) {
-                e.printStackTrace();
+            Marker flag = new Marker(mapView);
+            flag.setPosition(new GeoPoint(flagDTO.getLatitude(), flagDTO.getLongitude()));
+            flag.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+
+            if (flagDTO.getClan() == null && !flagDTO.isCapturing()){
+                // bandera libre
+                flag.setIcon(ResourcesCompat.getDrawable(resources, R.drawable.flag_blank, null));
+                flag.setTitle("Bandera libre");
+            }else if (flagDTO.getClan() != null && !flagDTO.isCapturing()){
+                // bandera capturada
+                flag.setIcon(ResourcesCompat.getDrawable(resources, R.drawable.flag_captured, null));
+                flag.setTitle("Bandera de " + flagDTO.getClan().getAcronym());
+            }else {
+                // bandera en disputa
+                flag.setIcon(ResourcesCompat.getDrawable(resources, R.drawable.flag_capturing, null));
+                flag.setTitle("Batalla en curso por la zona");
             }
+
+            double distanceToLocation = Math.pow(flagDTO.getLatitude() - userLatitude, 2) + Math.pow(flagDTO.getLongitude() - userLongitude, 2);
+            if (distanceToLocation <= captureRadius) {
+                this.flagsToCapture = new ArrayList<>();
+                this.flagsToCapture.add(flagDTO);
+            }
+
+            //TODO:Añadir descripcion a doc y restfacade
+            mapView.getOverlays().add(flag);
         }
 
     }
 
+    public List<FlagDTO> getFlagsToCapture() {
+        return flagsToCapture;
+    }
 }
