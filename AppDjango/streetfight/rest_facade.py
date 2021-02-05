@@ -559,21 +559,26 @@ def clan_by_id(request, id_clan):
 
 @csrf_exempt
 def change_clan(request, username, id_clan):
+    # comprobamos método HTTP, sino POST 405
     if request.method != 'POST':
         return HttpResponseNotAllowed(['POST'])
-    #si cookei es valida sino 401
+
+    # comprobamos si cookie está en headers, sino 400
     if not 'sessioncookie' in request.headers:
         return JsonResponse(custom_error_response.BAD_REQUEST, status=400)
 
     session_cookie = request.headers.get('sessioncookie')
 
-    try:  #Si user existe sino 404
+    # comprobamos si user existe, sino 404
+    try:  
         user = Usuario.objects.get(nombre__exact=username)
     except Usuario.DoesNotExist:
         return JsonResponse(custom_error_response.NOT_FOUND, status=404)
 
+    # obtenemos todas las sesiones del usuario
     session_list = Sesion.objects.filter(id_usuario__exact=user)
 
+    # comprobamos si cookie está es válida, sino 401
     valid_session = False
     for session in session_list:
         if session.valor_cookie == session_cookie:
@@ -582,52 +587,59 @@ def change_clan(request, username, id_clan):
 
     if not valid_session:
         return JsonResponse(custom_error_response.BAD_COOKIE, status=401)
-    #si cln exisste sino 404
-    try:  # Recupero el clan de base de datos, y si no existe devuelvo 404
+    
+    # comprobamos si clan existe, sino 404
+    try:
         clan = Clan.objects.get(pk=id_clan)
     except Clan.DoesNotExist:
         return JsonResponse(custom_error_response.NOT_FOUND, status=404)
-    #si usuarios se cambia al mismo clan eror 409
+    
+    # comprobamos si el usuario pertenece a lmismo clan al que se quiere cambiar, si es así 409
     if clan == user.id_clan:
         return JsonResponse(custom_error_response.ALREADY_EXISTS, status=409)
 
+    # cambiamos el clan
     user.id_clan=clan
     user.fundador=False
     user.save()
 
-    response = {} #temporal
-
+    # devolvemos CLAN_CHANGED
     return JsonResponse(custom_error_response.CLAN_CHANGED, status=200)
 
 
 @csrf_exempt
 def try_capture(request, username, id_flag):
+    # comprobamos método HTTP, sino POST 405
     if request.method != 'POST':
-        return HttpResponseNotAllowed(['POST']) # error 405
+        return HttpResponseNotAllowed(['POST'])
 
-    #sino manda la cookie, error 400
+    # comprobamos si cookie está en headers, sino 400
     if not 'sessioncookie' in request.headers:
         return JsonResponse(custom_error_response.BAD_REQUEST, status=400)
 
     session_cookie = request.headers.get('sessioncookie')
 
-    try:  #Si user existe sino 404
+    # comprobamos si user existe, sino 404
+    try:
         user = Usuario.objects.get(nombre__exact=username)
     except Usuario.DoesNotExist:
         return JsonResponse(custom_error_response.NOT_FOUND, status=404)
 
+    # obtenemos todas las sesiones del usuario
     session_list = Sesion.objects.filter(id_usuario__exact=user)
 
+    # comprobamos si cookie está es válida, sino 401
     valid_session = False
     for session in session_list:
         if session.valor_cookie == session_cookie:
             valid_session = True
             break
 
-    if not valid_session:#si coookie no es valida 401
+    if not valid_session:
         return JsonResponse(custom_error_response.BAD_COOKIE, status=401)
 
-    try: # si bandera no existe, error 404
+    # comprobamos si la bandera existe, sino 404
+    try:
         flag = Bandera.objects.get(pk=id_flag)
     except Bandera.DoesNotExist:
         return JsonResponse(custom_error_response.NOT_FOUND, status=404)
@@ -636,24 +648,41 @@ def try_capture(request, username, id_flag):
     intento_captura_list = IntentoCaptura.objects.filter(id_bandera=flag)
 
     # cuento cuantos usuarios de mi clan han realizado un intento de captura en los últimos 10 min
-    users_capturing = 0
+    users_capturing_list = []
     for intento_captura in intento_captura_list:
+        # si este mismo usuario ya ha iniciado una captura sobre esta bandera se devuelve un conflicto (409)
+        # OJO!: (si no se a plica el borrado de intentos esto no funciona bien)
+        if intento_captura.id_usuario == user:
+            return JsonResponse(custom_error_response.ALREADY_EXISTS, status=409)
         antiguedad_intento_captura = timezone.now() - intento_captura.fecha
-        if intento_captura.id_usuario.id_clan == user.id_clan and antiguedad_intento_captura < datetime.timedelta(minutes=10):
-            users_capturing += 1
+        if intento_captura.id_usuario.id_clan == user.id_clan and antiguedad_intento_captura < datetime.timedelta(minutes=1): # 10 o 5? (1 de prueba)
+            users_capturing_list.append(intento_captura.id_usuario)
 
-    if users_capturing >= 1:
-        # si hay 1 o más usuarios de tu mismo clan la bandera se captura
+    if len(users_capturing_list) >= 2:
+        # si hay 1 o más usuarios de tu mismo clan (además de ti mismo) la bandera se captura
         flag.capturando = False
         flag.id_clan = user.id_clan
-        # y borramos todos los intentos de captura asociados a esa bandera (creo que no lo voy a hacer)
-        # for intento_captura in intento_captura_list:
-        #     intento_captura.delete()
+        # borramos todos los intentos de captura asociados a esa bandera (puede que no haga falta, poer el hecho de filtrar por tiempo)
+        for intento_captura in intento_captura_list:
+            intento_captura.delete()
+
+        # sumamos 1 a las banderas capturadas de todos los usuarios del clan ganador
+        for user_obj in users_capturing_list:
+            user_obj.banderas_capturadas += 1
+            user_obj.save()
+
+        # sumamos 1 a las banderas capturadas de este propio usuario
+        user.banderas_capturadas += 1
+        user.save()
     else:
         # sino creamos un nuevo intento de captura
         flag.capturando = True
         new_intento = IntentoCaptura(id_usuario=user, id_bandera=flag)
         new_intento.save()
+    
+    # guardamos la bandera, porque su estado de captura se ha modificado (a true o a false)
     flag.save()
 
+    # envio una respuesta 200 indicando que la captura ha comenzado
+    # (aunque sea el usuario que finaliza la captura)
     return JsonResponse(custom_error_response.CAPTURE_STARTED, status=200)
