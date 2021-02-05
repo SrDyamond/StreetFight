@@ -19,13 +19,14 @@ import java.util.List;
 public class FlagManagement {
 
     public static double showRadius = 0.0051113;
-    public static double captureRadius = 0.0001113;
+//  public static double captureRadius = 0.0000001;
+    public static double captureRadius = 0.000000025;
 
     private final Context context;
     private final Resources resources;
     private final MapView mapView;
 
-    private List<FlagDTO> flagsToCapture;
+    private List<FlagDTO> flagsToCapture = new ArrayList<>();
 
     public FlagManagement(Context context, Resources resources, MapView mapView) {
         this.context= context;
@@ -34,7 +35,6 @@ public class FlagManagement {
     }
 
     public void sendFlagRequest(double userLatitude, double userLongitude) {
-
         Client.getInstance(context).sendFlagRequest(userLatitude, userLongitude, showRadius, new ResponseHandlerArray() {
             @Override
             public void onOkResponse(JSONArray okResponseJson) {
@@ -48,6 +48,7 @@ public class FlagManagement {
     }
 
     private void parseResponse(JSONArray jsonArrayFlags, double userLatitude, double userLongitude) {
+        this.flagsToCapture.clear();
         for (int i = 0; i < jsonArrayFlags.length(); i++){
 
             Integer flagId = null;
@@ -100,7 +101,6 @@ public class FlagManagement {
 
             double distanceToLocation = Math.pow(flagDTO.getLatitude() - userLatitude, 2) + Math.pow(flagDTO.getLongitude() - userLongitude, 2);
             if (distanceToLocation <= captureRadius) {
-                this.flagsToCapture = new ArrayList<>();
                 this.flagsToCapture.add(flagDTO);
             }
 

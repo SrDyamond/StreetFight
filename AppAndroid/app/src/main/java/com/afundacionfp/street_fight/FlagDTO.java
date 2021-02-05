@@ -51,4 +51,14 @@ public class FlagDTO {
     public ClanDTO getClan() {
         return clan;
     }
+
+    @Override
+    public String toString() {
+        return "FlagDTO{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                '}';
+    }
 }

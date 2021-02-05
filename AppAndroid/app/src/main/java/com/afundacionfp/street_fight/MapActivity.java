@@ -126,7 +126,8 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
     @Override
     public void onLocationChanged(Location location) {
         if (!paused) {
-            Log.d("UPDATE", "Se actualiza la localización:" + location);
+//            Log.d("UPDATE", "Se actualiza la localización:" + location);
+
 //            int fineLocationPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
 //            int coarseLocationPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
 //            int writeExternalStorage = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
@@ -139,6 +140,7 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
             iMapController.animateTo(geoPoint);
             flagManagement.sendFlagRequest(location.getLatitude(), location.getLongitude());
             wrongLocationThread.correctLocationRecived();
+            Log.d("TO CAPTURE", flagManagement.getFlagsToCapture().toString());
         }
     }
 
