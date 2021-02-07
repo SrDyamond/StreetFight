@@ -661,17 +661,19 @@ def try_capture(request, username, id_flag):
     users_capturing_list = []
     for intento_captura in intento_captura_list:
         # si este mismo usuario ya ha iniciado una captura sobre esta bandera se devuelve un conflicto (409)
-        # OJO!: (si no se a plica el borrado de intentos esto no funciona bien)
+        # OJO!: (si no se aplica el borrado de intentos esto no funciona bien)
         if intento_captura.id_usuario == user:
             return JsonResponse(custom_error_response.ALREADY_EXISTS, status=409)
-        antiguedad_intento_captura = timezone.now() - intento_captura.fecha
-        if intento_captura.id_usuario.id_clan == user.id_clan and antiguedad_intento_captura < datetime.timedelta(minutes=1): # 10 o 5? (1 de prueba)
+        # antiguedad_intento_captura = timezone.now() - intento_captura.fecha
+        # if intento_captura.id_usuario.id_clan == user.id_clan and antiguedad_intento_captura < datetime.timedelta(minutes=1): # 10 o 5? (1 de prueba)
+        if intento_captura.id_usuario.id_clan == user.id_clan:
             users_capturing_list.append(intento_captura.id_usuario)
 
-    if len(users_capturing_list) >= 2:
+    if len(users_capturing_list) >= 1:
         # si hay 1 o más usuarios de tu mismo clan (además de ti mismo) la bandera se captura
         flag.capturando = False
         flag.id_clan = user.id_clan
+        
         # borramos todos los intentos de captura asociados a esa bandera (puede que no haga falta, poer el hecho de filtrar por tiempo)
         for intento_captura in intento_captura_list:
             intento_captura.delete()
