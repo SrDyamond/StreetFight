@@ -12,9 +12,9 @@ class Clan(models.Model):
 
     def __str__(self):
         if self.abreviatura:
-            return self.nombre + " (" + self.abreviatura + ")"
+            return str(self.id) + " - " + self.nombre + " (" + self.abreviatura + ")"
         else:
-            return self.nombre
+            return str(self.id) + " - " + self.nombre
 
 
 class Usuario(models.Model):
@@ -51,9 +51,12 @@ class Bandera(models.Model):
 
     def __str__(self):
         if self.id_clan:
-            return self.nombre + " (" + self.id_clan.abreviatura + ")"
+            if self.id_clan.abreviatura:
+                return str(self.id) + " - " + self.nombre + " (" + self.id_clan.abreviatura + ")"
+            else:
+                return str(self.id) + " - " + self.nombre + " (" + self.id_clan.nombre + ")"
         else:
-            return self.nombre
+            return str(self.id) + " - " + self.nombre
 
 
 class IntentoCaptura(models.Model):
