@@ -2,6 +2,7 @@ package com.afundacionfp.street_fight;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.core.content.res.ResourcesCompat;
@@ -50,6 +51,8 @@ public class FlagManagement {
         this.flagsToCapture.clear();
         for (int i = 0; i < jsonArrayFlags.length(); i++){
 
+            Log.d("## jsonArrayFlags", jsonArrayFlags.toString());
+
             Integer flagId = null;
             Double flagLatitude = null;
             Double flagLongitude = null;
@@ -64,9 +67,15 @@ public class FlagManagement {
                 flagCapturing = jsonArrayFlags.getJSONObject(i).getBoolean("capturing");
                 if (jsonArrayFlags.getJSONObject(i).has("clan")) {
                     JSONObject flagClanJSON = jsonArrayFlags.getJSONObject(i).getJSONObject("clan");
-                    String clanUrlIcon = flagClanJSON.getString("url_icon");
-                    String clanAcronym = flagClanJSON.getString("acronym");
                     String clanColor = flagClanJSON.getString("color");
+                    String clanAcronym = null;
+                    if (flagClanJSON.has("acronym")) {
+                        clanAcronym = flagClanJSON.getString("acronym");
+                    }
+                    String clanUrlIcon = null;
+                    if (flagClanJSON.has("url_icon")) {
+                        clanUrlIcon = flagClanJSON.getString("url_icon");
+                    }
                     clanDTO = new ClanDTO(clanUrlIcon, clanAcronym, clanColor);
                 }
             } catch (JSONException e) {

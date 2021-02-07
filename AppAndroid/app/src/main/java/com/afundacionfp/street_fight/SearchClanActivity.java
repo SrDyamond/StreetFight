@@ -105,11 +105,11 @@ public class SearchClanActivity extends AppCompatActivity {
 
         switch (errorCode) {
             case 4003:
-                Toast.makeText(this, "Sesion invalida", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Sesion inválida", Toast.LENGTH_SHORT).show();
                 logout();
                 break;
             case 4004:
-                Toast.makeText(this, "El usuario no existe", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "El usuario o el clan no existe", Toast.LENGTH_SHORT).show();
                 logout();
                 break;
             case 4005:
@@ -119,8 +119,8 @@ public class SearchClanActivity extends AppCompatActivity {
                 Toast.makeText(this, "Otro error", Toast.LENGTH_SHORT).show();
                 break;
         }
-
     }
+
     public void logout(){
         UserPreferences.getInstance().deleteAll(getApplicationContext());
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);

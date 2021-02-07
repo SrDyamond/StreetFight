@@ -12,9 +12,9 @@ class Clan(models.Model):
 
     def __str__(self):
         if self.abreviatura:
-            return self.nombre + " (" + self.abreviatura + ")"
+            return str(self.id) + " - " + self.nombre + " (" + self.abreviatura + ")"
         else:
-            return self.nombre
+            return str(self.id) + " - " + self.nombre
 
 
 class Usuario(models.Model):
@@ -51,7 +51,19 @@ class Bandera(models.Model):
 
     def __str__(self):
         if self.id_clan:
-            return self.nombre + " (" + self.id_clan.abreviatura + ")"
+            if self.id_clan.abreviatura:
+                return str(self.id) + " - " + self.nombre + " (" + self.id_clan.abreviatura + ")"
+            else:
+                return str(self.id) + " - " + self.nombre + " (" + self.id_clan.nombre + ")"
+        else:
+            return str(self.id) + " - " + self.nombre
+
+    def str_no_id(self):
+        if self.id_clan:
+            if self.id_clan.abreviatura:
+                return self.nombre + " (" + self.id_clan.abreviatura + ")"
+            else:
+                return self.nombre + " (" + self.id_clan.nombre + ")"
         else:
             return self.nombre
 
@@ -62,4 +74,4 @@ class IntentoCaptura(models.Model):
     fecha = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.id_usuario.nombre + " captura " + self.id_bandera.nombre + " (" + str(self.fecha) + ")"
+        return "[" + str(self.id_usuario) + "] inicia la captura de [" + self.id_bandera.str_no_id() + "] a las " + str(self.fecha) + ""

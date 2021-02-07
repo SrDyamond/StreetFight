@@ -195,28 +195,40 @@ paths:
                   properties:
                     id:
                       type: integer
-                      example: 6578
+                      example: 17895
+                    name:
+                      type: string
+                      example: "Estatua de María Pita"
+                    description:
+                      type: string
+                      example: "María Mayor Fernández de Cámara y Pita (Sigrás, Cambre, 1565-1643), conocida como María Pita, fue una heroína de la defensa de La Coruña en 1589 contra la Invencible Inglesa."
                     latitude:
                       type: number
-                      example: 43.36644
+                      example: 43.77848
                     longitude:
                       type: number
-                      example: -8.40881
+                      example: -8.45531
                     capturing:
                       type: boolean
                       example: false
                     clan:
                       type: object
                       properties:
+                        id:
+                          type: integer
+                          example: 256
+                        name:
+                          type: string
+                          example: "El Mejor Clan"
                         url_icon:
                           type: string
-                          example: "https://i.imgur.com/Lbu3ErF.png"
+                          example: "https://i.imgur.com/Lbu3ErD.png"
                         acronym:
                           type: string
-                          example: "LPA"
+                          example: "EMC"
                         color:
                           type: string
-                          example: "#FFFFFF"
+                          example: "#FFFF55"
         '400':
           description: Cuando no mandas los query params correctamente.
           content:
@@ -427,6 +439,19 @@ paths:
                   description:
                     type: string
                     example: "bad_request"
+        '404':
+          description: Cuando te intentas unir a un clan que no existe.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: integer
+                    example: 4004
+                  description:
+                    type: string
+                    example: "not_found"
         '409':
           description: El nombre de usuario ya existe.
           content:
