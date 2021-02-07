@@ -117,7 +117,7 @@ public class CreateClanActivity extends AppCompatActivity {
 
         switch (errorCode) {
             case 4003:
-                Toast.makeText(this, "Sesion invalida", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Sesion inválida", Toast.LENGTH_SHORT).show();
                 logout();
                 break;
             case 4004:
