@@ -1,21 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
     <include
+        android:id="@+id/include"
         layout="@layout/map"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <ImageButton
         android:id="@+id/button_player_info"
-        android:layout_width="405dp"
-        android:layout_height="120dp"
+        android:layout_width="220dp"
+        android:layout_height="69dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/main_fondo_boton"
         android:contentDescription="@string/todo"
+        android:onClick="onUserButtonClick"
+        android:scaleX="1.15"
+        android:scaleY="1.1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -26,7 +30,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/bungee"
         android:gravity="center"
-        android:text="(Info juga)"
+        android:text="@string/text_player"
         android:textAlignment="center"
         android:textColor="#000000"
         android:textSize="18sp"
@@ -34,5 +38,46 @@
         app:layout_constraintEnd_toEndOf="@+id/button_player_info"
         app:layout_constraintStart_toStartOf="@+id/button_player_info"
         app:layout_constraintTop_toTopOf="@+id/button_player_info" />
+
+    <ImageButton
+        android:id="@+id/map_catch_button"
+        android:layout_width="220dp"
+        android:layout_height="69dp"
+        android:layout_marginBottom="70dp"
+        android:background="@drawable/fondo_boton_220"
+        android:contentDescription="@string/todo"
+        android:visibility="gone"
+        android:onClick="onCaptureClick"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/map_catch_button_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/bungee"
+        android:text="@string/text_catch"
+        android:textAlignment="center"
+        android:textColor="@color/text_black"
+        android:textSize="18sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/map_catch_button"
+        app:layout_constraintEnd_toEndOf="@+id/map_catch_button"
+        app:layout_constraintStart_toStartOf="@+id/map_catch_button"
+        app:layout_constraintTop_toTopOf="@+id/map_catch_button" />
+
+    <ImageView
+        android:id="@+id/wrong_location_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/wrong_location_text"
+        android:scaleX="0.7"
+        android:scaleY="0.7"
+        app:layout_constraintBottom_toBottomOf="@+id/button_player_info"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/button_player_info"
+        app:layout_constraintTop_toTopOf="@+id/button_player_info"
+        app:srcCompat="@drawable/wrong_location" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

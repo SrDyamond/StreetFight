@@ -9,9 +9,12 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,32 +31,36 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class MapActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback, LocationListener {
+
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
-    private MapView map = null;
-    private Location loc;
-    private LocationManager locManager;
-    private GeoPoint locPoint;
-    private IMapController mapController;
-    private Flags flags;
+    private MapView mapView = null;
+    private LocationManager locationManager;
+    private IMapController iMapController;
+
+    private FlagManagement flagManagement;
+    private boolean paused = false;
+    private WrongLocationThread wrongLocationThread;
+
+    private ImageButton mapCatchButton;
+    private TextView mapCatchButtonText;
+
+    private List<FlagDTO> flagsToCapture = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         Objects.requireNonNull(getSupportActionBar()).hide();
-        //  Use icon on another class
-        // if (Coordinates.resources == null) {
-        //     Coordinates.resources = getResources();
-        // }
 
         //handle permissions first, before map is created. not depicted here
 
         //load/initialize the osmdroid configuration, this can be done
         // Context ctx = getApplicationContext();
-        Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
+        Configuration.getInstance().load(getApplicationContext(), PreferenceManager.getDefaultSharedPreferences(this));
         //setting this before the layout is inflated is a good idea
         //it 'should' ensure that the map has a writable location for the map cache, even without permissions
         //if no tiles are displayed, you can try overriding the cache path using Configuration.getInstance().setCachePath
@@ -61,94 +68,102 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
         //note, the load method also sets the HTTP User Agent to your application's package name, abusing osm's
         //tile servers will get you banned based on this string
 
-        //inflate and create the map
-
+        // Set content view
 
         setContentView(R.layout.map_layout);
 
-        ImageButton buttonPlayerInfo = findViewById(R.id.button_player_info);
-        buttonPlayerInfo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), UserDetailActivity.class);
-                startActivity(intent);
-            }
-        });
+        TextView textPlayerInfo = findViewById(R.id.activity_main_text);
+        textPlayerInfo.setText(UserPreferences.getInstance().getUsername(this));
+        ImageView wrongLocationIcon = findViewById(R.id.wrong_location_icon);
+        wrongLocationThread = new WrongLocationThread(this, wrongLocationIcon);
+        wrongLocationThread.start();
 
+        mapCatchButton = findViewById(R.id.map_catch_button);
+        mapCatchButtonText = findViewById(R.id.map_catch_button_text);
 
         //  Localization
-        locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(MapActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        // es necesario comprobar si los permisos están concedidos
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
         }
-
-        loc = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, this);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1500, 0, this);
 
         //  Creacion de mapa ,controlador y overlay
-        map = findViewById(R.id.map);
-        map.setTileSource(TileSourceFactory.MAPNIK);
-        map.setMultiTouchControls(true);
-        mapController = map.getController();
-        mapController.setZoom(20.0);    // Initial zoom
-        MyLocationNewOverlay mLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(this), map);
+        mapView = findViewById(R.id.map);
+        mapView.setTileSource(TileSourceFactory.MAPNIK);
+        mapView.setMultiTouchControls(true);
+        mapView.setMinZoomLevel(5.0); // si el 0 es lo mas alejado, hasta donde puedes ir para atrás
+
+        iMapController = mapView.getController();
+        iMapController.setZoom(19.5); // si el 0 es lo mas alejado, a que nivel empiezas
+
+        MyLocationNewOverlay mLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(getApplicationContext()), mapView);
         mLocationOverlay.enableMyLocation();
-        map.getOverlays().add(mLocationOverlay);
-        map.setMinZoomLevel(15.0);  // Max zoom out
+        mapView.getOverlays().add(mLocationOverlay);
 
-        // HAY QUE INICIAR EL EMULADOR Y SETEAR LA LOCALIZACIÓN ANTES DE EJECUTAR LA APP
-        if (loc != null) { // ESTO ES PARA QUE LA APP NO CASQUE
-            locPoint = new GeoPoint(loc.getLatitude(), loc.getLongitude());
-            mapController.setCenter(locPoint);
-            // Coordinates.ubicacion(loc.getLatitude(), loc.getLongitude());
-            //  Add coordinates
-            // Coordinates.coors(map);
-            flags =new Flags(this,getResources(),map,loc.getLatitude(), loc.getLongitude());
-            /*
-            //  Prueva de icono en mapa
-            GeoPoint startPoint2 = new GeoPoint(43.36209, -8.41248);
-            Marker startMarker2 = new Marker(map);
-            startMarker2.setPosition(startPoint2);
-            startMarker2.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-            startMarker2.setIcon(getResources().getDrawable(R.drawable.ic_torchlight_help_icon, null));
-            startMarker2.setTitle("Start point");
-            map.getOverlays().add(startMarker2);
-            //  Prueba de poligono rojo
-            List<GeoPoint> geoPoints = new ArrayList<>();
-            geoPoints.add(new GeoPoint(43.36367, -8.404));
-            geoPoints.add(new GeoPoint(43.35967, -8.40209));
-            geoPoints.add(new GeoPoint(43.35984, -8.39767));
-            geoPoints.add(new GeoPoint(43.36316, -8.39668));
-            geoPoints.add(new GeoPoint(43.36393, -8.39876));
-            //add your points here
-            Polygon polygon = new Polygon();    //see note below
-            polygon.getFillPaint().setColor(Color.RED); //set fill color
-            geoPoints.add(geoPoints.get(0));    //forces the loop to close(connect last point to first point)
-            polygon.setPoints(geoPoints);
-            polygon.setTitle("A sample polygon");
+        flagManagement = new FlagManagement(this, getResources(), mapView);
 
-            map.getOverlayManager().add(polygon);
-            */
+        requestPermissionsIfNecessary(new String[]{
+                // if you need to show the current location, uncomment the line below
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                // WRITE_EXTERNAL_STORAGE is required in order to show the map
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+        });
 
-            requestPermissionsIfNecessary(new String[]{
-                    // if you need to show the current location, uncomment the line below
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    // WRITE_EXTERNAL_STORAGE is required in order to show the map
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-            });
+        // Situamos el mapa en la última localización
+        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        if (location != null) {
+            GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
+            iMapController.animateTo(geoPoint);
         }
     }
 
+    public void onUserButtonClick(View v) {
+        Intent intent = new Intent(getApplicationContext(), UserDetailActivity.class);
+        startActivity(intent);
+    }
+
     //  Runs wen the location changes
+    @Override
     public void onLocationChanged(Location location) {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(MapActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-            return;
+        if (!paused) {
+            Log.d("UPDATE", "Se actualiza la localización:" + location);
+
+//            int fineLocationPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+//            int coarseLocationPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
+//            int writeExternalStorage = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+//
+//            if (fineLocationPermission != PackageManager.PERMISSION_GRANTED || coarseLocationPermission != PackageManager.PERMISSION_GRANTED || writeExternalStorage != PackageManager.PERMISSION_GRANTED) {
+//                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+//            }
+
+            GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
+            iMapController.animateTo(geoPoint);
+            flagManagement.sendFlagRequest(location.getLatitude(), location.getLongitude());
+            wrongLocationThread.correctLocationRecived();
+
+
+            if (flagManagement.getFlagsToCapture().size() > 0) {
+                flagsToCapture = flagManagement.getFlagsToCapture();
+                mapCatchButton.setVisibility(View.VISIBLE);
+                mapCatchButtonText.setVisibility(View.VISIBLE);
+            } else {
+                flagsToCapture.clear();
+                mapCatchButton.setVisibility(View.GONE);
+                mapCatchButtonText.setVisibility(View.GONE);
+            }
+
+//            Log.d("TO CAPTURE", flagsToCapture.toString());
         }
-        loc = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        locPoint = new GeoPoint(loc.getLatitude(), loc.getLongitude());
-        mapController.animateTo(locPoint);
-        flags.sendFlagRequest(loc.getLatitude(),loc.getLongitude());
     }
 
     //  Must stay to work
@@ -163,7 +178,7 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
         //if you make changes to the configuration, use
         //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         //Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
-        map.onResume(); //needed for compass, my location overlays, v6.0.0 and up
+        mapView.onResume(); //needed for compass, my location overlays, v6.0.0 and up
     }
 
     @Override
@@ -173,35 +188,37 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
         //if you make changes to the configuration, use
         //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         //Configuration.getInstance().save(this, prefs);
-        map.onPause();  //needed for compass, my location overlays, v6.0.0 and up
+        mapView.onPause();  //needed for compass, my location overlays, v6.0.0 and up
+        paused = true;
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, int[] grantResults) {
         ArrayList<String> permissionsToRequest = new ArrayList<>(Arrays.asList(permissions).subList(0, grantResults.length));
+
         if (permissionsToRequest.size() > 0) {
-            ActivityCompat.requestPermissions(
-                this,
-                permissionsToRequest.toArray(new String[0]),
-                REQUEST_PERMISSIONS_REQUEST_CODE
-            );
+            ActivityCompat.requestPermissions(this, permissionsToRequest.toArray(new String[0]), REQUEST_PERMISSIONS_REQUEST_CODE);
         }
     }
 
     private void requestPermissionsIfNecessary(String[] permissions) {
         ArrayList<String> permissionsToRequest = new ArrayList<>();
+
         for (String permission : permissions) {
             if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
                 // Permission is not granted
                 permissionsToRequest.add(permission);
             }
         }
+
         if (permissionsToRequest.size() > 0) {
-            ActivityCompat.requestPermissions(
-                this,
-                permissionsToRequest.toArray(new String[0]),
-                REQUEST_PERMISSIONS_REQUEST_CODE
-            );
+            ActivityCompat.requestPermissions(this, permissionsToRequest.toArray(new String[0]), REQUEST_PERMISSIONS_REQUEST_CODE);
+        }
+    }
+
+    public void onCaptureClick(View v) {
+        for (FlagDTO flagDTO : flagsToCapture) {
+            Log.d("CAPTURANDO", flagDTO.toString());
         }
     }
 }

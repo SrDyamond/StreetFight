@@ -439,6 +439,19 @@ paths:
                   description:
                     type: string
                     example: "bad_request"
+        '404':
+          description: Cuando te intentas unir a un clan que no existe.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: integer
+                    example: 4004
+                  description:
+                    type: string
+                    example: "not_found"
         '409':
           description: El nombre de usuario ya existe.
           content:

@@ -45,7 +45,7 @@ public class CreateClanActivity extends AppCompatActivity {
         inputCreateClanUrlIcon = findViewById(R.id.input_create_clan_url_icon);
     }
 
-    public void onButtonCreateClanClick(View v){
+    public void onButtonCreateClanClick(View v) {
         final String clanName = inputCreateClanName.getText().toString();
         final String clanAcronym = inputCreateClanAcronym.getText().toString();
         final String clanColor = inputCreateClanColor.getText().toString();
@@ -57,9 +57,20 @@ public class CreateClanActivity extends AppCompatActivity {
                     Client.getInstance(this).sendRegisterCreateClanRest(username, passwordSha, clanName, clanAcronym, clanColor, clanUrlIcon, new ResponseHandlerObject() {
                         @Override
                         public void onOkResponse(JSONObject okResponseJson) {
-                            // FALTA GUARDAR LA COOKIE EN LA PERSISTENCIA, ASÍ COMO EL ID DEL USUARIO Y LA FECHA DE EXPIRACIÓN DE LA SESIÓN
+                            try {
+                                //UserPreferences.getInstance().setExpiration(okResponseJson.getString("expiration"),getApplicationContext());
+                                UserPreferences.getInstance().savePreferences(
+                                        getApplicationContext(),
+                                        okResponseJson.getInt("user_id"),
+                                        username,
+                                        okResponseJson.getString("session_cookie"));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                             Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(intent);
+                            finish();
                         }
 
                         @Override
@@ -69,17 +80,18 @@ public class CreateClanActivity extends AppCompatActivity {
                     });
                 } else if (from.equals("detail")) {
                     // SOLO CREAMOS EL CLAN /clan (POST)
-                    Integer idUser = null;
-                    if (MainActivity.user != null) {
-                        idUser = MainActivity.user.getUserId();
-                    }
-                    
-                    assert idUser != null;
+
+                    int idUser = UserPreferences.getInstance().getUserId(getApplicationContext());
+
                     Client.getInstance(this).sendCreateClanRest(idUser, username, session_cookie, clanName, clanAcronym, clanColor, clanUrlIcon, new ResponseHandlerObject() {
                         @Override
                         public void onOkResponse(JSONObject okResponseJson) {
+                            Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
                             finish();
                         }
+
                         @Override
                         public void onErrorResponse(JSONObject errorResponseJson) {
                             parseErrorResponse(errorResponseJson);
@@ -105,8 +117,12 @@ public class CreateClanActivity extends AppCompatActivity {
 
         switch (errorCode) {
             case 4003:
-                Toast.makeText(this, "Sesion invalida", Toast.LENGTH_SHORT).show();
-                //TODO:BORRA LA PERSISTENCIA DE LA COOKIE PORQUE ES INVALIDA
+                Toast.makeText(this, "Sesion inválida", Toast.LENGTH_SHORT).show();
+                logout();
+                break;
+            case 4004:
+                Toast.makeText(this, "El usuario no existe", Toast.LENGTH_SHORT).show();
+                logout();
                 break;
             case 4005:
                 Toast.makeText(this, "Conflicto", Toast.LENGTH_SHORT).show();
@@ -117,4 +133,10 @@ public class CreateClanActivity extends AppCompatActivity {
         }
     }
 
+    public void logout(){
+        UserPreferences.getInstance().deleteAll(getApplicationContext());
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
 }
