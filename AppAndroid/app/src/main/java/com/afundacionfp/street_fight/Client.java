@@ -347,6 +347,38 @@ public class Client {
         this.requestQueue.add(jsonObjectRequest);
     }
 
+    public void sendDeleteSession(String username,String sessionCookie, ResponseHandlerObject handler) {
+        String url = "http://" + DJANGOSERVERIP + "/user/" + username+"/session";
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequestCustomHeader(Request.Method.DELETE, url, sessionCookie, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject okResponseJson) {
+                        Log.d("# RESPONSE", okResponseJson.toString());
+                        handler.onOkResponse(okResponseJson);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        String responseBodyString = new String(error.networkResponse.data, StandardCharsets.UTF_8);
+                        JSONObject errorResponseJson = null;
+                        try {
+                            errorResponseJson = new JSONObject(responseBodyString);
+                        } catch (JSONException e) {
+                            // e.printStackTrace();
+                            Log.d("## ERROR-L1", error.toString());
+                            Log.d("## ERROR-L2", responseBodyString);
+                        }
+                        Log.d("# ERROR-JSON", errorResponseJson.toString());
+                        handler.onErrorResponse(errorResponseJson);
+                    }
+                });
+
+        // Add the request to the RequestQueue.
+        this.requestQueue.add(jsonObjectRequest);
+    }
+
     public void sendCatchFlag(String username,Integer id_flag, String sessionCookie, ResponseHandlerObject handler) {
         String url = "http://" + DJANGOSERVERIP + "/user/" + username + "/catch/" + id_flag;
 
