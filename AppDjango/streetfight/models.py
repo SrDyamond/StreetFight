@@ -58,6 +58,15 @@ class Bandera(models.Model):
         else:
             return str(self.id) + " - " + self.nombre
 
+    def str_no_id(self):
+        if self.id_clan:
+            if self.id_clan.abreviatura:
+                return self.nombre + " (" + self.id_clan.abreviatura + ")"
+            else:
+                return self.nombre + " (" + self.id_clan.nombre + ")"
+        else:
+            return self.nombre
+
 
 class IntentoCaptura(models.Model):
     id_usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
@@ -65,4 +74,4 @@ class IntentoCaptura(models.Model):
     fecha = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.id_usuario.nombre + " captura " + self.id_bandera.nombre + " (" + str(self.fecha) + ")"
+        return "[" + str(self.id_usuario) + "] inicia la captura de [" + self.id_bandera.str_no_id() + "] a las " + str(self.fecha) + ""
