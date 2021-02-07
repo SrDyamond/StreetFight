@@ -130,17 +130,25 @@ def flag(request):
     for flag in flags_in_area_list:
         flag_response = {
             "id": flag.id,
-            "latitude": flag.latitud,
-            "longitude": flag.longitud,
+            "name": flag.nombre,
+            "description": flag.descripcion,
+            "user_latitude": flag.latitud,
+            "user_longitude": flag.longitud,
             "capturing": flag.capturando
         }
 
-        if not flag.id_clan is None:
+        if flag.id_clan is not None:
             flag_response["clan"] = {
-                "url_icon": flag.id_clan.id,
-                "acronym": flag.id_clan.abreviatura,
+                "id": flag.id_clan.id,
+                "name": flag.id_clan.nombre,
                 "color": flag.id_clan.color
             }
+
+            if flag.id_clan.url_icon is not None:
+                flag_response["clan"]["url_icon"] = flag.id_clan.url_icon
+
+            if flag.id_clan.abreviatura is not None:
+                flag_response["clan"]["acronym"] = flag.id_clan.abreviatura
 
         response.append(flag_response)
 
