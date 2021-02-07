@@ -164,19 +164,21 @@ def flag_by_id(request, id_flag):
         "description": flag.descripcion,
         "user_latitude": flag.latitud,
         "user_longitude": flag.longitud,
-        "capturing": flag.capturando,
-        "clan": {
+        "capturing": flag.capturando
+    }
+
+    if flag.id_clan is not None:
+        response["clan"] = {
             "id": flag.id_clan.id,
             "name": flag.id_clan.nombre,
             "color": flag.id_clan.color
         }
-    }
 
-    if not flag.id_clan.url_icon is None:
-        response["clan"]["url_icon"] = flag.id_clan.url_icon
+        if flag.id_clan.url_icon is not None:
+            response["clan"]["url_icon"] = flag.id_clan.url_icon
 
-    if not flag.id_clan.abreviatura is None:
-        response["clan"]["acronym"] = flag.id_clan.abreviatura
+        if flag.id_clan.abreviatura is not None:
+            response["clan"]["acronym"] = flag.id_clan.abreviatura
 
     return JsonResponse(response, status=200)
 
