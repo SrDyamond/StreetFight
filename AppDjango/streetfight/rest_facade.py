@@ -132,8 +132,8 @@ def flag(request):
             "id": flag.id,
             "name": flag.nombre,
             "description": flag.descripcion,
-            "user_latitude": flag.latitud,
-            "user_longitude": flag.longitud,
+            "latitude": flag.latitud,
+            "longitude": flag.longitud,
             "capturing": flag.capturando
         }
 
@@ -170,8 +170,8 @@ def flag_by_id(request, id_flag):
         "id": flag.id,
         "name": flag.nombre,
         "description": flag.descripcion,
-        "user_latitude": flag.latitud,
-        "user_longitude": flag.longitud,
+        "latitude": flag.latitud,
+        "longitude": flag.longitud,
         "capturing": flag.capturando
     }
 
