@@ -1,4 +1,4 @@
-package com.afundacionfp.street_fight;
+package com.afundacionfp.street_fight.persistence;
 
 import android.content.Context;
 import android.content.SharedPreferences;

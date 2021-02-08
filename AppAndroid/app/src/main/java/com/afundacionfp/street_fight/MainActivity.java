@@ -8,6 +8,8 @@ import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.afundacionfp.street_fight.persistence.UserPreferences;
+
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {

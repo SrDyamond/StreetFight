@@ -10,6 +10,11 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.afundacionfp.street_fight.api.Client;
+import com.afundacionfp.street_fight.interfaces.ResponseHandlerObject;
+import com.afundacionfp.street_fight.persistence.UserPreferences;
+import com.afundacionfp.street_fight.threads.ImageDownloaderThread;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 

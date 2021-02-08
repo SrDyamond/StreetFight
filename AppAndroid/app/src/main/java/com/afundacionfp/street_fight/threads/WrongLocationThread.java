@@ -1,4 +1,4 @@
-package com.afundacionfp.street_fight;
+package com.afundacionfp.street_fight.threads;
 
 import android.app.Activity;
 import android.content.Context;

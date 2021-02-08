@@ -1,4 +1,4 @@
-package com.afundacionfp.street_fight;
+package com.afundacionfp.street_fight.threads;
 
 import android.app.Activity;
 import android.content.Context;
@@ -8,6 +8,8 @@ import android.util.Log;
 import android.widget.ImageView;
 
 import androidx.core.content.ContextCompat;
+
+import com.afundacionfp.street_fight.R;
 
 import java.io.IOException;
 import java.io.InputStream;
