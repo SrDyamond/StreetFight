@@ -1,4 +1,4 @@
-package com.afundacionfp.street_fight;
+package com.afundacionfp.street_fight.api;
 
 import androidx.annotation.Nullable;
 

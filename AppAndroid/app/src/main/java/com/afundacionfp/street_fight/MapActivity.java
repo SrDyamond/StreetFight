@@ -22,6 +22,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.afundacionfp.street_fight.api.Client;
+import com.afundacionfp.street_fight.dto.FlagDTO;
+import com.afundacionfp.street_fight.interfaces.ResponseHandlerObject;
+import com.afundacionfp.street_fight.persistence.UserPreferences;
+import com.afundacionfp.street_fight.threads.WrongLocationThread;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.osmdroid.api.IMapController;

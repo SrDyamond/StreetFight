@@ -7,6 +7,11 @@ import android.widget.Toast;
 
 import androidx.core.content.res.ResourcesCompat;
 
+import com.afundacionfp.street_fight.api.Client;
+import com.afundacionfp.street_fight.dto.ClanDTO;
+import com.afundacionfp.street_fight.dto.FlagDTO;
+import com.afundacionfp.street_fight.interfaces.ResponseHandlerArray;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,6 +21,8 @@ import org.osmdroid.views.overlay.Marker;
 
 import java.util.ArrayList;
 import java.util.List;
+
+// heredera espiritual de la clase Coordinates ;)
 
 public class FlagManagement {
 

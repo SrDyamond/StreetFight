@@ -1,8 +1,10 @@
-package com.afundacionfp.street_fight;
+package com.afundacionfp.street_fight.api;
 
 import android.content.Context;
 import android.util.Log;
 
+import com.afundacionfp.street_fight.interfaces.ResponseHandlerArray;
+import com.afundacionfp.street_fight.interfaces.ResponseHandlerObject;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -24,7 +26,7 @@ import java.util.Locale;
 public class Client {
 
     private static Client client = null;
-    public static final String DJANGOSERVERIP = "192.168.43.89:8000";
+    public static final String DJANGOSERVERIP = "192.168.0.25:8000";
     private final RequestQueue requestQueue;
 
     private Client(Context context) {
