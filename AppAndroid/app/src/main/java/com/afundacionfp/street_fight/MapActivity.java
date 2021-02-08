@@ -15,12 +15,15 @@ import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -167,9 +170,14 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
     }
 
     //  Must stay to work
-    public void onStatusChanged(String provider, int status, Bundle extras) {}
-    public void onProviderEnabled(String provider) {}
-    public void onProviderDisabled(String provider) {}
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+    }
+
+    public void onProviderEnabled(String provider) {
+    }
+
+    public void onProviderDisabled(String provider) {
+    }
 
     @Override
     public void onResume() {
@@ -219,6 +227,51 @@ public class MapActivity extends AppCompatActivity implements ActivityCompat.OnR
     public void onCaptureClick(View v) {
         for (FlagDTO flagDTO : flagsToCapture) {
             Log.d("CAPTURANDO", flagDTO.toString());
+            Client.getInstance(this).sendCatchFlag(UserPreferences.getInstance().getUsername(this), flagDTO.getId(), UserPreferences.getInstance().getSessionCookie(this), new ResponseHandlerObject() {
+                @Override
+                public void onOkResponse(JSONObject okResponseJson) {
+                    Toast.makeText(MapActivity.this, "Se ha iniciado la captura", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onErrorResponse(JSONObject errorResponseJson) {
+                    parseErrorResponse(errorResponseJson);
+                }
+            });
         }
+    }
+
+    private void parseErrorResponse(JSONObject errorResponseBodyJson) {
+        int errorCode = 0;
+
+        try {
+            errorCode = errorResponseBodyJson.getInt("error");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        switch (errorCode) {
+            case 4003:
+                Toast.makeText(this, "Sesion invalida", Toast.LENGTH_SHORT).show();
+                logout();
+                break;
+            case 4004:
+                Toast.makeText(this, "El usuario no existe", Toast.LENGTH_SHORT).show();
+                logout();
+                break;
+            case 4005:
+                Toast.makeText(this, "Ya estas capturando esta bandera", Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                Toast.makeText(this, "Otro error", Toast.LENGTH_SHORT).show();
+                break;
+        }
+    }
+
+    public void logout() {
+        UserPreferences.getInstance().deleteAll(getApplicationContext());
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 }

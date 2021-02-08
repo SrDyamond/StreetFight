@@ -81,8 +81,6 @@ public class UserDetailActivity extends AppCompatActivity {
                         parseErrorResponse(errorResponseJson);
                     }
                 });
-
-
     }
 
     public void onChangeClanClick(View v) {
