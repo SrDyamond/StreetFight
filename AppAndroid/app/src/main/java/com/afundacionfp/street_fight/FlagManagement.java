@@ -61,6 +61,8 @@ public class FlagManagement {
             Log.d("## jsonArrayFlags", jsonArrayFlags.toString());
 
             Integer flagId = null;
+            String flagName = null;
+            String flagDescription = null;
             Double flagLatitude = null;
             Double flagLongitude = null;
             Boolean flagCapturing = null;
@@ -69,21 +71,36 @@ public class FlagManagement {
             try {
 //                Log.d("#Flag", jsonArrayFlags.getJSONObject(i).toString());
                 flagId = jsonArrayFlags.getJSONObject(i).getInt("id");
+                flagName = jsonArrayFlags.getJSONObject(i).getString("name");
+                if (jsonArrayFlags.getJSONObject(i).has("description")) {
+                    flagDescription = jsonArrayFlags.getJSONObject(i).getString("description");
+                }
                 flagLatitude = jsonArrayFlags.getJSONObject(i).getDouble("latitude");
                 flagLongitude = jsonArrayFlags.getJSONObject(i).getDouble("longitude");
                 flagCapturing = jsonArrayFlags.getJSONObject(i).getBoolean("capturing");
                 if (jsonArrayFlags.getJSONObject(i).has("clan")) {
                     JSONObject flagClanJSON = jsonArrayFlags.getJSONObject(i).getJSONObject("clan");
+
+                    Integer clanId = flagClanJSON.getInt("id");
+                    String clanName = flagClanJSON.getString("name");
                     String clanColor = flagClanJSON.getString("color");
+
                     String clanAcronym = null;
                     if (flagClanJSON.has("acronym")) {
                         clanAcronym = flagClanJSON.getString("acronym");
                     }
+
                     String clanUrlIcon = null;
                     if (flagClanJSON.has("url_icon")) {
                         clanUrlIcon = flagClanJSON.getString("url_icon");
                     }
-                    clanDTO = new ClanDTO(clanUrlIcon, clanAcronym, clanColor);
+
+                    assert clanId != null;
+                    assert clanName != null;
+                    assert clanAcronym != null;
+                    assert clanColor != null;
+
+                    clanDTO = new ClanDTO(clanId, clanName, clanUrlIcon, clanAcronym, clanColor);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -94,7 +111,7 @@ public class FlagManagement {
             assert flagLongitude != null;
             assert flagCapturing != null;
 
-            FlagDTO flagDTO = new FlagDTO(flagId, flagLatitude, flagLongitude, flagCapturing, clanDTO);
+            FlagDTO flagDTO = new FlagDTO(flagId, flagName, flagDescription, flagLatitude, flagLongitude, flagCapturing, clanDTO);
 
             Marker flag = new Marker(mapView);
             flag.setPosition(new GeoPoint(flagDTO.getLatitude(), flagDTO.getLongitude()));
@@ -103,15 +120,18 @@ public class FlagManagement {
             if (flagDTO.getClan() == null && !flagDTO.isCapturing()){
                 // bandera libre
                 flag.setIcon(ResourcesCompat.getDrawable(resources, R.drawable.flag_blank, null));
-                flag.setTitle("Bandera libre");
+//                flag.setTitle("Bandera libre");
+                flag.setTitle(flagDTO.getName() + "\n(libre)");
             }else if (flagDTO.getClan() != null && !flagDTO.isCapturing()){
                 // bandera capturada
                 flag.setIcon(ResourcesCompat.getDrawable(resources, R.drawable.flag_captured, null));
-                flag.setTitle("Bandera de " + flagDTO.getClan().getAcronym());
+//                flag.setTitle("Bandera de " + flagDTO.getClan().getAcronym());
+                flag.setTitle(flagDTO.getName() + "\n(" + flagDTO.getClan().getName() + ")");
             }else {
                 // bandera en disputa
                 flag.setIcon(ResourcesCompat.getDrawable(resources, R.drawable.flag_capturing, null));
-                flag.setTitle("Batalla en curso por la zona");
+//                flag.setTitle("Batalla en curso por la zona");
+                flag.setTitle(flagDTO.getName() + "\n(batalla en curso)");
             }
 
             double distanceToLocation = Math.pow(flagDTO.getLatitude() - userLatitude, 2) + Math.pow(flagDTO.getLongitude() - userLongitude, 2);

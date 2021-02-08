@@ -6,14 +6,16 @@ public class FlagDTO {
 
     private int id;
     private String name;
+    private String description;
     private double latitude;
     private double longitude;
     private boolean capturing;
     private ClanDTO clan;
 
-    public FlagDTO(int id, String name, double latitude, double longitude, boolean capturing, ClanDTO clan) {
+    public FlagDTO(int id, String name, @Nullable String description, double latitude, double longitude, boolean capturing, @Nullable ClanDTO clan) {
         this.id = id;
         this.name = name;
+        this.description = description;
         this.latitude = latitude;
         this.longitude = longitude;
         this.capturing = capturing;
