@@ -24,7 +24,7 @@ import java.util.Locale;
 public class Client {
 
     private static Client client = null;
-    public static final String DJANGOSERVERIP = "192.168.0.20:8000";
+    public static final String DJANGOSERVERIP = "192.168.43.89:8000";
     private final RequestQueue requestQueue;
 
     private Client(Context context) {
@@ -382,7 +382,7 @@ public class Client {
     public void sendCatchFlag(String username,Integer id_flag, String sessionCookie, ResponseHandlerObject handler) {
         String url = "http://" + DJANGOSERVERIP + "/user/" + username + "/catch/" + id_flag;
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequestCustomHeader(Request.Method.DELETE, url, sessionCookie, null,
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequestCustomHeader(Request.Method.POST, url, sessionCookie, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject okResponseJson) {
