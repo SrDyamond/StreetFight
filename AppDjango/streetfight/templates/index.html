@@ -22,17 +22,11 @@
       crossorigin=""
     ></script>
 
-    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <!-- <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script> -->
 
     <script language="javascript">
       function init() {
         var map = new L.Map("map");
-
-        $(document).ready(function () {
-          $.getJSON("http://ip-api.io/api/json", function (data) {
-            console.log(data);
-          });
-        });
 
         L.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
           attribution:
@@ -90,14 +84,32 @@
         // or fetched seperately as a jsonp request.
         var markers = [
           [-0.1244324, 51.5006728, "Big Ben"],
-          [-0.119623, 51.503308, "London Eye"],
-          [-8.40652, 43.38594, "Torre de hercules"], // Torre de hercules
-          [
-            -0.1279688,
-            51.5077286,
-            "Nelson's Column<br><a href=\"https://en.wikipedia.org/wiki/Nelson's_Column\">wp</a>",
-          ],
+          {% for flag in flag_list %}
+          [{{ flag.longitud }}, {{ flag.latitud }}, "{{ flag.nombre }}", "{{ flag.capturando }}".toLowerCase() , "{{ flag.id_clan.nombre }}"],
+          {% endfor %}
         ];
+
+        var blueIcon = new L.Icon({
+          iconUrl:
+            "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png",
+          shadowUrl:
+            "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
+          iconSize: [25, 41],
+          iconAnchor: [12, 41],
+          popupAnchor: [1, -34],
+          shadowSize: [41, 41],
+        });
+
+        var redIcon = new L.Icon({
+          iconUrl:
+            "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png",
+          shadowUrl:
+            "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
+          iconSize: [25, 41],
+          iconAnchor: [12, 41],
+          popupAnchor: [1, -34],
+          shadowSize: [41, 41],
+        });
 
         var greenIcon = new L.Icon({
           iconUrl:
@@ -115,17 +127,24 @@
           var lon = markers[i][0];
           var lat = markers[i][1];
           var popupText = markers[i][2];
+          var capturando = markers[i][3];
+          var nombreClan = "";
+          if (markers[i][4]) {
+            nombreClan = markers[i][4];
+          }
 
           var markerLocation = new L.LatLng(lat, lon);
-          var marker = new L.Marker(markerLocation, { icon: greenIcon });
+          var coloredIcon = capturando == "true" ? blueIcon : (nombreClan != "" ? redIcon : greenIcon);
+          var marker = new L.Marker(markerLocation, { icon: coloredIcon});
+
           map.addLayer(marker);
 
-          marker.bindPopup(popupText);
+          marker.bindPopup(popupText + (capturando == "true" ? "<br>(batalla en curso)" : (nombreClan != "" ? "<br>(" + nombreClan + ")" : "")));
         }
       }
     </script>
   </head>
-  <body onLoad="javascript:init();">
+  <body onLoad="javascript:init();" style="margin: 0px;">
     <div id="map" style="width: 100%; height: 100%"></div>
   </body>
 </html>

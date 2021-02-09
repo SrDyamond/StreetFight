@@ -2,6 +2,7 @@
 from django.http import HttpResponse
 # from django.views import generic
 from django.template import loader
+from .models import Bandera
 
 
 def index(request):
@@ -13,5 +14,6 @@ def index(request):
     # return render(request, 'streetfight/index.html', context)
 
     template = loader.get_template('index.html')
-    context = {}
+    flag_list = Bandera.objects.all()
+    context = {'flag_list': flag_list}
     return HttpResponse(template.render(context, request))
