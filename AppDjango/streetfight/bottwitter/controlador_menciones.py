@@ -40,7 +40,7 @@ def parse_text(texto,user,api,tweet_id):
 	try:
 		#ComandoBotAyuda
 		if (texto_separado[1] == "Ayuda!"):
-			mensaje = "Ayuda\n- Top clanes <número>\n- Top usuarios <número>\n- Info del clan <nombre>\n- Info del usuario <nombre>\n @"+str(user)
+			mensaje = "Ayuda\n- Top clanes <número>\n- Top usuarios <número>\n- Info clan <nombre>\n- Info usuario <nombre>\n @"+str(user)
 			print(mensaje)
 			api.update_status(mensaje,tweet_id)
 		elif (texto_separado[1] == "Top" and texto_separado[2] == "clanes" and is_int==True):

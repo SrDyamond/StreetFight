@@ -26,7 +26,7 @@ import java.util.Locale;
 public class Client {
 
     private static Client client = null;
-    public static final String DJANGOSERVERIP = "192.168.0.66:8000";
+    public static final String DJANGOSERVERIP = "192.168.43.146:8000";
     private final RequestQueue requestQueue;
 
     private Client(Context context) {
